@@ -1,0 +1,148 @@
+# Engineering Standards
+
+¶ - Code quality bar, product shape, workspace practice and the source header profile. Routed from the global policy ¶11; read before writing or reviewing code.
+
+document:
+  id: taks.engineering@1
+  version: 1
+  status: proposed
+  authority_basis: [@taks/global-policy]
+  scope: identity, code_standards, product_shape, workspace_practice, header_profile, context_comment_profile, templates
+  excludes: language_grammar, delegation, sdd_lifecycle
+
+¶ 1 — Identity
+
+```text
+signature {{SIGNATURE_AUTHOR}} # optional; empty -> line omitted
+tagline {{SIGNATURE_TAGLINE}} # default "VAI CORINTHIANS!"
+org {{OPERATOR_ORG}}
+mission {{OPERATOR_MISSION}}
+```
+
+¶ 2 — Code Standards
+
+```text
+ban god_object, monolith
+contracts small, explicit, testable
+errors explicit_errors > panics in libraries
+doc_comment every public function and type
+tests {{TEST_STANCE}}
+end_of_plan output the execution model plus a one-sentence justification
+```
+
+¶ 3 — Product Shape
+
+```text
+pattern {{PRODUCT_SHAPE}} # operator default stack; empty -> follow the project
+fallback consult local AGENTS.md
+non_destructive original source files are never mutated
+integration reuse the existing application layer
+```
+
+¶ 4 — Workspaces
+
+```text
+rule read local AGENTS.md before proposing changes
+focus strictly per package (crate, module, project)
+large_workspace -> compact context in long sessions; clear between unrelated packages
+structural_change_completed -> build or check the touched package (e.g. `cargo check -p <crate>`)
+```
+
+¶ 5 — Source Header Profile
+
+Presentation profile for source code, not TDSL semantics. Delimiter-agnostic:
+`<D>` is each file's own comment delimiter. `{{KERNEL_HOME}}/scripts/diagram_check.py`
+owns the delimiter table and renders every banner; never write one by hand.
+
+```text
+target all_source_files
+delim // Rust C C++ C# JS TS Go Java Kotlin Swift
+delim #  Python Ruby Shell PowerShell Makefile TOML
+delim -- SQL Lua Haskell
+delim /* */ CSS SCSS
+delim <!-- --> HTML XML SVG
+skip [.json .yaml .toml .md .env .lock .tdsl]
+
+anchor § registry marker
+  header_use `§ - <purpose one line> · <lang>`, no number
+  chapter_use `§ <n> — <DOMAIN> — <observable responsibility or result>`
+  subsection_use `§ <n>.<m> — <Domain> — <observable responsibility or result>`
+glyph ─ U+2500 header rule; ── flanks chapter titles
+rule_width 44
+number l1=integer l2=integer.integer
+title l1=UPPERCASE l2=TitleCase
+title_rule domain classifies the responsibility; description lets an agent decide whether to read it
+ban_title [UTILS HELPERS MISC LOGIC METHODS] when used without a specific observable responsibility
+anchor_language_rule chapters live at module level, column zero; never nested inside a block
+```
+
+```text
+header ln: |
+  <D> ────────────────────────────────────────────
+  <D> [PROJECT] [VERSION] — [Filename.ext]
+  <D> § - [Purpose one line] · [Language]
+  <D> [SIGNATURE_AUTHOR] # omitted when empty
+  <D> [SIGNATURE_TAGLINE] # omitted when empty
+  <D> ────────────────────────────────────────────
+
+chapter_l1 ln: |
+  <D> ── § 1 — SECTION NAME — Brief description ──
+
+chapter_l2 ln: |
+  <D> ── § 1.1 — Subsection Name — Brief description ──
+```
+
+Procedure and guard rules belong to skill(diagram).
+
+¶ 6 — Semantic Context Comment Profile
+
+`※` marks a deliberate, indexable source comment. Ordinary comments remain local and are not
+part of the preliminary context map. The marker is optional; when present, its claim must remain
+current and must be verified against source before an agent treats it as behavior.
+
+```text
+form `<D> ※ <kind> — <one current verifiable statement>`
+location full-line comment inside the § chapter it qualifies
+language English
+
+kind assumption information accepted locally but not proven here
+kind boundary exclusive authority or responsibility
+kind decision chosen approach and the materially relevant rejected alternative
+kind effect externally visible mutation or interaction not obvious from the local signature
+kind invariant condition a distant or tempting local change must preserve
+kind rationale non-obvious reason the implementation has this shape
+kind relation stable reference to another responsibility
+kind risk known limitation or failure exposure
+
+comment_when rationale_not_derivable | distant_invariant | exclusive_authority |
+  non_obvious_order | external_effect | material_assumption | material_risk | rejected_alternative
+ban_comment restates_code | repeats_section_title | narrates_history | substitutes_for_clear_code |
+  vague_reason | unowned_todo
+rule one marker one proposition
+rule references use stable file and § identity, never line number
+rule public API documentation uses the language native doc-comment form; `※` only adds non-local context
+rule stale_or_conflicting_comment -> code wins, report divergence, repair only within authorized scope
+```
+
+```text
+examples:
+  `<D> ※ invariant — Generated directories never enter the source index.`
+  `<D> ※ boundary — This module is the only writer of project-map.json.`
+  `<D> ※ rationale — Imports establish dependency evidence, not execution order.`
+  `<D> ※ relation — Supplies indexed sections to @flowchart/projector § 2.`
+```
+
+¶ 7 — Templates
+
+```text
+dir {{KERNEL_HOME}}/templates/
+  project-AGENTS.md.template human resume entry, natural language
+  AGENTS.md.template agent-facing TDSL; local and non-derivable only, inherits global
+  briefing.template subagent executor TDSL, <~400 tokens, points to the spec
+  cross-model-prompt.template self-contained, no references to this ecosystem
+
+dir {{KERNEL_HOME}}/skills/<skill>/template.tdsl
+  owner the skill of the same name
+  rule authoring shape only; the type contract belongs to the schemas
+  rule loaded only when its skill is invoked
+```

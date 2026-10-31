@@ -1,0 +1,47 @@
+# Delegation
+
+¶ - Briefing contract and error escalation. Routed from the global policy ¶5; read before the first spawn of a session.
+
+document:
+  id: taks.delegation@1
+  version: 1
+  status: proposed
+  authority_basis: [@taks/global-policy]
+  scope: briefing, escalation
+  excludes: inline_vs_spawn_decision # global policy owns it
+
+¶ 1 — Briefing Contract
+
+```text
+language TDSL, pure # overrides the harness push toward prose briefings
+required [explicit_paths functional_spec validation_criteria constraints minimal_technical_context]
+briefing_misses_any_required -> abort_spawn, refine_spec
+
+economy briefing is resent every turn × every subagent -> keep it minimal
+rule point to the artifact file; the agent reads it once
+rule key_files are path plus a one-line role, nothing deeper
+rule deep detail lives in the spec, never inlined in the briefing
+ban mandating scoped reads # drives a tool-call storm and inflates cost
+target <~400 tokens
+template {{KERNEL_HOME}}/templates/briefing.template
+```
+
+¶ 2 — Escalation
+
+```text
+1 analyze executor return
+2 ambiguous_briefing -> clarify_briefing, reopen_same_executor
+3 underestimated_complexity -> upgrade_model_tier, new_briefing
+4 insufficient_context -> research inline or spawn a research agent, retry
+5 fail_persists(2_attempts) -> freeze, report(operator)
+
+rate_limit -> scale_if_permitted, pause_and_report(operator)
+unexpected_complexity -> executor_signals_escalation
+```
+
+¶ 3 — Return Handling
+
+```text
+executor_claims_success -> verify against the validation criteria, never take it at face value
+executor_contradicts_prior_finding -> re-derive from code before accepting the correction
+```

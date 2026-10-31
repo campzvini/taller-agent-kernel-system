@@ -1,0 +1,84 @@
+Taller Personal Noncommercial License 1.0
+
+Copyright (c) 2026 Vinícius Campos, Taller.
+
+This is a source-available license, not the MIT License, the Apache License,
+or an Open Source Initiative approved license.
+
+1. Scope
+
+"Licensor" means Vinícius Campos, acting under the Taller name.
+"Covered Material" means original material contributed by the Licensor to
+this repository and material whose copyright holder expressly releases it
+under this license. Third-party material remains subject to its own terms.
+
+2. Free personal noncommercial grant
+
+Subject to these terms, the Licensor grants any natural person a worldwide,
+non-exclusive, royalty-free license to use, study, copy, modify, and redistribute
+Covered Material solely for that person's personal, noncommercial purposes.
+You may share unmodified copies and adaptations without charge under this
+license. Each recipient receives the same grant directly from the Licensor.
+
+Personal noncommercial purposes exclude use in employment, consulting, paid
+services, business operations, products, services, or other activity intended
+to produce commercial advantage or monetary compensation. Acting for, on
+behalf of, or for the benefit of a company is not personal use, even if the
+person performing the activity is unpaid.
+
+3. Business and organizational licensing
+
+The free grant does not authorize use of Covered Material by or on behalf of
+a company, including internal use, evaluation, adaptation, deployment, or
+redistribution. Such use requires a separate paid commercial license from
+the Licensor before it begins. Any other organizational use also requires
+separate written permission. No payment amount or commercial permission is
+implied by publication of this repository.
+
+Request commercial licensing through the Licensor's GitHub profile:
+https://github.com/campzvini
+
+This requirement applies only to Covered Material. Third-party material
+remains subject to its own terms.
+
+4. Notices and modified distributions
+
+When redistributing Covered Material, retain this license, applicable copyright
+and attribution notices. Do not remove notices identifying the original author or source.
+
+For any distributed adaptation containing Covered Material, prominently state
+in its README or equivalent documentation that it is a modified, unofficial
+version, identify its maintainer, describe the changes, and provide a link to
+the official repository. Do not represent a fork, adaptation, or third-party
+distribution as an official Taller release or as endorsed by Taller.
+
+These conditions apply to Covered Material. Independently authored, separable material
+does not become Covered Material merely by being distributed alongside it.
+
+5. Official distribution and names
+
+The official TASK distribution maintained by Taller is published at:
+https://github.com/campzvini/taller-agent-system-kernel
+
+This license grants no trademark, trade-name, or endorsement rights. Accurate
+descriptions of origin and legally permitted references remain permitted.
+No claim of registered trademark status is made by this notice.
+
+6. Ownership and termination
+
+Copyright holders retain ownership of their original contributions. Rights
+not expressly granted are reserved. This license does not transfer ownership
+and does not grant a right to sublicense Covered Material for commercial use.
+
+The free grant terminates if you fail to comply with these terms. You must
+then stop exercising rights under this license unless the Licensor grants
+written reinstatement. Termination does not affect compliant recipients' own grants.
+
+7. Disclaimer
+
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, COVERED MATERIAL IS PROVIDED
+"AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE LICENSOR OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM,
+DAMAGES, OR OTHER LIABILITY ARISING FROM COVERED MATERIAL OR ITS USE,
+WHETHER IN CONTRACT, TORT, OR OTHERWISE.

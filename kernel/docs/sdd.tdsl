@@ -1,0 +1,325 @@
+# Governed Delivery (.protocol)
+
+¶ - Full lifecycle policy for the TDSL spec-driven workflow. Routed from the global policy ¶11; read only when entering or auditing the flow.
+
+document:
+  id: taks.sdd-policy@1
+  version: 1
+  status: proposed
+  authority_basis: [@taks/global-policy @arch/tdsl-sdd @arch/tdsl-language]
+  scope: lifecycle, layout, authority, dag, freshness, controlled_return, commands
+  excludes: dialect_field_types, phase_authoring_procedure, assurance_selection, acceptance_records # skills and schemas own these; assurance and acceptance are deliberate omissions
+  entry skill(protocol)
+
+¶ 1 — Backbone
+
+```text
+initialize
+-> constitution
+-> feature
+-> specify
+-> plan
+-> tasks
+-> analyze
+-> execute
+-> close   # ends the cycle; see ¶10
+-> idle    # nothing governed is open; the next step is the operator's
+```
+
+Each phase writes one record. No phase asks permission to begin: it needs its
+predecessors to exist because it references their parts, which is referential
+integrity, not authorization.
+
+¶ 2 — Layout
+
+```text
+.protocol/project.tdsl                              # anchor: cursor + lifecycle register, ¶10
+.protocol/.scaffold/<artifact>.tdsl                 # authoring skeletons, ¶11; never a record
+.protocol/constitution.tdsl                         # constitution@1
+.protocol/features/<NNN-name>/spec.tdsl             # spec@1
+.protocol/features/<NNN-name>/plan.tdsl             # plan@1
+.protocol/features/<NNN-name>/tasks.tdsl            # tasks@1
+.protocol/features/<NNN-name>/analysis.tdsl         # analysis@1
+.protocol/features/<NNN-name>/decomposition.tdsl    # optional, ¶12; absence is not a gap
+.protocol/features/<NNN-name>/execution.journal.tdsl # runtime, never accepted
+
+dialects [constitution@1 spec@1 plan@1 tasks@1 analysis@1]
+schema_lock {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
+field_contracts {{KERNEL_HOME}}/skills/_shared/field-contracts.tdsl
+```
+
+¶ 3 — Records, not authorities
+
+```text
+artifact a record of a decision already taken in conversation
+  has no acceptance status
+  has no pass or fail
+  passes no judgment on itself
+  ban asking an artifact whether it is good; it has no opinion
+
+operator present in the conversation; reviews as the work is produced
+  silence is agreement; a change is stated, not recorded as a rejection
+  ban a mechanism that reconstructs, from files, a fact the transcript already holds
+
+analyze the only tool that emits a verdict, and the verdict is advice
+  it reports contradiction, ambiguity, gap and drift
+  it never withholds a transition; the operator decides what matters
+
+gate identity, sequence, conformance, coherence, refusal on a broken reference
+  ban the gate granting or withholding permission
+```
+
+Acceptance and lifecycle are different things, and only one of them is banned
+from the records:
+
+```text
+acceptance a judgement of quality
+  belongs to the operator, who is in the conversation
+  the transcript already holds it; a file would attest nothing
+  ban an artifact carrying accepted, approved, pass or fail
+
+lifecycle position in the cycle
+  is this feature still the one that routes work
+  is it finished, and if so with what standing
+  the conversation ended and the next agent enters cold; the repository is the
+    only thing still speaking to it, so position must be written down
+  ban a lifecycle value that expresses merit rather than position
+```
+
+The distinction is what makes `records_have_no_status` survive: a lifecycle
+field describes where the work sits, never how good it is.
+
+Why there is no acceptance layer: LIMA needs one because a kernel governs
+execution where the operator is genuinely absent at decision time, so a record
+must speak for them. Here the operator is in the room. An acceptance record
+would attest what the conversation already contains, and the agent runs the
+command that writes it — so it attests nothing and costs friction.
+
+This package deliberately omits two upstream concepts: independent assurance
+selection (tdsl-sdd ¶14) and acceptance record contracts (tdsl-sdd ¶13). Assurance
+as an independent policy gate does not fit an operator-in-room model where
+coherence findings are presented and the operator decides. Acceptance records are
+unnecessary because silence in transcript is agreement; a file-based record would
+duplicate what the conversation already holds.
+
+¶ 4 — Invariants
+
+```text
+sequence_before_author a phase needs its predecessors to exist; the gate refuses a broken reference
+one_phase_one_skill a phase skeleton is loaded only by its own skill
+records_have_no_status an artifact never carries acceptance, pass, or fail
+verdict_is_advisory analyze reports; the operator decides; nothing is withheld
+unknown_is_not_assumption material uncertainty -> explicit_unknowns
+one_proposition_one_location downstream artifacts reference upstream ids, never restate them
+runtime_is_not_planning progress lives in the execution journal, never in a planning record
+optional_only_when_material an absent optional section beats an empty ceremonial one
+lifecycle_is_position_not_merit a feature records where it sits, never how good it is
+one_cursor_many_lives active_feature points at one feature; the register holds every feature's position
+closing_is_an_operator_act the agent proposes a closing state; the operator directs it; close records it
+completing_one_cycle_opens_none delivery is not a reason to start the next feature
+```
+
+¶ 5 — Derivation and drift
+
+```text
+constitution -> [spec plan tasks analysis]
+spec -> [plan tasks analysis]
+plan -> [tasks analysis]
+tasks -> analysis
+```
+
+Drift is detected by content, not by byte digest. Editing a spec does not stale
+anything; it may make a downstream record incoherent, and that is what analyze
+reports:
+
+```text
+add a requirement -> `requirement_unproved` until some validation proves it
+rename a part -> `unresolved_reference` wherever the old id is still cited
+remove a component -> `unresolved_reference` in every task that referenced it
+reword without changing meaning -> nothing, correctly
+```
+
+This replaces the digest-based freshness of `tdsl-sdd ¶5`. The upstream can
+compare semantic `ir_digest`; this package has no IR, and a byte digest would
+have flagged a comma as a semantic change. Content coherence is both cheaper and
+closer to what the rule meant. Declared divergence, not an omission.
+
+¶ 6 — Controlled Return
+
+```text
+defect_found -> return to the artifact owning the semantic defect
+ban mutating an unrelated predecessor to make a downstream phase pass
+ban inferring an operator answer to close an explicit_unknown
+semantic_change -> new version, renewed acceptance, recalculated staleness
+preserve current, rejected and replacement versions
+attempt_count telemetry, never authority
+```
+
+¶ 7 — Commands
+
+```text
+state   python {{KERNEL_HOME}}/scripts/sdd_gate.py state
+init    python {{KERNEL_HOME}}/scripts/sdd_gate.py init --name <project>
+feature python {{KERNEL_HOME}}/scripts/sdd_gate.py feature <NNN-kebab-name> [--reopen]
+close   python {{KERNEL_HOME}}/scripts/sdd_gate.py close <id> --as <state> [--successor <id>] [--reason <text>]
+analyze python {{KERNEL_HOME}}/scripts/sdd_gate.py analyze # coerência entre registros
+gate    python {{KERNEL_HOME}}/scripts/sdd_gate.py gate <phase>
+check   python {{KERNEL_HOME}}/scripts/sdd_gate.py check <path.tdsl>
+trail   python {{KERNEL_HOME}}/scripts/sdd_gate.py trail # o que existe, o que analyze achou, o que falta
+repin   python {{KERNEL_HOME}}/scripts/tdsl_lock.py # after any grammar schema change
+```
+
+¶ 8 — Skills
+
+```text
+protocol     router and state reader, lifecycle entry point; owns feature, close and idle
+constitution phase(constitution) -> constitution@1
+specify      phase(specify) -> spec@1
+clarify      phase(clarify) -> spec@1 next version, governed replacement
+plan         phase(plan) -> plan@1
+tasks        phase(tasks) -> tasks@1
+analyze      phase(analyze) -> analysis@1, read_only
+execute      phase(execute) -> implementation files + execution journal
+```
+
+Analysis runs deterministically before it judges:
+
+```text
+python {{KERNEL_HOME}}/scripts/sdd_gate.py analyze
+
+settles_mechanically:
+  requirement_unproved, unresolved_reference, malformed_reference
+  component_unexercised, criterion_unmeasured, explicit_unknown, not_accepted_fresh
+
+remains_judgment:
+  policy_alignment, duplication, drift, silent_scope
+  atomicity, verifiability, authority, runtime_leak
+```
+
+¶ 9 — Legacy Coexistence
+
+Here `legacy` means the regime that came before governance — markdown specs under
+docs/specs/ — never a component this package retired. The retired script is named
+`legacy_archive_spec.py` in that same sense: it belongs to that regime.
+
+```text
+project_has(.protocol) -> this policy owns spec, plan and tasks; skill(spec) is not used
+project_lacks(.protocol) -> markdown specs under docs/specs/active/ via skill(spec)
+adoption operator decides; discovery is read-only and mutates nothing
+ban rewriting repository history to adopt governance
+```
+
+¶ 10 — Lifecycle
+
+A feature has two independent facts about it, and one slot could never hold
+both. `active_feature` is a cursor: which feature this session is pointed at,
+one at most, moved freely. The register says where each feature sits.
+
+```text
+.protocol/project.tdsl
+  active_feature: <id> | unknown        # cursor, zero or one
+  features:                             # register, every feature the project has
+    feature <id>:
+      lifecycle: <state>
+      successor: <id>                   # required when superseded
+      closed_at: <YYYY-MM-DD>
+      reason: <text>                    # required when abandoned
+```
+
+```text
+active     in work; the only state a feature routes work from
+delivered  finished; its invariants still hold; consult it, do not route from it
+heritage   finished and explicitly material to future work; reuse it actively
+historical finished; kept as evidence and rationale; consult, do not reuse
+superseded replaced by another feature, which is named; a claim without a named
+             successor is a classification with no evidence
+  ban naming itself as successor; that records no substitution
+  ban an abandoned successor; work is not replaced by work that never shipped
+  ban a succession chain that closes on itself
+abandoned  ended without delivery, with the reason recorded
+```
+
+`heritage` and `historical` both mean "does not route". They differ in the
+licence they carry: heritage says reuse this, historical says this is why. Without
+the distinction, "no normative authority" gets read as "no use", and reusable
+work is rebuilt from nothing.
+
+```text
+open   `feature <id>` registers the feature as active and points the cursor at it
+close  `close <id> --as <state>` records where it ended and clears the cursor if it pointed there
+reopen `feature <id> --reopen` puts a closed feature back in work, dropping the
+         closing facts that no longer hold; it rewrites no history
+idle   cursor empty or pointing at a closed feature -> next_phase is idle
+```
+
+```text
+ban a lifecycle state that expresses quality
+ban the agent closing a feature on its own initiative; it proposes, the operator directs
+ban an argument outside the state that requires it: successor only with superseded,
+  reason only with abandoned. A delivered feature carrying a closing reason implies
+  a justification for ending that its own state says does not exist.
+ban treating delivery as authorization to open the next feature
+ban directories as classification: `.protocol/archive/<state>/` would make the path
+  assert a fact nobody verified, and reclassifying would become a file move plus
+  every cross reference that pointed at the old path. The state is a field that
+  is read; the layout stays features/<id>/.
+```
+
+Compatibility: an anchor written before the register existed has no `features:`
+block. Its active feature reads as `active` and nothing fails. A project does not
+stop working for lacking a field that did not exist when it was written.
+
+¶ 11 — Scaffold
+
+The structure of a governed project is always the same; only the content differs.
+`init` places every authoring skeleton in one pass, and a phase fills one in
+rather than deriving the shape again.
+
+```text
+path .protocol/.scaffold/<artifact>.tdsl
+source {{KERNEL_HOME}}/skills/<phase>/template.tdsl
+refresh python {{KERNEL_HOME}}/scripts/<gate>.py scaffold # after a harness update
+
+rule the skeleton is a shape, never a record
+rule it lives outside every path the gate resolves an artifact from
+  reason next_phase decides by existence; a skeleton sitting where an artifact
+    belongs would make a freshly initialized project report itself ready to execute
+rule it carries placeholders and directives, which `check` refuses by design
+ban the hook gating a write to .scaffold/; there is no phase to gate
+```
+
+¶ 12 — Decomposition
+
+```text
+path .protocol/features/<NNN-name>/decomposition.tdsl
+dialect local:decomposition@1 # local; the kernel has no subtask contract
+declared_divergence its rules live in Python (check_decomposition), not in generated
+  TDSL, because tdsl_lock.py emits contracts from the bundled grammar schemas and the kernel
+  has no subtask dialect to emit. Deliberate, not an oversight; if the kernel ever
+  grows one, this moves to field-contracts and the check becomes a dialect lookup.
+skill decompose
+optional absent by default; absence is never a finding and never a phase the router asks for
+
+propose_when one task holds more than one independently validated result
+operator decides; the agent names the task and says why
+sibling_not_nested subtasks are their own container, with an explicit parent
+  reason the shared block parser reads fields exactly one level below an item, so a
+    subtask nested inside a task is dropped in silence
+depends_on orders subtasks of one parent only; ordering between tasks is the task DAG's
+  reason a second ordering model is how two contradictory orders come to exist
+```
+
+¶ 13 — Planning Modes
+
+The operator chooses how far planning runs ahead of code. The gate never forces
+either; it records the choice and routes accordingly.
+
+```text
+mode gradual # default: one feature runs specify -> plan -> tasks -> analyze -> execute, then the next opens
+mode integral # every active feature is specified, planned, tasked and analysed before any code
+record anchor field `planning_mode`, set by `init --mode` or `mode <value>`
+route integral -> next_phase targets the first active feature still missing a planning record
+view roadmap -> per-feature planning table; "all features planned" marks the start of execution
+invariant sequence_before_author still holds per feature; integral changes order across features, never within one
+choose integral when architecture must be settled whole before code; gradual when learning from each delivery matters
+```

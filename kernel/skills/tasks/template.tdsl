@@ -1,0 +1,56 @@
+# Authoring skeleton for the `tasks` phase.
+# NOT a template@1 document: the placeholder type contract is owned by the
+# schemas, never restated here. Emit this shape with the placeholders resolved.
+
+skeleton:
+  id @skeleton/tasks-efficient
+  purpose compact traceable dependency DAG with fixed completion semantics
+  output_dialect tasks@1
+  provenance operator
+  schema_lock {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
+  field_contracts {{KERNEL_HOME}}/skills/_shared/field-contracts.tdsl
+  canonical @kernel/grammar/templates/tasks.tdsl
+
+directives: # authoring instructions, never emitted into the artifact
+  {name} one typed scalar, complete field value, reference component, or ln segment
+  {*name} zero-or-more collection members
+  {#name} the complete object contract, see field_contracts
+  {alias.field} repeated-item value inside a `for`
+  for <collection> as <alias>: repeat the block per item
+  when <name>: emit only when present and material
+  when_empty <name>: emit `name: []` when the required container has zero items
+
+shape:
+
+tdsl: tasks@1
+schema_revision: {schema_revision} # copy revisions.tasks@1 from schema_lock verbatim
+id: @tasks/{feature_id}
+version: {artifact_version}
+status: proposed
+purpose: {purpose}
+spec_ref: @spec/{feature_id}
+plan_ref: @plan/{feature_id}
+
+tasks:
+  for tasks as task:
+    task {task.id}:
+      action ln: |
+        {task.action}
+      status: pending
+      requirement_refs: [{*task.requirement_refs}]
+      plan_refs: [{*task.plan_refs}]
+      file_refs: {task.file_refs}
+      validation_refs: [{*task.validation_refs}]
+      depends_on: [{*task.depends_on}]
+      when task.condition:
+        condition: {task.condition}
+
+execution_order: [{*execution_order}]
+
+validation:
+  completion_rule: all_required_validation_pass
+  required_refs: [{*required_validation_refs}]
+
+completion:
+  evidence_required: true
+  operator_acceptance: required

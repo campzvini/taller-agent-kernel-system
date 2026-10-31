@@ -1,0 +1,15 @@
+# AGENTS.md — <Projeto>
+# Entrada humana / retomada. Linguagem natural. Fino por design.
+# A política agent-facing (tooling, §, economia, commits, DSL) HERDA de ~/.codex/AGENTS.md — não repetir.
+
+## Retomada
+Antes de qualquer tarefa, leia nesta ordem:
+1. `AGENTS.md` (este diretório) — fronteiras, layout, comandos, estado
+2. <índice/memória operacional do projeto, se houver>
+3. <spec ativa em docs/specs/active/, se a sessão for dirigida por uma>
+
+## Objetivo
+<uma linha: o que o projeto é e qual seu papel>
+
+## Quando trabalhar aqui
+→ <regra de entrada específica do projeto, se houver>

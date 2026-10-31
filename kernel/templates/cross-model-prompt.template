@@ -1,0 +1,10 @@
+# cross-model-prompt.template — prompt autocontido para modelo EXTERNO (GPT/Gemini/etc.).
+# Sem referência a spec/§/AGENTS/arquivos do ecossistema do kernel — o modelo externo não tem acesso.
+# TDSL. Inglês se o destino for melhor servido nisso.
+
+context <background mínimo, 1-3 linhas>
+task <imperativo>
+inputs: <dados/trechos colados INLINE — sem paths, o modelo não lê arquivos>
+constraints: <lista>
+output_format <forma exata da saída esperada>
+done_when <critério de aceite objetivo>

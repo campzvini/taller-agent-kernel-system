@@ -1,0 +1,26 @@
+# AGENTS.md — agent-facing. TDSL puro. Só o LOCAL e NÃO-DERIVÁVEL do global.
+# Não repetir política de tooling/§/economia/commits — isso herda de ~/.codex/AGENTS.md.
+
+project <nome>
+stack <linguagens/motores>
+role <propósito em uma linha>
+
+boundaries:            # fronteiras que NUNCA se cruza
+  never <regra transversal>
+
+layout:                # diretório -> papel (uma linha cada)
+  <dir> -> <papel>
+
+commands:
+  test <cmd>
+  build <cmd>
+  lint <cmd>
+
+conventions:
+  inherit ~/.codex/AGENTS.md   # annex_b §, lang, commits, §_protocol
+  local <só o que desvia ou estende o global>
+
+state:
+  active_specs docs/specs/active/
+  adr docs/adr/
+  open <concern transversal atual, se houver>

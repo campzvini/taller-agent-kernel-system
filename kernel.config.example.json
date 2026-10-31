@@ -1,0 +1,24 @@
+{
+  "kernel": "taller-agent-kernel-system",
+  "version": "1.0.0",
+  "kernel_home": "{{KERNEL_HOME}}",
+  "python": "{{PYTHON}}",
+  "signature": {
+    "author": "",
+    "tagline": "VAI CORINTHIANS!"
+  },
+  "operator": {
+    "identity": "",
+    "domain": "",
+    "capability": "",
+    "shared_context": ""
+  },
+  "chat_language": "en",
+  "agent_posture": "thought_partner",
+  "response_style": "balanced",
+  "commit_attribution": "no_agent_trailer",
+  "doc_edits": "require_explicit_request",
+  "sdd_default_mode": "gradual",
+  "test_stance": "required",
+  "harnesses": []
+}

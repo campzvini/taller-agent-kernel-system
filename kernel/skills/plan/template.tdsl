@@ -1,0 +1,107 @@
+# Authoring skeleton for the `plan` phase.
+# NOT a template@1 document: the placeholder type contract is owned by the
+# schemas, never restated here. Emit this shape with the placeholders resolved.
+
+skeleton:
+  id @skeleton/plan-efficient
+  purpose compact technical design whose validation map is the single verification layer
+  output_dialect plan@1
+  provenance derived
+  schema_lock {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
+  field_contracts {{KERNEL_HOME}}/skills/_shared/field-contracts.tdsl
+  canonical @kernel/grammar/templates/plan.tdsl
+
+directives: # authoring instructions, never emitted into the artifact
+  {name} one typed scalar, complete field value, reference component, or ln segment
+  {*name} zero-or-more collection members
+  {#name} the complete object contract, see field_contracts
+  {alias.field} repeated-item value inside a `for`
+  for <collection> as <alias>: repeat the block per item
+  when <name>: emit only when present and material
+  when_empty <name>: emit `name: []` when the required container has zero items
+
+shape:
+
+tdsl: plan@1
+schema_revision: {schema_revision} # copy revisions.plan@1 from schema_lock verbatim
+id: @plan/{feature_id}
+version: {artifact_version}
+status: proposed
+purpose: {purpose}
+constitution_ref: @project/constitution
+spec_ref: @spec/{feature_id}
+
+summary ln: |
+  {summary}
+
+technical_context:
+  {#technical_context}
+
+components:
+  for components as component:
+    component {component.id}:
+      purpose ln: |
+        {component.purpose}
+      responsibilities: [{*component.responsibilities}]
+      when component.depends_on:
+        depends_on: [{*component.depends_on}]
+
+boundaries:
+  for boundaries as boundary:
+    boundary {boundary.id}:
+      between: [{*boundary.between}]
+      contract ln: |
+        {boundary.contract}
+      when boundary.authority:
+        authority: [{*boundary.authority}]
+
+when interfaces:
+  interfaces:
+    for interfaces as interface:
+      interface {interface.id}:
+        kind: {interface.kind}
+        contract ln: |
+          {interface.contract}
+        owner: {interface.owner}
+when_empty interfaces:
+  interfaces: []
+
+data_and_state:
+  {#data_and_state}
+
+validations:
+  for validations as validation:
+    validation {validation.id}:
+      level: {validation.level}
+      proves: [{*validation.proves}]
+      method ln: |
+        {validation.method}
+
+project_structure:
+  {#project_structure}
+
+decisions: [{*decisions}]
+explicit_unknowns: [{*explicit_unknowns}]
+risks: [{*risks}]
+
+when research_refs:
+  research_refs: [{*research_refs}]
+
+when migration:
+  migration:
+    {#migration}
+
+when performance:
+  performance:
+    {#performance}
+
+when security:
+  security:
+    {#security}
+
+when operations:
+  operations:
+    {#operations}
+
+when complexity_exceptions:
+  complexity_exceptions: [{*complexity_exceptions}]

@@ -1,0 +1,65 @@
+# Harness Adapters
+
+¶ - Where each supported harness reads global rules, skills and hooks, and what the installer writes there.
+
+document:
+  id: taks.adapters@1
+  version: 1.0.0
+  status: active
+  scope: claude_code, codex, antigravity, cline
+
+¶ 1 — Shared Layout
+
+```text
+kernel_home ~/.taks # one copy of scripts, docs, grammar, skills and kernel.config.json for every harness
+policy kernel/policy.tdsl.md rendered once -> {{KERNEL_HOME}}/policy.tdsl.md, then placed per harness below
+skills kernel/skills/* copied into each harness skill directory, {{KERNEL_HOME}} resolved
+hooks the harness hook script is copied into {{KERNEL_HOME}}/scripts/ so it resolves docs and gates from the kernel
+existing_file -> back up to {{KERNEL_HOME}}/backups/<timestamp>/ before writing; never discard operator content
+```
+
+¶ 2 — Claude Code
+
+```text
+policy ~/.claude/CLAUDE.md # merge: keep operator content, insert the policy between `<!-- taks:begin -->` and `<!-- taks:end -->`
+skills ~/.claude/skills/<name>/SKILL.md
+hooks merge adapters/claude/settings.hooks.json into ~/.claude/settings.json `hooks`
+hook_script adapters/claude/claude_hook.py -> {{KERNEL_HOME}}/scripts/claude_hook.py
+enforcement mechanical: the PreToolUse hook runs the gate before a .protocol write and injects engineering.tdsl
+```
+
+¶ 3 — Codex
+
+```text
+policy ~/.codex/AGENTS.md # same merge markers
+skills ~/.codex/skills/<name>/SKILL.md # also valid: ~/.agents/skills per current Codex docs
+hooks merge adapters/codex/hooks.json into ~/.codex/hooks.json; enable hooks in ~/.codex/config.toml if the installed version requires it
+hook_script adapters/codex/codex_hook.py -> {{KERNEL_HOME}}/scripts/codex_hook.py
+enforcement mechanical on apply_patch; delegation contract injected on SubagentStart
+```
+
+¶ 4 — Antigravity
+
+```text
+policy ~/.gemini/GEMINI.md # same merge markers; keep the file under ~12000 characters
+skills ~/.gemini/config/skills/<name>/SKILL.md and ~/.gemini/antigravity/skills/<name>/SKILL.md
+  # third-party guides disagree on the global path; writing both is harmless
+hooks none # the agent runs gate and diagram scripts itself, as policy ¶11 instructs
+size_guard rendered policy > 12000 chars -> drop ¶2 grammar block (canonical grammar file stays referenced)
+```
+
+¶ 5 — Cline
+
+```text
+policy ~/Documents/Cline/Rules/taks-policy.md # global rules directory; Linux may use ~/Cline/Rules
+skills ~/.cline/skills/<name>/SKILL.md # name must equal the directory name; keep each under ~5k tokens
+hooks none # instruction-driven enforcement, as for Antigravity
+```
+
+¶ 6 — Other Harnesses
+
+```text
+rule any harness that reads a global instruction file and SKILL.md folders can host the kernel
+install policy into its global instruction file with the merge markers, skills into its skill directory
+no_skill_support -> append a skill index (name, description, path) to the policy; the agent reads SKILL.md on demand
+```

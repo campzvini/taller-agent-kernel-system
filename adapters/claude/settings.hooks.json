@@ -1,0 +1,37 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON}} {{KERNEL_HOME}}/scripts/session_init.py --hook",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON}} {{KERNEL_HOME}}/scripts/claude_hook.py",
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|NotebookEdit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON}} {{KERNEL_HOME}}/scripts/claude_hook.py",
+            "timeout": 25
+          }
+        ]
+      }
+    ]
+  }
+}

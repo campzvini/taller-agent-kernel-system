@@ -1,0 +1,77 @@
+# Authoring skeleton for the `specify` phase.
+# NOT a template@1 document: the placeholder type contract is owned by the
+# schemas, never restated here. Emit this shape with the placeholders resolved.
+
+skeleton:
+  id @skeleton/spec-efficient
+  purpose compact behavior contract with atomic requirements and reference-based traceability
+  output_dialect spec@1
+  provenance operator
+  schema_lock {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
+  field_contracts {{KERNEL_HOME}}/skills/_shared/field-contracts.tdsl
+  canonical @kernel/grammar/templates/spec.tdsl
+
+directives: # authoring instructions, never emitted into the artifact
+  {name} one typed scalar, complete field value, reference component, or ln segment
+  {*name} zero-or-more collection members
+  {#name} the complete object contract, see field_contracts
+  {alias.field} repeated-item value inside a `for`
+  for <collection> as <alias>: repeat the block per item
+  when <name>: emit only when present and material
+  when_empty <name>: emit `name: []` when the required container has zero items
+
+shape:
+
+tdsl: spec@1
+schema_revision: {schema_revision} # copy revisions.spec@1 from schema_lock verbatim
+id: @spec/{feature_id}
+version: {artifact_version}
+status: proposed
+purpose: {purpose}
+feature_ref: @feature/{feature_id}
+
+objective ln: |
+  {objective}
+
+user_journeys:
+  for journeys as journey:
+    journey {journey.id}:
+      title: {journey.title}
+      priority: {journey.priority}
+      actor: {journey.actor}
+      goal ln: |
+        {journey.goal}
+      independent_test ln: |
+        {journey.independent_test}
+      acceptance: [{*journey.acceptance}]
+
+requirements:
+  for requirements as requirement:
+    requirement {requirement.id}:
+      statement ln: |
+        {requirement.statement}
+      when requirement.source_refs:
+        source_refs: [{*requirement.source_refs}]
+      when requirement.conditions:
+        conditions: [{*requirement.conditions}]
+
+success_criteria:
+  for criteria as criterion:
+    criterion {criterion.id}:
+      statement ln: |
+        {criterion.statement}
+      measure: {criterion.measure}
+
+edge_cases: []
+decisions: [{*decisions}]
+explicit_unknowns: [{*explicit_unknowns}]
+evidence_refs: [{*evidence_refs}]
+
+when non_goals:
+  non_goals: [{*non_goals}]
+
+when entities:
+  entities: [{*entities}]
+
+when dependencies:
+  dependencies: [{*dependencies}]

@@ -1,0 +1,66 @@
+# Authoring skeleton for the `analyze` phase.
+# NOT a template@1 document: the placeholder type contract is owned by the
+# schemas, never restated here. Emit this shape with the placeholders resolved.
+
+skeleton:
+  id @skeleton/analysis
+  purpose deterministic analysis skeleton
+  output_dialect analysis@1
+  provenance lima_canonical
+  schema_lock {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
+  field_contracts {{KERNEL_HOME}}/skills/_shared/field-contracts.tdsl
+  canonical @kernel/grammar/templates/analysis.tdsl
+
+directives: # authoring instructions, never emitted into the artifact
+  {name} one typed scalar, complete field value, reference component, or ln segment
+  {*name} zero-or-more collection members
+  {#name} the complete object contract, see field_contracts
+  {alias.field} repeated-item value inside a `for`
+  for <collection> as <alias>: repeat the block per item
+  when <name>: emit only when present and material
+  when_empty <name>: emit `name: []` when the required container has zero items
+
+shape:
+
+tdsl: analysis@1
+schema_revision: {schema_revision} # copy revisions.analysis@1 from schema_lock verbatim
+id: @analysis/{feature_id}
+version: {artifact_version}
+status: proposed
+purpose: {purpose}
+constitution_ref: @project/constitution
+spec_ref: @spec/{feature_id}
+plan_ref: @plan/{feature_id}
+tasks_ref: @tasks/{feature_id}
+
+coverage:
+  {#coverage}
+
+consistency:
+  {#consistency}
+
+when findings:
+  findings:
+    for findings as finding:
+      finding {finding.id}:
+        severity: {finding.severity}
+        class: {finding.class}
+        statement ln: |
+          {finding.statement}
+        owner_artifact: {finding.owner_artifact}
+        source_refs: [{*finding.source_refs}]
+        route: {finding.route}
+        when finding.evidence_refs:
+          evidence_refs: [{*finding.evidence_refs}]
+        when finding.affected_refs:
+          affected_refs: [{*finding.affected_refs}]
+        when finding.confidence:
+          confidence: {finding.confidence}
+when_empty findings:
+  findings: []
+
+result: {result}
+when limitations:
+  limitations: [{*limitations}]
+when evidence_refs:
+  evidence_refs: [{*evidence_refs}]

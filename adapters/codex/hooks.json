@@ -1,0 +1,43 @@
+{
+  "description": "Taller Agent Kernel System hooks for Codex.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON}} {{KERNEL_HOME}}/scripts/session_init.py --hook",
+            "timeout": 30,
+            "additionalContextLimit": 5000
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON}} {{KERNEL_HOME}}/scripts/codex_hook.py",
+            "timeout": 15,
+            "additionalContextLimit": 5000
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON}} {{KERNEL_HOME}}/scripts/codex_hook.py",
+            "timeout": 25,
+            "additionalContextLimit": 12000
+          }
+        ]
+      }
+    ]
+  }
+}

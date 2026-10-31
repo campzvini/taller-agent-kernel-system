@@ -1,0 +1,75 @@
+# Authoring skeleton for the `constitution` phase.
+# NOT a template@1 document: the placeholder type contract is owned by the
+# schemas, never restated here. Emit this shape with the placeholders resolved.
+
+skeleton:
+  id @skeleton/constitution-efficient
+  purpose compact normative project constitution with explicit authority and minimal policy duplication
+  output_dialect constitution@1
+  provenance operator
+  schema_lock {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
+  field_contracts {{KERNEL_HOME}}/skills/_shared/field-contracts.tdsl
+  canonical @kernel/grammar/templates/constitution.tdsl
+
+directives: # authoring instructions, never emitted into the artifact
+  {name} one typed scalar, complete field value, reference component, or ln segment
+  {*name} zero-or-more collection members
+  {#name} the complete object contract, see field_contracts
+  {alias.field} repeated-item value inside a `for`
+  for <collection> as <alias>: repeat the block per item
+  when <name>: emit only when present and material
+  when_empty <name>: emit `name: []` when the required container has zero items
+
+shape:
+
+tdsl: constitution@1
+schema_revision: {schema_revision} # copy revisions.constitution@1 from schema_lock verbatim
+id: @project/constitution
+version: {artifact_version}
+status: proposed
+purpose: {purpose}
+
+principles:
+  for principles as principle:
+    principle {principle.id}:
+      title: {principle.title}
+      rule ln: |
+        {principle.rule}
+      when principle.rationale:
+        rationale ln: |
+          {principle.rationale}
+      when principle.applies_to:
+        applies_to: [{*principle.applies_to}]
+      when principle.exceptions:
+        exceptions: [{*principle.exceptions}]
+
+authority:
+  {#authority}
+
+quality:
+  {#quality}
+
+safety:
+  {#safety}
+
+evidence:
+  {#evidence}
+
+amendment:
+  {#amendment}
+
+when language_policy:
+  language_policy:
+    {#language_policy}
+
+when architecture_refs:
+  architecture_refs: [{*architecture_refs}]
+
+when workflow_refs:
+  workflow_refs: [{*workflow_refs}]
+
+when profiles:
+  profiles: [{*profiles}]
+
+when explicit_unknowns:
+  explicit_unknowns: [{*explicit_unknowns}]

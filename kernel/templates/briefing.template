@@ -1,0 +1,15 @@
+# briefing.template — prompt de subagent executor. TDSL. Alvo <~400 tokens.
+# Aponta pro spec (lido uma vez); NÃO inline design_notes nem mandato de leitura scoped.
+
+task <imperativo em uma linha>
+root <path absoluto>
+spec <path> status=read_once authoritative    # se existe: é a fonte da profundidade
+scope in: <o que está no escopo> | out: <o que não tocar>
+key_files:                                     # só path + papel; detalhe fica no spec
+  <path> -> <papel em uma linha>
+constraints: <lista>
+validation:
+  cmd <comando de teste/build — suíte inteira, encadeie com && se multi-stack>
+  criteria <condição objetiva de "passou">
+report files_changed, test_tally, deviations+reason, blockers
+on_block briefing_ambíguo|complexidade>estimativa -> stop_and_report, no_guess

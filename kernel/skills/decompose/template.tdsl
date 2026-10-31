@@ -1,0 +1,35 @@
+# Authoring skeleton for the optional `decompose` phase.
+# NOT a template@1 document. Emit this shape with the placeholders resolved.
+
+skeleton:
+  id @skeleton/decomposition
+  purpose break one task into ordered subtasks without inventing a second dependency model
+  output_dialect local:decomposition@1
+  provenance operator
+  canonical none # local dialect; the kernel has no subtask contract
+
+directives: # authoring instructions, never emitted into the artifact
+  {name} one typed scalar or complete field value
+  {*name} zero-or-more collection members
+  {alias.field} repeated-item value inside a `for`
+  for <collection> as <alias>: repeat the block per item
+
+shape:
+
+tdsl: local:decomposition@1
+schema_revision: local:decomposition@1
+id: @decomposition/{feature_id}
+version: {artifact_version}
+status: proposed
+purpose: {purpose}
+tasks_ref: @tasks/{feature_id}
+
+subtasks:
+  for subtasks as subtask:
+    subtask {subtask.id}:
+      parent: {subtask.parent}
+      action ln: |
+        {subtask.action}
+      status: pending
+      file_refs: {subtask.file_refs}
+      depends_on: [{*subtask.depends_on}]
