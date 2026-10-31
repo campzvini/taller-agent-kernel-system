@@ -27,8 +27,7 @@ This README explains what each part is and, above all, **why** it exists.
 10. [Supported harnesses](#10-supported-harnesses)
 11. [Installation](#11-installation)
 12. [Repository layout](#12-repository-layout)
-13. [The signature, and the joke in it](#13-the-signature-and-the-joke-in-it)
-14. [Contributing](#14-contributing)
+13. [Contributing](#13-contributing)
 
 ---
 
@@ -127,15 +126,15 @@ module level.
 
 ```rust
 // ────────────────────────────────────────────
-// filmcraft 0.7.2 — demosaic.rs
-// § - CFA demosaicing to RGB · Rust
+// myapp 1.0.0 — parser.rs
+// § - Parse configuration files into typed settings · Rust
 // <your signature>
 // VAI CORINTHIANS!
 // ────────────────────────────────────────────
 
-// ── § 1 — CFA PATTERN — Bayer pattern model ──
-// ── § 2 — PADDING — Mirror padding of the plane ──
-// ── § 3 — DEMOSAIC — Entry point ──
+// ── § 1 — TYPES — Settings model and parse errors ──
+// ── § 2 — LEXER — Tokens from raw text ──
+// ── § 3 — PUBLIC API — parse and validate ──
 ```
 
 - `§` indexes source code (header `§ -` plus numbered chapters `§ n — DOMAIN — responsibility`).
@@ -292,13 +291,7 @@ adapters/                   per-harness placement and hook configuration
 kernel.config.example.json  shape of the installer's answers
 ```
 
-## 13. The signature, and the joke in it
-
-The anchor banner carries two optional lines: an author signature, which you choose at install time,
-and a tagline that defaults to `VAI CORINTHIANS!`. It is a harmless joke and a reminder that whoever
-ships the code signs it. Change it or remove it whenever you like in `kernel.config.json`.
-
-## 14. Contributing
+## 13. Contributing
 
 This is a contribution, not a product: issues, ideas and pull requests are welcome.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for conventions and versioning.
