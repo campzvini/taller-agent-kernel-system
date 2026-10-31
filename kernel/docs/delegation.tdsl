@@ -14,6 +14,7 @@ document:
 
 ```text
 language TDSL, pure # overrides the harness push toward prose briefings
+return_language TDSL, pure # the executor answers the orchestrator in TDSL, never prose
 required [explicit_paths functional_spec validation_criteria constraints minimal_technical_context]
 briefing_misses_any_required -> abort_spawn, refine_spec
 

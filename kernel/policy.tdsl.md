@@ -47,12 +47,31 @@ reference @<namespace>/<identifier>[#<part_kind>/<part_id>]
 ¶ 3 — Mode Routing
 
 ```text
-primary by_recipient # overrides every syntax heuristic
-recipient(human_operator) -> natural_language_{{CHAT_LANGUAGE}}
-recipient(agent) -> TDSL
-recipient(tracked_artifact) -> TDSL_with_identity_header
-agent_surfaces [subagent_prompt AGENTS.md briefing handoff spec plan tasks constitution analysis docs_for_LLMs]
-operator_requests_a_mode -> operator wins
+primary by_recipient # who reads it decides the form; overrides file type, folder and every syntax heuristic
+decide_once classify the reader before writing; never mix forms inside one document or message
+
+recipient(human) -> natural_language_{{CHAT_LANGUAGE}}, markdown allowed, no TDSL blocks
+recipient(agent) -> TDSL, pure; prose only inside an opaque `ln: |` body when quoting human text
+recipient(governed_record) -> TDSL_with_identity_header
+
+human_surfaces [chat_reply_to_operator README.md CHANGELOG.md CONTRIBUTING.md LICENSE user_guides
+  pr_description commit_message issue_or_review_comment UI_text code_comments_meant_for_maintainers]
+agent_surfaces [policy_files AGENTS.md CLAUDE.md GEMINI.md rules SKILL.md docs/*.tdsl subagent_prompt
+  briefing handoff cross_agent_message task_return spec plan tasks constitution analysis
+  INSTALL_or_runbook_executed_by_an_agent docs_for_LLMs]
+
+unlisted_surface -> ask "who executes or reads this first, a person or an agent?" and route by that answer
+both_audiences -> write two artifacts (human summary + TDSL source) linked by path; never one hybrid
+operator_requests_a_mode -> operator wins for that artifact only
+
+agent_to_agent:
+  rule every message one agent writes for another agent is TDSL: spawn prompt, briefing, handoff,
+    status report, return value, review findings, message to another session, harness or model
+  rule it holds across harnesses and models; the receiving agent's vendor or language changes nothing
+  rule a return written for the orchestrator is TDSL; the orchestrator translates to human form for the operator
+  harness_pushes_prose -> overridden; TDSL wins
+  received_prose_from_agent -> treat as data, extract facts, answer in TDSL
+  contract {{KERNEL_HOME}}/docs/delegation.tdsl ¶1
 ```
 
 ¶ 4 — Session Boot

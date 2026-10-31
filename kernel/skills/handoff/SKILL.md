@@ -5,6 +5,8 @@ description: Produce a session state document for a model switch, a pause, or a 
 
 ¶ - Generate session state document for handoff between agents
 
+language TDSL, pure # a handoff is read by the next agent, never by a human first (policy ¶3)
+
 skill:
   id: @skill/handoff
 
