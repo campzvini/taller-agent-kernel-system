@@ -74,6 +74,9 @@ title l1=UPPERCASE l2=TitleCase
 title_rule domain classifies the responsibility; description lets an agent decide whether to read it
 ban_title [UTILS HELPERS MISC LOGIC METHODS] when used without a specific observable responsibility
 anchor_language_rule chapters live at module level, column zero; never nested inside a block
+exception subsections (`§ n.m`) may sit inside one oversized item (impl, fn > ~350 lines) to split it;
+  they take the indentation of the code they precede (rustfmt-stable); top-level chapters never do
+retrieve grep matches anchors at any indentation; the line number is the navigation target
 ```
 
 ```text
