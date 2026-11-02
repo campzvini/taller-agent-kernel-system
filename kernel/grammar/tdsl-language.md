@@ -1,5 +1,7 @@
 # TDSL Canonical Language Definition
 
+TDSL = Transformer Deterministic Semantic Language.
+
 ¶ - Consolidate the living TDSL grammar into one production normative source without resetting its lineage.
 
 document:

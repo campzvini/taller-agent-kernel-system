@@ -27,7 +27,7 @@ shared_context {{SHARED_CONTEXT}}
 
 ¶ 2 — Language
 
-TDSL v3 is the agent-facing language. This is a working subset; the bundled grammar is canonical.
+TDSL v3 (Transformer Deterministic Semantic Language) is the agent-facing language. This is a working subset; the bundled grammar is canonical.
 
 ```text
 principle max_info_per_token, min_invention, semantics_over_syntax

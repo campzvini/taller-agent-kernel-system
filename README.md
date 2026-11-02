@@ -33,21 +33,37 @@ This README explains what each part is and, above all, **why** it exists.
 
 ## 1. The problem it solves
 
-Agents are extremely capable, but capability without method turns into noise:
+Working with an agent is communication over a noisy channel. Every instruction, briefing, spec and
+handoff is a message, and each one can be read more than one way. Prose is the noisiest encoding
+available: a sentence a human finds clear can be read three ways by a model, the same word means
+different things in different files, and every ambiguity is a place where the agent fills the gap by
+inventing. That invention is entropy, and in a long session it compounds.
 
-- **Every harness has its own rules format.** Claude Code reads `CLAUDE.md`, Codex reads `AGENTS.md`,
-  Antigravity reads `GEMINI.md`, Cline reads a rules folder. Keep four copies by hand and they drift
-  apart within weeks — the same instruction ends up meaning four different things.
-- **Prose instructions are ambiguous and expensive.** A paragraph that a human finds clear can be read
-  three ways by a model, and it is re-sent on every turn, paying tokens each time.
-- **Agents read whole files to find one function.** On a large codebase that is most of the cost of a
-  session, and most of the context window filled with things that did not matter.
-- **"Just write the code" does not scale.** Without written decisions, each session re-derives the
-  architecture, and two agents working in parallel make incompatible choices.
-- **Delegation without a contract is lossy.** When one agent hands work to another in free prose, detail
-  is dropped, invented or misread.
+TASK treats this as an information problem. Shannon's insight is that a message is useful in proportion
+to how much uncertainty it removes, and that noise is what the channel adds that the sender did not
+mean. Wittgenstein's is that the limits of a language are the limits of what can be said clearly in it,
+and that meaning is fixed by use within a defined practice. Put together, the problem is this:
 
-TASK answers each of these with one deliberate choice, described below.
+**how do you communicate with an agent so that each token carries the most information and the least
+noise, and the agent's next step is determined by the message rather than guessed from it?**
+
+TASK's answer is to make the communication model as deterministic as it can be:
+
+- **A closed language.** TDSL gives every instruction one reading. Its grammar limits what can be said,
+  so that what is said cannot drift.
+- **A recipient rule.** Who reads a text decides its form; agents always receive TDSL, humans always
+  receive natural language. No channel mixes the two.
+- **A procedure, not advice.** The spec-driven flow (constitution, spec, plan, tasks, analysis,
+  execution) turns intent into records, and records into a fixed order of steps. Each phase reads
+  only what its predecessors wrote.
+- **A map the agent walks.** Records, phase gates, routed policies and code anchors together form a
+  map of where the agent is, what it may read, what comes next and when to stop. The agent does not
+  re-derive the path each session; it follows it.
+
+The practical symptoms this removes are familiar: four harnesses with four drifting copies of the same
+rules, prose instructions paid for on every turn, whole files read to find one function, architecture
+re-derived by every session, and delegation that loses or invents detail between agents. Each is a
+form of the same noise, and each is answered by one deliberate choice described below.
 
 ## 2. The idea: a kernel before the harness
 
@@ -69,7 +85,7 @@ points back to that single kernel.
 
 ## 3. TDSL — a language for agents
 
-TDSL (Taller Domain-Specific Language) is a small, line-oriented notation for writing instructions and
+TDSL (Transformer Deterministic Semantic Language) is a small, line-oriented notation for writing instructions and
 records that agents read. A fragment:
 
 ```text
