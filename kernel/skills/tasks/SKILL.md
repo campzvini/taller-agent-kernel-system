@@ -1,6 +1,6 @@
 ---
 name: tasks
-description: Author the executable task set as a tasks@1 TDSL artifact in .protocol/features/<id>/tasks.tdsl — an acyclic dependency DAG whose every node traces to a requirement, a plan part, and a validation. Use when the operator wants the recorded plan decomposed into work. Not for technical design (use plan) and not for tracking runtime progress.
+description: Author the executable task set as a tasks@1 TDSL artifact in .task/features/<id>/tasks.tdsl — an acyclic dependency DAG whose every node traces to a requirement, a plan part, and a validation. Use when the operator wants the recorded plan decomposed into work. Not for technical design (use plan) and not for tracking runtime progress.
 ---
 
 ¶ - Author acyclic task DAG, each traces to requirement, plan part, validation.
@@ -9,7 +9,7 @@ skill:
   id: @skill/tasks
   phase tasks
   output_dialect tasks@1
-  output_path .protocol/features/<feature_id>/tasks.tdsl
+  output_path .task/features/<feature_id>/tasks.tdsl
   template {{KERNEL_HOME}}/skills/tasks/template.tdsl
 
 ¶ 1 — Preconditions

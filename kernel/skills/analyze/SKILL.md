@@ -9,7 +9,7 @@ skill:
   id: @skill/analyze
   phase analyze
   output_dialect analysis@1
-  output_path .protocol/features/<feature_id>/analysis.tdsl
+  output_path .task/features/<feature_id>/analysis.tdsl
   template {{KERNEL_HOME}}/skills/analyze/template.tdsl
   posture read_only
 

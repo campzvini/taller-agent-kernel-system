@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Author the technical plan as a plan@1 TDSL artifact in .protocol/features/<id>/plan.tdsl — components, boundaries, interfaces, data and state, and the validation map that proves the spec. Use when the operator wants the technical approach for an accepted specification. Not for task decomposition (use tasks) and not for behavior (use specify).
+description: Author the technical plan as a plan@1 TDSL artifact in .task/features/<id>/plan.tdsl — components, boundaries, interfaces, data and state, and the validation map that proves the spec. Use when the operator wants the technical approach for an accepted specification. Not for task decomposition (use tasks) and not for behavior (use specify).
 ---
 
 ¶ - Author technical approach: components, boundaries, interfaces, data, validation map.
@@ -9,7 +9,7 @@ skill:
   id: @skill/plan
   phase plan
   output_dialect plan@1
-  output_path .protocol/features/<feature_id>/plan.tdsl
+  output_path .task/features/<feature_id>/plan.tdsl
   template {{KERNEL_HOME}}/skills/plan/template.tdsl
 
 ¶ 1 — Preconditions

@@ -9,7 +9,7 @@ skill:
   id: @skill/clarify
   phase clarify
   output_dialect spec@1
-  output_path .protocol/features/<feature_id>/spec.tdsl
+  output_path .task/features/<feature_id>/spec.tdsl
   skeleton {{KERNEL_HOME}}/skills/specify/template.tdsl # clarify emits a spec, it owns no shape of its own
 
 ¶ 1 — What this is

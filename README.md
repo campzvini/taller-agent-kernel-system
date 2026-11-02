@@ -158,7 +158,7 @@ by one agent is immediately usable by any other.
 
 ## 6. Spec-driven development — records, not bureaucracy
 
-Governed work moves through phases, each producing one TDSL record in `.protocol/`:
+Governed work moves through phases, each producing one TDSL record in `.task/`:
 
 ```
 constitution → spec → (clarify) → plan → tasks → analysis → execute

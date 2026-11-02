@@ -9,7 +9,7 @@ skill:
   id: @skill/decompose
   phase decompose
   output_dialect local:decomposition@1
-  output_path .protocol/features/<feature_id>/decomposition.tdsl
+  output_path .task/features/<feature_id>/decomposition.tdsl
   template {{KERNEL_HOME}}/skills/decompose/template.tdsl
   optional the artifact is absent by default; absence is never a finding
 

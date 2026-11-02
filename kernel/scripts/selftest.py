@@ -130,7 +130,7 @@ findings: []
 
 
 def run_sdd(root: Path) -> None:
-    base = root / ".protocol"
+    base = root / ".task"
     feature = base / "features" / "001-fixture"
 
     code, out = gate(root, "sdd", "init", "--name", "fixture")
@@ -282,7 +282,7 @@ subtasks:
 
 
 def run_decomposition(root: Path) -> None:
-    feature = root / ".protocol" / "features" / "001-fixture"
+    feature = root / ".task" / "features" / "001-fixture"
     path = feature / "decomposition.tdsl"
     write(path, DECOMPOSITION_CYCLE)
     code, out = gate(root, "sdd", "check", str(path))
@@ -299,11 +299,11 @@ def run_decomposition(root: Path) -> None:
 def run_integral(root: Path) -> None:
     code, out = gate(root, "sdd", "init", "--name", "plano", "--mode", "integral")
     check("integral init succeeds", code == 0, out)
-    write(root / ".protocol" / "constitution.tdsl", "tdsl: constitution@1\n")
+    write(root / ".task" / "constitution.tdsl", "tdsl: constitution@1\n")
     for fid in ("001-alpha", "002-beta"):
-        (root / ".protocol" / "features" / fid).mkdir(parents=True, exist_ok=True)
+        (root / ".task" / "features" / fid).mkdir(parents=True, exist_ok=True)
     for a in ("spec", "plan", "tasks", "analysis"):
-        write(root / ".protocol" / "features" / "001-alpha" / f"{a}.tdsl", f"tdsl: {a}@1\n")
+        write(root / ".task" / "features" / "001-alpha" / f"{a}.tdsl", f"tdsl: {a}@1\n")
     code, out = gate(root, "sdd", "state", "--json")
     snap = json.loads(out) if code == 0 else {}
     check("integral routes planning to the unplanned feature",

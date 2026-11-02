@@ -1,4 +1,4 @@
-# Governed Delivery (.protocol)
+# Governed Delivery (.task)
 
 ¶ - Full lifecycle policy for the TDSL spec-driven workflow. Routed from the global policy ¶11; read only when entering or auditing the flow.
 
@@ -33,15 +33,15 @@ integrity, not authorization.
 ¶ 2 — Layout
 
 ```text
-.protocol/project.tdsl                              # anchor: cursor + lifecycle register, ¶10
-.protocol/.scaffold/<artifact>.tdsl                 # authoring skeletons, ¶11; never a record
-.protocol/constitution.tdsl                         # constitution@1
-.protocol/features/<NNN-name>/spec.tdsl             # spec@1
-.protocol/features/<NNN-name>/plan.tdsl             # plan@1
-.protocol/features/<NNN-name>/tasks.tdsl            # tasks@1
-.protocol/features/<NNN-name>/analysis.tdsl         # analysis@1
-.protocol/features/<NNN-name>/decomposition.tdsl    # optional, ¶12; absence is not a gap
-.protocol/features/<NNN-name>/execution.journal.tdsl # runtime, never accepted
+.task/project.tdsl                              # anchor: cursor + lifecycle register, ¶10
+.task/.scaffold/<artifact>.tdsl                 # authoring skeletons, ¶11; never a record
+.task/constitution.tdsl                         # constitution@1
+.task/features/<NNN-name>/spec.tdsl             # spec@1
+.task/features/<NNN-name>/plan.tdsl             # plan@1
+.task/features/<NNN-name>/tasks.tdsl            # tasks@1
+.task/features/<NNN-name>/analysis.tdsl         # analysis@1
+.task/features/<NNN-name>/decomposition.tdsl    # optional, ¶12; absence is not a gap
+.task/features/<NNN-name>/execution.journal.tdsl # runtime, never accepted
 
 dialects [constitution@1 spec@1 plan@1 tasks@1 analysis@1]
 schema_lock {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
@@ -204,8 +204,8 @@ docs/specs/ — never a component this package retired. The retired script is na
 `legacy_archive_spec.py` in that same sense: it belongs to that regime.
 
 ```text
-project_has(.protocol) -> this policy owns spec, plan and tasks; skill(spec) is not used
-project_lacks(.protocol) -> markdown specs under docs/specs/active/ via skill(spec)
+project_has(.task) -> this policy owns spec, plan and tasks; skill(spec) is not used
+project_lacks(.task) -> markdown specs under docs/specs/active/ via skill(spec)
 adoption operator decides; discovery is read-only and mutates nothing
 ban rewriting repository history to adopt governance
 ```
@@ -217,7 +217,7 @@ both. `active_feature` is a cursor: which feature this session is pointed at,
 one at most, moved freely. The register says where each feature sits.
 
 ```text
-.protocol/project.tdsl
+.task/project.tdsl
   active_feature: <id> | unknown        # cursor, zero or one
   features:                             # register, every feature the project has
     feature <id>:
@@ -260,7 +260,7 @@ ban an argument outside the state that requires it: successor only with supersed
   reason only with abandoned. A delivered feature carrying a closing reason implies
   a justification for ending that its own state says does not exist.
 ban treating delivery as authorization to open the next feature
-ban directories as classification: `.protocol/archive/<state>/` would make the path
+ban directories as classification: `.task/archive/<state>/` would make the path
   assert a fact nobody verified, and reclassifying would become a file move plus
   every cross reference that pointed at the old path. The state is a field that
   is read; the layout stays features/<id>/.
@@ -277,7 +277,7 @@ The structure of a governed project is always the same; only the content differs
 rather than deriving the shape again.
 
 ```text
-path .protocol/.scaffold/<artifact>.tdsl
+path .task/.scaffold/<artifact>.tdsl
 source {{KERNEL_HOME}}/skills/<phase>/template.tdsl
 refresh python {{KERNEL_HOME}}/scripts/<gate>.py scaffold # after a harness update
 
@@ -292,7 +292,7 @@ ban the hook gating a write to .scaffold/; there is no phase to gate
 ¶ 12 — Decomposition
 
 ```text
-path .protocol/features/<NNN-name>/decomposition.tdsl
+path .task/features/<NNN-name>/decomposition.tdsl
 dialect local:decomposition@1 # local; the kernel has no subtask contract
 declared_divergence its rules live in Python (check_decomposition), not in generated
   TDSL, because tdsl_lock.py emits contracts from the bundled grammar schemas and the kernel

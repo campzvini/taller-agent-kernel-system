@@ -25,35 +25,42 @@ policy ~/.claude/CLAUDE.md # merge: keep operator content, insert the policy bet
 skills ~/.claude/skills/<name>/SKILL.md
 hooks merge adapters/claude/settings.hooks.json into ~/.claude/settings.json `hooks`
 hook_script adapters/claude/claude_hook.py -> {{KERNEL_HOME}}/scripts/claude_hook.py
-enforcement mechanical: the PreToolUse hook runs the gate before a .protocol write and injects engineering.tdsl
+enforcement mechanical: the PreToolUse hook runs the gate before a .task write and injects engineering.tdsl
 ```
 
 ¶ 3 — Codex
 
 ```text
-policy ~/.codex/AGENTS.md # same merge markers
-skills ~/.codex/skills/<name>/SKILL.md # also valid: ~/.agents/skills per current Codex docs
-hooks merge adapters/codex/hooks.json into ~/.codex/hooks.json; enable hooks in ~/.codex/config.toml if the installed version requires it
+policy ~/.codex/AGENTS.md # same merge markers; AGENTS.override.md, when present, wins over it
+  size AGENTS.md is truncated past 32 KiB
+skills ~/.codex/skills/<name>/SKILL.md # global; project skills live in .agents/skills/
+hooks merge adapters/codex/hooks.json into ~/.codex/hooks.json # on by default; inline [hooks] in config.toml also valid
 hook_script adapters/codex/codex_hook.py -> {{KERNEL_HOME}}/scripts/codex_hook.py
 enforcement mechanical on apply_patch; delegation contract injected on SubagentStart
+source developers.openai.com/codex/config-reference, verified 2026-11-02
 ```
 
 ¶ 4 — Antigravity
 
 ```text
 policy ~/.gemini/GEMINI.md # same merge markers; keep the file under ~12000 characters
-skills ~/.gemini/config/skills/<name>/SKILL.md and ~/.gemini/antigravity/skills/<name>/SKILL.md
-  # third-party guides disagree on the global path; writing both is harmless
-hooks none # the agent runs gate and diagram scripts itself, as policy ¶11 instructs
-size_guard rendered policy > 12000 chars -> drop ¶2 grammar block (canonical grammar file stays referenced)
+  note Gemini CLI reads the same file; one block serves both
+  alt ~/.gemini/AGENTS.md, ~/.gemini/config/GEMINI.md, ~/.gemini/config/rules/*.md (YAML frontmatter)
+skills ~/.gemini/config/skills/<name>/SKILL.md # shared by every Antigravity product
+  also ~/.gemini/antigravity/skills (IDE) and ~/.gemini/antigravity-cli/skills (CLI) when present
+  workspace skills live in .agents/skills/
+hooks ~/.gemini/config/hooks.json exists; the kernel ships no adapter yet -> instruction-driven, as policy ¶11 instructs
+size_guard rendered policy > 12000 chars -> keep the operator's own ¶1-¶3 and place kernel ¶4 onward
+source antigravity.google/docs/rules, antigravity.google/docs/cli/gcli-migration, verified 2026-11-02
 ```
 
 ¶ 5 — Cline
 
 ```text
-policy ~/Documents/Cline/Rules/task-policy.md # global rules directory; Linux may use ~/Cline/Rules
-skills ~/.cline/skills/<name>/SKILL.md # name must equal the directory name; keep each under ~5k tokens
-hooks none # instruction-driven enforcement, as for Antigravity
+policy ~/Documents/Cline/Rules/task-policy.md # still discovered for compatibility; newer builds also read ~/.cline/rules
+skills ~/.cline/skills/<name>/SKILL.md # name must equal the directory name; keep each under ~5k tokens; global wins over workspace
+hooks ~/Documents/Cline/Hooks or ~/.cline/hooks, one script per hook type; the kernel ships no adapter yet -> instruction-driven
+source docs.cline.bot/customization/skills, docs.cline.bot/getting-started/config, verified 2026-11-02
 ```
 
 ¶ 6 — Other Harnesses

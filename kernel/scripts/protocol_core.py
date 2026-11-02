@@ -1,6 +1,6 @@
 # ────────────────────────────────────────────
 # CODEX-ENV 2.0 — protocol_core.py
-# § - Workflow-neutral machinery shared by every .protocol governance flow · Python
+# § - Workflow-neutral machinery shared by every .task governance flow · Python
 # Taller Dev 2026
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────
@@ -18,7 +18,7 @@ from typing import Callable
 
 # ── § 1 — CONFIG — layout constants every workflow shares ──
 
-ROOT_DIR = ".protocol"
+ROOT_DIR = ".task"
 CACHE_DIR = ".agent-cache"
 
 ANCHOR = "project.tdsl"
@@ -84,7 +84,7 @@ class Workflow:
 
 
 def find_root(start: Path) -> Path | None:
-    """Walk up from start looking for a .protocol directory."""
+    """Walk up from start looking for a .task directory."""
     for candidate in [start, *start.parents]:
         if (candidate / ROOT_DIR).is_dir():
             return candidate
@@ -871,10 +871,10 @@ def write_analysis_cache(state: State, payload: dict) -> None:
 
 def build_parser(workflow: Workflow, description: str) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument("--cwd", default=".", help="directory to resolve the .protocol anchor from")
+    parser.add_argument("--cwd", default=".", help="directory to resolve the .task anchor from")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p = sub.add_parser("init", help="create the .protocol anchor")
+    p = sub.add_parser("init", help="create the .task anchor")
     p.add_argument("--name", default=None)
     p.add_argument("--mode", choices=PLANNING_MODES, default="gradual",
                    help="gradual: one feature to execute at a time; integral: plan every feature first")

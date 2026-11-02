@@ -102,14 +102,14 @@ def governed_workflow(root: Path) -> str | None:
     workflow: its records read as absent and next_phase pointed at a phase the
     project had already passed.
     """
-    anchor = root / ".protocol" / "project.tdsl"
+    anchor = root / ".task" / "project.tdsl"
     if anchor.is_file():
         for line in anchor.read_text(encoding="utf-8", errors="replace").split("\n"):
             if line.startswith("workflow: "):
                 declared = line.partition(": ")[2].partition(" #")[0].strip()
                 if declared in GATE_OF_WORKFLOW:
                     return declared
-    features = root / ".protocol" / "features"
+    features = root / ".task" / "features"
     if features.is_dir() and any(features.glob("*/part.tdsl")):
         return "cad"
     return None
@@ -117,11 +117,11 @@ def governed_workflow(root: Path) -> str | None:
 
 def collect_protocol(root: Path) -> dict[str, Any] | None:
     """Governance state, when the project is governed. The gate owns the truth."""
-    if not (root / ".protocol").is_dir():
+    if not (root / ".task").is_dir():
         return None
     workflow = governed_workflow(root)
     if workflow is None:
-        anchor = root / ".protocol" / "project.tdsl"
+        anchor = root / ".task" / "project.tdsl"
         fields: dict[str, str] = {}
         if anchor.is_file():
             for line in anchor.read_text(encoding="utf-8", errors="replace").split("\n"):
@@ -292,7 +292,7 @@ def render_markdown(r: dict[str, Any]) -> str:
     L.append("")
     protocol = r.get("protocol")
     if protocol:
-        L.append("## Governança (.protocol)")
+        L.append("## Governança (.task)")
         L.append(f"- Projeto: `{protocol.get('project')}`")
         L.append(f"- Workflow: `{protocol.get('workflow')}`")
         L.append(f"- Feature ativa: `{protocol.get('active_feature')}`")

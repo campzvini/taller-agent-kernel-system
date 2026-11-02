@@ -1,6 +1,6 @@
 ---
 name: specify
-description: Author the feature specification as a spec@1 TDSL artifact in .protocol/features/<id>/spec.tdsl — objective, user journeys, atomic requirements, measurable success criteria, explicit unknowns. Use when the operator wants to turn intent or a brainstorm into the observable behavior contract for the active feature, or to clarify and replace an existing spec. Not for technical design (use plan).
+description: Author the feature specification as a spec@1 TDSL artifact in .task/features/<id>/spec.tdsl — objective, user journeys, atomic requirements, measurable success criteria, explicit unknowns. Use when the operator wants to turn intent or a brainstorm into the observable behavior contract for the active feature, or to clarify and replace an existing spec. Not for technical design (use plan).
 ---
 
 ¶ - Author feature behavior contract: objective, journeys, requirements, criteria, unknowns.
@@ -9,7 +9,7 @@ skill:
   id: @skill/specify
   phase specify
   output_dialect spec@1
-  output_path .protocol/features/<feature_id>/spec.tdsl
+  output_path .task/features/<feature_id>/spec.tdsl
   template {{KERNEL_HOME}}/skills/specify/template.tdsl
 
 ¶ 1 — Preconditions

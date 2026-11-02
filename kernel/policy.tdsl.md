@@ -78,7 +78,7 @@ agent_to_agent:
 
 ```text
 1 read project AGENTS.md / CLAUDE.md / GEMINI.md if present; git status and recent log if a repository
-2 governed project (.protocol/ present) -> python {{KERNEL_HOME}}/scripts/session_init.py, render state
+2 governed project (.task/ present) -> python {{KERNEL_HOME}}/scripts/session_init.py, render state
 3 next_phase present -> route via skill(protocol)
 4 proceed
 ban a script electing a trajectory by heuristic; the gate reports phase, the operator decides
@@ -192,7 +192,7 @@ writing_source_code first_in_session -> read {{KERNEL_HOME}}/docs/engineering.td
 governed_work -> read {{KERNEL_HOME}}/docs/sdd.tdsl when entering or auditing the flow
 authoring_a_TDSL_artifact -> {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
 object_splice_or_enum_field -> {{KERNEL_HOME}}/skills/_shared/field-contracts.tdsl
-write(.protocol/<record>.tdsl) -> run `python {{KERNEL_HOME}}/scripts/sdd_gate.py gate <phase>` first; FAIL is a real refusal
+write(.task/<record>.tdsl) -> run `python {{KERNEL_HOME}}/scripts/sdd_gate.py gate <phase>` first; FAIL is a real refusal
 hooks_available -> the harness enforces the above mechanically; otherwise the agent runs the scripts itself
 ```
 
@@ -239,5 +239,5 @@ contexts:
   global this_policy
   routed {{KERNEL_HOME}}/docs/
   project AGENTS.md | CLAUDE.md | GEMINI.md local
-  governed .protocol/
+  governed .task/
 ```

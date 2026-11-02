@@ -31,7 +31,7 @@ reason a copy drifts, and the copy is what gets read
 ¶ 3 — Determine the tree first; it decides which gate you speak to
 
 ```text
-anchor exists -> read `workflow:` from .protocol/project.tdsl
+anchor exists -> read `workflow:` from .task/project.tdsl
 no anchor, no artifacts -> the operator's stated intent declares it; confirm before init
 artifacts present but no workflow field -> read the evidence
   spec.tdsl present -> development

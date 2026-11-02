@@ -1,6 +1,6 @@
 # ────────────────────────────────────────────
 # TASK 1.1.0 — claude_hook.py
-# § - PreToolUse router: enforce the .protocol gate, force-load routed policy once · Python
+# § - PreToolUse router: enforce the .task gate, force-load routed policy once · Python
 # Taller Dev 2026
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────
@@ -43,10 +43,10 @@ ARTIFACT_PHASE = {
     },
 }
 
-# writes inside .protocol that the gate itself owns; never intercepted
+# writes inside .task that the gate itself owns; never intercepted
 # Skeletons are shapes, not records: gating them as if they were an artifact
 # would refuse a write that authors nothing.
-GATE_OWNED = ("/.protocol/decisions/", "/.protocol/project.tdsl", "/.protocol/.scaffold/")
+GATE_OWNED = ("/.task/decisions/", "/.task/project.tdsl", "/.task/.scaffold/")
 
 SOURCE_SUFFIXES = {
     ".rs", ".py", ".ts", ".tsx", ".js", ".jsx", ".go", ".java", ".kt", ".swift",
@@ -135,7 +135,7 @@ def handle_task(session_id: str) -> None:
 def protocol_target(file_path: str) -> tuple[str, str, str] | None:
     """Return (workflow, artifact, phase) when the write targets a governed record."""
     normalized = file_path.replace("\\", "/")
-    if "/.protocol/" not in normalized and not normalized.startswith(".protocol/"):
+    if "/.task/" not in normalized and not normalized.startswith(".task/"):
         return None
     if any(owned in normalized for owned in GATE_OWNED):
         return None
@@ -153,7 +153,7 @@ def protocol_target(file_path: str) -> tuple[str, str, str] | None:
 def anchor_fields(file_path: str) -> dict[str, str]:
     """Read the anchor directly: cheaper than a subprocess, and the hook is hot."""
     for parent in Path(file_path).resolve().parents:
-        anchor = parent / ".protocol" / "project.tdsl"
+        anchor = parent / ".task" / "project.tdsl"
         if anchor.is_file():
             out: dict[str, str] = {}
             for line in anchor.read_text(encoding="utf-8", errors="replace").split("\n"):
@@ -202,7 +202,7 @@ def handle_protocol_write(session_id: str, file_path: str,
 
     if proc.returncode == 2:
         deny(
-            f"{file_path} sits under .protocol/ but the project has no anchor, so no "
+            f"{file_path} sits under .task/ but the project has no anchor, so no "
             "phase can be gated. Ask the operator to authorize:\n"
             f"  python ~/.claude/scripts/{GATES[workflow].name} init --name <project>"
         )

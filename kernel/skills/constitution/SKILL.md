@@ -1,6 +1,6 @@
 ---
 name: constitution
-description: Author or amend the project constitution as a constitution@1 TDSL artifact in .protocol/constitution.tdsl. Use when the operator wants to establish, review, or amend durable project policy — principles, authority boundaries, quality bar, safety rules, evidence requirements. Not for feature behavior (use specify) and not for technical design (use plan).
+description: Author or amend the project constitution as a constitution@1 TDSL artifact in .task/constitution.tdsl. Use when the operator wants to establish, review, or amend durable project policy — principles, authority boundaries, quality bar, safety rules, evidence requirements. Not for feature behavior (use specify) and not for technical design (use plan).
 ---
 
 ¶ - Author durable project policy: principles, authority, quality, safety, evidence.
@@ -9,13 +9,13 @@ skill:
   id: @skill/constitution
   phase constitution
   output_dialect constitution@1
-  output_path .protocol/constitution.tdsl
+  output_path .task/constitution.tdsl
   template {{KERNEL_HOME}}/skills/constitution/template.tdsl
 
 ¶ 1 — Preconditions
 
 1 run: python {{KERNEL_HOME}}/scripts/sdd_gate.py state
-2 if: no_.protocol_anchor -> propose `sdd_gate.py init --name <project>` -> await operator
+2 if: no_.task_anchor -> propose `sdd_gate.py init --name <project>` -> await operator
 3 if: constitution exists and accepted -> this is an AMENDMENT, not authoring; go to ¶ 5
 
 ¶ 2 — Load
@@ -79,8 +79,8 @@ always: run analyze and say what the change made incoherent downstream
 
 ¶ 6 — Close
 
-1 write .protocol/constitution.tdsl
-2 run: python {{KERNEL_HOME}}/scripts/sdd_gate.py check .protocol/constitution.tdsl
+1 write .task/constitution.tdsl
+2 run: python {{KERNEL_HOME}}/scripts/sdd_gate.py check .task/constitution.tdsl
 3 if: FAIL -> fix and recheck; never accept a failing source
 4 report the principle ids, the explicit_unknowns, and the amendment impact
 5 stop. O registro está escrito. Se ele precisa mudar, o operador diz o que muda;

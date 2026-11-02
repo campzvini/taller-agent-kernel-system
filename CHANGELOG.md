@@ -10,6 +10,8 @@ Renamed to TASK — Taller Agent System Kernel. Delivery model reworked.
 - `sdd` ¶13: integral mode ends with one analysis subagent over the whole package, then fixes, then a ready package.
 - `sdd` ¶14 Delivery Session: no initial analysis or test run; orchestrator / test_author / executor roles; tests written before code; executor never edits tests nor escalates to the operator; one feature in flight; close without asking when the constitution pre-directs it.
 - `execute`, `protocol`, `analyze`, `constitution`, `delegation`, briefing template aligned with the above.
+- Governed project directory renamed `.protocol/` -> `.task/`. Upgrading: rename the directory in each governed project.
+- `ADAPTERS.tdsl`: Codex, Antigravity and Cline paths re-verified against current official docs.
 
 ## 1.0.0 — 2026-10-31
 

@@ -83,7 +83,7 @@ is; the journal states what happened. Mixing them makes the plan unreadable as a
 plan and the history unreadable as history.
 
 ```text
-path .protocol/features/<feature_id>/execution.journal.tdsl
+path .task/features/<feature_id>/execution.journal.tdsl
 owner this skill; the gate reads it, the planning records never do
 
 entry ln: |
