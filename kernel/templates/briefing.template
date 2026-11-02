@@ -13,3 +13,5 @@ validation:
   criteria <condição objetiva de "passou">
 report files_changed, test_tally, deviations+reason, blockers
 on_block briefing_ambíguo|complexidade>estimativa -> stop_and_report, no_guess
+on_test teste_contestado -> devolve ao orquestrador com o motivo; ban editar ou apagar teste
+on_problem problem_triage (treino -> web -> só então orquestrador); nunca escala direto ao operador

@@ -1,5 +1,5 @@
 {
-  "description": "Taller Agent Kernel System hooks for Codex.",
+  "description": "Taller Agent System Kernel hooks for Codex.",
   "hooks": {
     "SessionStart": [
       {

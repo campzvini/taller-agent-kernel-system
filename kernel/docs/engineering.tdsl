@@ -3,10 +3,10 @@
 ¶ - Code quality bar, product shape, workspace practice and the source header profile. Routed from the global policy ¶11; read before writing or reviewing code.
 
 document:
-  id: taks.engineering@1
+  id: task.engineering@1
   version: 1
   status: proposed
-  authority_basis: [@taks/global-policy]
+  authority_basis: [@task/global-policy]
   scope: identity, code_standards, product_shape, workspace_practice, header_profile, context_comment_profile, templates
   excludes: language_grammar, delegation, sdd_lifecycle
 

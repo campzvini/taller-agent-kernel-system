@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.0 — 2026-11-02
+
+Renamed to TASK — Taller Agent System Kernel. Delivery model reworked.
+
+- Rename: TAKS -> TASK. `kernel_home` default `~/.taks` -> `~/.task`; rules-file markers `taks:begin/end` -> `task:begin/end`; document ids `taks.*` -> `task.*`. Upgrading from 1.0.0: move `~/.taks` to `~/.task` and replace the old marker block.
+- Global policy ¶10 gains `problem_triage`: training -> web documentation -> only then the operator; no spikes or extra validation rounds when a known answer exists.
+- `test-protocol` ¶3 Test Triage: every validation is classified before it becomes a test; tautological tests banned.
+- `sdd` ¶13: integral mode ends with one analysis subagent over the whole package, then fixes, then a ready package.
+- `sdd` ¶14 Delivery Session: no initial analysis or test run; orchestrator / test_author / executor roles; tests written before code; executor never edits tests nor escalates to the operator; one feature in flight; close without asking when the constitution pre-directs it.
+- `execute`, `protocol`, `analyze`, `constitution`, `delegation`, briefing template aligned with the above.
+
 ## 1.0.0 — 2026-10-31
 
 First public release.

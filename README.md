@@ -1,10 +1,10 @@
-# Taller Agent Kernel System
+# TASK — Taller Agent System Kernel
 
 **A governance kernel for AI coding agents, installed before any harness and shared by all of them.**
 
-Version 1.0.0 · [Taller Personal Noncommercial License 1.0](LICENSE) · created by Vinícius Campos ([Taller](https://github.com/campzvini))
+Version 1.1.0 · [Taller Personal Noncommercial License 1.0](LICENSE) · created by Vinícius Campos ([Taller](https://github.com/campzvini))
 
-The Taller Agent Kernel System (TAKS) is the operating layer I built to work with AI agents every day:
+The Taller Agent System Kernel (TASK) is the operating layer I built to work with AI agents every day:
 a global policy, a language written for agents to read, a spec-driven workflow, a navigation index for
 source code, and the skills and scripts that hold it together. It is not a product. It is a method,
 released so anyone can use it, change it, and build on it.
@@ -47,12 +47,12 @@ Agents are extremely capable, but capability without method turns into noise:
 - **Delegation without a contract is lossy.** When one agent hands work to another in free prose, detail
   is dropped, invented or misread.
 
-TAKS answers each of these with one deliberate choice, described below.
+TASK answers each of these with one deliberate choice, described below.
 
 ## 2. The idea: a kernel before the harness
 
-TAKS sits **underneath** the harness, the way an operating-system kernel sits under applications.
-There is one copy of the kernel on the machine (`~/.taks`): scripts, policies, grammar, skills and your
+TASK sits **underneath** the harness, the way an operating-system kernel sits under applications.
+There is one copy of the kernel on the machine (`~/.task`): scripts, policies, grammar, skills and your
 configuration. Each harness receives only a thin adapter — its rules file and its skill folder — that
 points back to that single kernel.
 
@@ -251,7 +251,7 @@ Any harness that reads a global instruction file can host the kernel; see `adapt
 
 The installer is your own agent.
 
-1. Download the [latest release](https://github.com/campzvini/taller-agent-kernel-system/releases) or
+1. Download the [latest release](https://github.com/campzvini/taller-agent-system-kernel/releases) or
    clone this repository.
 2. Open your agent and say:
    > Install the kernel from `<path to this folder>` following `INSTALL.md`.
@@ -273,8 +273,8 @@ During installation the agent explains, with pros and cons, and records your cho
 - the default planning mode (`gradual` or `integral`)
 - your stance on tests
 
-Everything is stored in `~/.taks/kernel.config.json` and in your rules file, between
-`<!-- taks:begin -->` and `<!-- taks:end -->`, so your own content is kept and upgrades replace only
+Everything is stored in `~/.task/kernel.config.json` and in your rules file, between
+`<!-- task:begin -->` and `<!-- task:end -->`, so your own content is kept and upgrades replace only
 that block.
 
 ## 12. Repository layout

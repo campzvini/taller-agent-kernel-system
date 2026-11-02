@@ -19,6 +19,11 @@ skill:
 1 run: python {{KERNEL_HOME}}/scripts/sdd_gate.py gate analyze
 2 FAIL -> a predecessor record does not exist yet; say which, and stop
 3 read {{KERNEL_HOME}}/skills/analyze/template.tdsl; load no other phase skeleton
+
+scope:
+  gradual the active feature
+  integral the whole package in one pass, run by one subagent (sdd ¶13 integral_package);
+    one analysis.tdsl per feature; a cross-feature finding routes to the record that owns it
 ```
 
 ¶ 2 — Posture
@@ -130,7 +135,9 @@ routing:
 1 write the analysis artifact
 2 run: python {{KERNEL_HOME}}/scripts/sdd_gate.py check <path>
 3 report result, findings by severity, and each routed return
-4 report what the operator must decide: which findings matter, which he tolerates
+4 integral -> the planning session fixes every finding with a known answer (problem_triage),
+  then re-runs check; the operator receives only real unknowns and choices of direction
+  gradual -> report what the operator must decide: which findings matter, which they tolerate
 5 stop. Your verdict is advice. It withholds nothing, and you never declare a
   phase complete.
 ```

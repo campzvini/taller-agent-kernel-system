@@ -1,6 +1,6 @@
 # Contributing
 
-¶ - How to propose changes to the Taller Agent Kernel System.
+¶ - How to propose changes to the Taller Agent System Kernel.
 
 ```text
 scope policy, skills, scripts, grammar, adapters for more harnesses

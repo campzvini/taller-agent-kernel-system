@@ -74,8 +74,10 @@ planning_mode (read it from `state`; the anchor records it, `mode <value>` switc
   integral -> next_phase names `feature: <id>`; run(feature <id>) when it differs from the cursor,
     then invoke that phase's skill. Every active feature reaches analysis before any execute.
   integral_start -> agree the full feature list with the operator, open each id with run(feature <id>),
-    then follow next_phase until `roadmap` reports "all features planned"
-  integral_execute -> execute features in id order; activate each with run(feature <id>)
+    author spec, plan and tasks for every feature, then ONE skill(analyze) over the whole package
+    (sdd ¶13 integral_package); fix, and stop when `roadmap` reports "all features planned"
+  integral_execute -> a separate session the operator opens; skill(execute) runs the sdd ¶14 loop
+    in id order without asking between features
 
 ¶ 5 — Commands
 

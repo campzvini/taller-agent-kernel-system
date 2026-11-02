@@ -1,10 +1,10 @@
 # Install — instructions for the installing agent
 
-¶ - Agent-executed installation of the Taller Agent Kernel System: interview the operator, render the kernel, place it in the harness, verify.
+¶ - Agent-executed installation of the Taller Agent System Kernel: interview the operator, render the kernel, place it in the harness, verify.
 
 document:
-  id: taks.install@1
-  version: 1.0.0
+  id: task.install@1
+  version: 1.1.0
   status: active
   audience: the AI agent the operator pointed at this folder
   scope: preflight, interview, render, place, verify, report
@@ -20,7 +20,7 @@ detect harness you are running in: claude_code | codex | antigravity | cline | o
 detect os and home directory
 require python >= 3.10 and git on PATH -> if missing, tell the operator how to install them and stop
 python_cmd the exact command that runs Python 3 here (python | python3 | py -3)
-kernel_home default ~/.taks; operator may choose another path
+kernel_home default ~/.task; operator may choose another path
 read adapters/ADAPTERS.tdsl chapter for the detected harness
 existing_install {{KERNEL_HOME}}/kernel.config.json present -> offer upgrade (keep answers) or reinstall
 ```
@@ -109,7 +109,7 @@ test_stance:
 ```text
 follow adapters/ADAPTERS.tdsl for the detected harness:
   back up every file you will touch into {{KERNEL_HOME}}/backups/<timestamp>/
-  policy merge between `<!-- taks:begin -->` and `<!-- taks:end -->`; replace only that block on upgrade
+  policy merge between `<!-- task:begin -->` and `<!-- task:end -->`; replace only that block on upgrade
   skills copy {{KERNEL_HOME}}/skills/* into the harness skill directory
   hooks merge the adapter hook config with {{PYTHON}} -> python_cmd and {{KERNEL_HOME}} resolved;
     keep the operator's existing hooks
@@ -133,5 +133,5 @@ tell the operator, in their language:
   what was installed and where (kernel_home, policy file, skills directory, hooks)
   the choices recorded, and that they live in {{KERNEL_HOME}}/kernel.config.json and the policy file
   how to start: "start a governed project" -> skill(protocol); "index this code" -> skill(diagram) or skill(code-map)
-  where backups are and how to uninstall (remove the taks block, the copied skills, the hook entries, kernel_home)
+  where backups are and how to uninstall (remove the task block, the copied skills, the hook entries, kernel_home)
 ```

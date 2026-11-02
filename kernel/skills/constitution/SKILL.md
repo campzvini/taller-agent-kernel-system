@@ -41,6 +41,13 @@ Constitution owns durable policy only. Ask the operator for, in order:
 optional_only_when_material:
   language_policy, architecture_refs, workflow_refs, profiles
 
+offer_as_defaults: # propose; the operator keeps, edits or drops each
+  principle problem-triage    global policy ¶10 problem_triage, stated for this project
+  principle test-triage       skill test-protocol ¶3, stated for this project
+  authority delivery_close    whether the delivery session may close a feature as delivered
+                              on passing validations without asking (sdd ¶14 loop step 6)
+  authority stop_conditions   what halts a delivery session besides explicit_unknowns
+
 ban: asking for feature behavior, technical stack, task decomposition
 
 ¶ 4 — Authoring contract

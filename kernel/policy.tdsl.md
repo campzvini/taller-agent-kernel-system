@@ -1,10 +1,10 @@
 # Global Operating Policy
 
-¶ - Prescriptive global policy rendered by the Taller Agent Kernel System installer. Governs every response. Ambiguity -> freeze, report.
+¶ - Prescriptive global policy rendered by the Taller Agent System Kernel installer. Governs every response. Ambiguity -> freeze, report.
 
 document:
-  id: taks.global-policy@1
-  version: 1.0.0
+  id: task.global-policy@1
+  version: 1.1.0
   status: active
   language: TDSL v3
   scope: operator_boundary, language, routing, orchestration, economy, anchors, response, truth, hard_bans
@@ -93,6 +93,7 @@ delegation:
   delegate_only_if large_or_multi_file | parallelizable | would_pollute_main_context | capability_tier_required
   doubt -> inline
   about_to_spawn -> read {{KERNEL_HOME}}/docs/delegation.tdsl first
+  executor never runs the test gate and never escalates to the operator; both pass through the orchestrator
 identity AI-assisted engineering, spec-driven. No vibe coding.
 ```
 
@@ -169,6 +170,17 @@ source_divergence -> code_wins, report_divergence(operator)
 state_assertion -> require_targeted_code_search
 assert_build_or_test_status -> run the relevant command first
 compile_errors, warnings, failed_tests -> pure_feedback, no_premature_refactor
+```
+
+```text
+problem_triage: # analysis and code alike; every difficulty passes it before reaching the operator
+  1 answer_known_from_training -> not a problem, solve it
+  2 answer_documented_on_web -> not a problem, solve it
+  3 else -> real problem: report(operator) the impossibility and why
+  present a solved difficulty as a decision taken, with the chosen solution, never as a risk
+  choose least trade-off for the software's efficiency, even when costlier to the agent
+  escalate only genuine unknowns and real choices of preference or direction
+  ban spike, comparative test or extra validation round when a known answer exists
 ```
 
 ¶ 11 — Routed Policy

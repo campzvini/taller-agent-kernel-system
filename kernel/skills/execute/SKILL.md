@@ -1,6 +1,6 @@
 ---
 name: execute
-description: Execute the recorded task set — confirms the whole governance trail, then implements task by task in dependency order, running each task's declared validation before marking it done. Use when the operator wants the planned work actually built, or says implement, execute, run the tasks, or build the feature. Refuses only when a record it needs does not exist; coherence findings are reported to the operator, never used to withhold execution.
+description: Execute the recorded task set as a delivery session — takes the package as already inspected, orchestrates a test author and an executor per feature in dependency order, and closes each feature on passing validations. Use when the operator opens an execution session, or says implement, execute, run the tasks, or build the feature. Refuses only when a record it needs does not exist.
 ---
 
 ¶ - Execute task DAG in order, validate each, confirm governance trail.
@@ -13,24 +13,16 @@ skill:
 
 ¶ 1 — Confirm the trail
 
-Nothing is executed on trust. One command answers the whole question:
+The operator opens an execution session only when the package is ready, so the
+package is taken as already inspected (sdd ¶14). The trail is checked for
+existence, never re-judged.
 
 ```text
 run: python {{KERNEL_HOME}}/scripts/sdd_gate.py trail
-```
-
-It reports which records exist, what the coherence pass found, the task count
-and what remains in the execution order.
-
-```text
 record missing -> STOP; name it and the phase that writes it
-coherence findings open -> do NOT stop; present them and ask whether they matter
-  reason analyze advises, it does not gate; the operator decides what is tolerable
-operator says proceed -> proceed, and report which findings were carried knowingly
+coherence findings listed -> ignore at start; they were settled in the planning session
+ban initial analysis, initial test run, or asking whether findings matter
 ```
-
-`trail` derives coherence itself rather than reading `result:` out of
-`analysis.tdsl`, because a record never judges itself.
 
 ¶ 2 — Load context
 
@@ -61,19 +53,27 @@ ban reordering to make a blocked task reachable
 
 ¶ 4 — Per task
 
+This skill runs in the orchestrator. Roles and the loop are owned by sdd ¶14;
+read it before the first spawn.
+
 ```text
-1 announce the task id and what it will change
-2 implement exactly its `action`, bounded by its plan_refs
-3 run the validation named by every validation_refs entry
+orchestrator never edits source
+1 classify every validation of the active plan by test-triage (skill test-protocol ¶3)
+2 spawn test_author (agent test-agent) with the validations that need tests;
+   tests come from spec, plan and independent references, before code, and land failing
+3 spawn executor with tasks.tdsl, the test paths and the ban on test edits;
+   it implements each task's `action`, bounded by its plan_refs, and keeps the journal
+4 executor contests a test -> it returns the test and the reason; orchestrator judges
+5 orchestrator runs the build check and the whole suite once
+6 failures -> problem_triage over the whole feature scope -> precise failures to the same executor
+7 every validation passes -> the executor's journal entries carry the evidence
    validation absent or unrunnable -> the task is NOT done; record it blocked and say why
-4 validation fails -> stop this branch; do not proceed to a dependent task
-5 validation passes -> append the completion record to the journal, with evidence
-6 report progress before moving on
 
 ban writing code a requirement did not ask for
 ban introducing architecture absent from the plan
 ban marking done without the declared validation actually having run
 ban silencing, skipping or weakening a validation to make a task pass
+ban the executor running the test gate or escalating to the operator directly
 ```
 
 ¶ 5 — The journal
@@ -108,7 +108,7 @@ speckit groups execution by phase labels (Setup, Tests, Core, Integration, Polis
   here the DAG is the only ordering authority; labels would be a second, competing model
 
 speckit gates on a checklist table and asks the operator to override
-  here coherence findings are presented and the operator decides; nothing is withheld
+  here coherence is settled in the planning session; the delivery session does not re-judge it
   the gate refuses only a missing record, which is a broken reference, not a verdict
 
 speckit runs Pre-Execution and Mandatory Post-Execution hooks from .specify/extensions.yml
@@ -122,10 +122,13 @@ speckit creates ignore files by detecting the stack
 ¶ 7 — Halting
 
 ```text
-non_parallel_task_fails -> halt; report the task, the validation and the output
-parallel_task_fails -> finish the independent siblings, then halt; report each outcome
-plan_contradicts_repository -> halt; this is a controlled return to plan, not a fix in place
-requirement_ambiguous_at_implementation_time -> halt; controlled return to clarify
+every difficulty -> problem_triage (global policy ¶10) before any halt
+task_fails, answer known -> fix through the same executor; never proceed to a dependent task first
+plan_contradicts_repository, answer in the records -> fix and record the decision in the journal
+plan_contradicts_repository, no known answer -> halt; controlled return to plan
+requirement_ambiguous with no known answer -> halt; controlled return to clarify
+halt -> report the task, the validation, the output and why no known answer exists
+stop only on a constitution stop_condition, a blocking explicit_unknown, or a production dependency
 ban continuing past a failure to maximize the number of tasks touched
 ```
 
@@ -137,11 +140,12 @@ ban continuing past a failure to maximize the number of tasks touched
 3 run `python {{KERNEL_HOME}}/scripts/sdd_gate.py trail` again and show it
 4 state plainly whether the feature is complete or partial, and list every
   coherence finding carried knowingly
-5 stop. Feature completion is an operator decision; this skill never declares it.
-6 every task complete and every validation run -> propose a closing state and say
-  why: delivered, heritage, historical, superseded (naming the successor) or
-  abandoned. The operator directs it; then, and only then:
-    python {{KERNEL_HOME}}/scripts/sdd_gate.py close <feature_id> --as <state>
-  ban running close on your own initiative
-  ban treating the close as permission to open the next feature
+5 every task complete and every validation run:
+  constitution authority pre-directs the close -> run
+    python {{KERNEL_HOME}}/scripts/sdd_gate.py close <feature_id> --as delivered
+    then follow sdd ¶14 to the next feature without asking
+  otherwise -> propose a closing state and why (delivered, heritage, historical,
+    superseded naming the successor, abandoned); the operator directs it, then close
+  ban running close on your own initiative when no authority pre-directs it
+6 register exhausted or a stop condition reached -> report and stop
 ```

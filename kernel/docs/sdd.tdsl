@@ -3,10 +3,10 @@
 ¶ - Full lifecycle policy for the TDSL spec-driven workflow. Routed from the global policy ¶11; read only when entering or auditing the flow.
 
 document:
-  id: taks.sdd-policy@1
+  id: task.sdd-policy@1
   version: 1
   status: proposed
-  authority_basis: [@taks/global-policy @arch/tdsl-sdd @arch/tdsl-language]
+  authority_basis: [@task/global-policy @arch/tdsl-sdd @arch/tdsl-language]
   scope: lifecycle, layout, authority, dag, freshness, controlled_return, commands
   excludes: dialect_field_types, phase_authoring_procedure, assurance_selection, acceptance_records # skills and schemas own these; assurance and acceptance are deliberate omissions
   entry skill(protocol)
@@ -150,6 +150,7 @@ closer to what the rule meant. Declared divergence, not an omission.
 defect_found -> return to the artifact owning the semantic defect
 ban mutating an unrelated predecessor to make a downstream phase pass
 ban inferring an operator answer to close an explicit_unknown
+during_delivery a defect with a known answer is fixed through problem_triage; only a real unknown returns to the operator
 semantic_change -> new version, renewed acceptance, recalculated staleness
 preserve current, rejected and replacement versions
 attempt_count telemetry, never authority
@@ -322,4 +323,56 @@ route integral -> next_phase targets the first active feature still missing a pl
 view roadmap -> per-feature planning table; "all features planned" marks the start of execution
 invariant sequence_before_author still holds per feature; integral changes order across features, never within one
 choose integral when architecture must be settled whole before code; gradual when learning from each delivery matters
+```
+
+```text
+integral_package: # how the planning session ends in integral mode
+  1 author every feature: spec, plan, tasks, as many as the work needs
+  2 spawn ONE analysis subagent over the whole package, every active feature at once
+    it writes each feature's analysis.tdsl; cross-feature findings route to the owning record
+  3 fix what the findings require, through problem_triage; the operator sees only real unknowns
+  4 package ready -> the planning session stops; execution is a separate session the operator opens
+ban analysing feature by feature in integral mode; contradictions between features are what it exists to catch
+```
+
+¶ 14 — Delivery Session
+
+The operator opens an execution session only when the whole package is ready.
+The session therefore takes the package as already inspected and executes in
+order; re-inspecting it would repeat paid work and invite re-planning mid-build.
+
+```text
+precondition every active feature holds spec, plan, tasks and analysis
+premise package already inspected
+ban initial analysis, initial test run, or presenting coherence findings at session start
+trail checks that records exist; nothing else is re-judged
+
+roles:
+  orchestrator the main session; holds project intent; reads state, records and reports only
+    never edits source
+    classifies every validation by test-triage (constitution, else skill test-protocol) before any test exists
+  test_author one subagent per feature; writes tests from spec, plan and independent references,
+    before implementation, never reading implementation code
+  executor one subagent per feature; implements tasks until the tests pass; keeps the journal
+    ban editing or deleting a test
+    test believed wrong -> return it to the orchestrator with the reason
+  rule one feature in flight; the next spawns only after the orchestrator closes the current one
+
+loop:
+  1 python {{KERNEL_HOME}}/scripts/sdd_gate.py state
+  2 orchestrator states the test-triage class of every validation of the active plan
+  3 spawn test_author with the validations that need tests; tests land, failing
+  4 spawn executor with tasks.tdsl, the test paths and the ban on test edits
+  5 orchestrator runs the build check and the whole suite once, judges the result against
+    the scope of the whole feature through problem_triage, then returns precise failures to
+    the same executor or proceeds
+  6 every required validation passes -> close <id> --as delivered when the constitution
+    authority pre-directs it; otherwise propose the state and wait
+  7 feature <next-id> moves the cursor; back to 1
+  8 register exhausted -> report to the operator and stop
+
+stop only on a constitution stop_condition, an explicit_unknown that blocks the active task,
+  or a production dependency awaiting operator confirmation
+ban asking the operator between features
+ban opening spikes, comparative tests or validation rounds the plan does not declare
 ```

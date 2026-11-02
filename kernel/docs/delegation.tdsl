@@ -3,10 +3,10 @@
 ¶ - Briefing contract and error escalation. Routed from the global policy ¶5; read before the first spawn of a session.
 
 document:
-  id: taks.delegation@1
+  id: task.delegation@1
   version: 1
   status: proposed
-  authority_basis: [@taks/global-policy]
+  authority_basis: [@task/global-policy]
   scope: briefing, escalation
   excludes: inline_vs_spawn_decision # global policy owns it
 
@@ -34,7 +34,7 @@ template {{KERNEL_HOME}}/templates/briefing.template
 2 ambiguous_briefing -> clarify_briefing, reopen_same_executor
 3 underestimated_complexity -> upgrade_model_tier, new_briefing
 4 insufficient_context -> research inline or spawn a research agent, retry
-5 fail_persists(2_attempts) -> freeze, report(operator)
+5 fail_persists(2_attempts) -> problem_triage (global policy ¶10); operator only at its step 3
 
 rate_limit -> scale_if_permitted, pause_and_report(operator)
 unexpected_complexity -> executor_signals_escalation
@@ -45,4 +45,10 @@ unexpected_complexity -> executor_signals_escalation
 ```text
 executor_claims_success -> verify against the validation criteria, never take it at face value
 executor_contradicts_prior_finding -> re-derive from code before accepting the correction
+precise_failures -> back to the same executor (SendMessage), never a fresh spawn
+executor_contests_a_test -> it returns the test and the reason; the orchestrator judges against
+  spec and independent reference, then reopens test_author or rejects the claim
 ```
+
+The roles of a delivery session (orchestrator, test_author, executor) and who
+triggers each are owned by sdd ¶14; this document only carries the contract.

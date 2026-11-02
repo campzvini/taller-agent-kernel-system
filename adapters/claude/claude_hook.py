@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TAKS 1.0.0 — claude_hook.py
+# TASK 1.1.0 — claude_hook.py
 # § - PreToolUse router: enforce the .protocol gate, force-load routed policy once · Python
 # Taller Dev 2026
 # VAI CORINTHIANS!
