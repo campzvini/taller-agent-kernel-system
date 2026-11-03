@@ -4,13 +4,13 @@
 
 ¶ 1 — Version 2.0.0
 
-## 2.0.0 — Unreleased
+## 2.0.0 — 2026-11-03
 
 Adds intended/observed/historical state, immutable constitutional revisions, tree-only architecture,
 stable structural identity and provisional sections. Introduces deterministic reconciliation and
 safe integral scaffolding, adaptive execution units, explicit autonomy, configurable test authorship,
 and execution/decision/failure journals with derived progress. Legacy projects retain interactive
-authority; adopting new contracts requires migration. This branch is pending operator review.
+authority; adopting new contracts requires migration. Completed after operator review and merged into master.
 
 ## 1.1.0 — 2026-11-02
 
