@@ -122,11 +122,13 @@ class JournalTests(unittest.TestCase):
             journal.append_entry(self.root, "execution", self.execution("started", supersedes_ref="@event/E001"))
 
     def test_registry_pins_match_exact_bundled_bytes(self) -> None:
-        repository = Path(__file__).resolve().parents[2]
-        registry = repository / "kernel/grammar/schemas/registry.json"
+        kernel = Path(__file__).resolve().parents[1]
+        registry = kernel / "grammar/schemas/registry.json"
         for entry in json.loads(registry.read_text(encoding="utf-8"))["entries"]:
             with self.subTest(dialect=entry["dialect"]):
-                path = repository / entry["path"]
+                relative = Path(entry['path'])
+                self.assertEqual(relative.parts[0], 'kernel')
+                path = kernel.joinpath(*relative.parts[1:])
                 self.assertTrue(path.is_file())
                 self.assertEqual(entry["schema_revision"], "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest())
 

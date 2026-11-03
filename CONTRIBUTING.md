@@ -24,3 +24,15 @@ scaffolding, unresolved ambiguous moves and conservative migration with executab
 
 Keep this release on its review branch until the operator evaluates it. Updating the repository does
 not authorize installation into the live kernel or merging the branch.
+
+¶ 2 — Contribution Licensing
+
+Submit only material you own or are authorized to license, and identify any third-party terms.
+New original contributions must explicitly be offered under the license in LICENSE. By submitting
+such a contribution for inclusion, you also grant Vinícius Campos a worldwide, non-exclusive,
+irrevocable, royalty-free right to reproduce, modify, distribute, and sublicense that contribution
+under this project's personal noncommercial terms and separate paid commercial licenses. You retain
+ownership and may license your own contribution elsewhere. If you cannot grant these rights,
+state that before submitting; the contribution cannot be accepted under the default terms.
+
+Third-party contributions must retain their applicable notices and terms.

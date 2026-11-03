@@ -105,6 +105,8 @@ test_stance:
 
 ```text
 1 create {{KERNEL_HOME}}; copy kernel/scripts, kernel/docs, kernel/grammar, kernel/skills, kernel/templates into it
+  copy LICENSE into {{KERNEL_HOME}}; preserve its notices and terms
+  copy adapters/ into {{KERNEL_HOME}}/adapters for installed-layout validation; this does not activate hooks
 2 copy the harness hook script (adapters/<harness>/*_hook.py) into {{KERNEL_HOME}}/scripts/ when the harness has hooks
 3 write {{KERNEL_HOME}}/kernel.config.json from kernel.config.example.json with the interview answers
 4 render kernel/policy.tdsl.md -> {{KERNEL_HOME}}/policy.tdsl.md, replacing every {{PLACEHOLDER}}:

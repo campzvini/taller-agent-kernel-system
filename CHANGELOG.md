@@ -2,7 +2,23 @@
 
 ¶ - Release changes and migration boundaries.
 
-¶ 1 — Version 2.0.0
+¶ 1 — Version 2.1.0
+
+## 2.1.0 — 2026-11-03
+
+Adds an independent diagram CLI with preview-first adopt, conservative upgrade and snapshot-backed
+verification. Python transformations use standard-library syntax and token parsing, preserve
+existing identities and provisional markers, and record immediate pre-application originals.
+Other languages remain pending rather than receiving unsafe automatic transformations. Structural
+tracking is optional and no governed project or new hook is required. Includes installed-layout
+integration coverage and documents adapter, semantic-review and full-scan limits.
+
+Uses the Taller Personal Noncommercial License 1.0 for original material: free personal
+noncommercial use, separate paid business licensing, and explicit identification of unofficial
+adaptations.
+Records the official Taller distribution and contribution terms for future commercial licensing.
+
+¶ 2 — Version 2.0.0
 
 ## 2.0.0 — 2026-11-03
 

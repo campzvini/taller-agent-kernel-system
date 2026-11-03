@@ -4,12 +4,13 @@
 
 **A governance kernel for AI coding agents, installed before any harness and shared by all of them.**
 
-Version 2.0.0 · [Taller Personal Noncommercial License 1.0](LICENSE) · created by Vinícius Campos ([Taller](https://github.com/campzvini))
+Version 2.1.0 · [Licensing and official distribution](#licensing-and-official-distribution) · created by Vinícius Campos ([Taller](https://github.com/campzvini))
 
 The Taller Agent System Kernel (TASK) is the operating layer I built to work with AI agents every day:
 a global policy, a language written for agents to read, a spec-driven workflow, a navigation index for
 source code, and the skills and scripts that hold it together. It is not a product. It is a method,
-released so anyone can use it, change it, and build on it.
+shared so individuals can use it, change it, and build on it for personal noncommercial purposes;
+business use requires a separate agreement.
 
 This README explains what each part is and, above all, **why** it exists.
 
@@ -30,6 +31,8 @@ This README explains what each part is and, above all, **why** it exists.
 11. [Installation](#11-installation)
 12. [Repository layout](#12-repository-layout)
 13. [Contributing](#13-contributing)
+14. [Upgrade from 1.x](#14-upgrade-from-1x)
+15. [Licensing and official distribution](#licensing-and-official-distribution)
 
 ---
 
@@ -259,6 +262,49 @@ sound — is left to the agent.
 tokens doing it. A script does it the same way every time, for free. Splitting the work this way makes
 results reproducible across models and keeps the agent's attention on decisions.
 
+The independent diagram engine operates without a project anchor, constitution or feature:
+
+```console
+python kernel/scripts/diagram_project.py adopt --root ./project
+python kernel/scripts/diagram_project.py adopt --root ./project --apply
+python kernel/scripts/diagram_project.py upgrade --root ./project --apply
+python kernel/scripts/diagram_project.py verify --root ./project
+python kernel/scripts/diagram_project.py verify --root ./project --snapshot ./project/.agent-cache/diagram/OPERATION
+```
+
+In an installed kernel, use `scripts/diagram_project.py` under the kernel home instead.
+`adopt` inserts headers and chapters at Python module-level functions and classes, before their
+decorators. Existing module and symbol docstrings supply descriptions; missing descriptions are
+reported for semantic review. A syntactic boundary is not proof of a useful responsibility boundary.
+`upgrade` preserves recognized chapter numbers, titles, explicit identities, attribution and
+provisional `◇` markers; it normalizes recognized legacy separators and gives unidentified chapters
+explicit `legacy-N` identities so existing tracker references remain valid. It does not infer
+renumbering or rewrite ambiguous references. Existing diagrams are left to `upgrade`, not rediagrammed
+by `adopt`. Neither mode generates `※` comments.
+
+Both modes default to preview and emit JSON with changes, pending files and semantic review items.
+Automatic transformation currently supports UTF-8 Python only, using the standard library; other
+recognized source languages remain pending for external identification or a future syntax adapter.
+Build/dependency directories and symlinks are excluded. Python files marked generated in leading
+comments, invalid syntax, BOM inputs, nested/malformed markers and conflicting identities remain
+untouched. No Tree-sitter dependency or new hook is installed.
+
+Application checks that source bytes still match the proposal, saves immediate originals and a
+manifest under `.agent-cache/diagram/<operation>/`, and validates executable tokens and AST before
+publication. Ordinary comments and source preambles are preserved; failed publication restores
+only files still matching the engine's own output. Each applied operation includes the structural
+index produced by `code_map`. Use `--tracking` to initialize the optional structural registry;
+an existing registry is reconciled automatically. Tracking uses the existing whole-project
+inventory, which is broader than the set eligible for transformation.
+
+`verify` alone reports diagram coverage without claiming functional integrity. With `--snapshot`,
+it checks the saved baseline hash, compares executable tokens and AST, and reports whether current
+bytes still equal the applied result. This is structural preservation evidence, not an application
+test or semantic approval. Exit codes are `0` for no pending files / successful verification,
+`1` for pending files or failed verification, and `2` for an operation error. Semantic review items
+are reported separately and do not change the exit code. Applying safe files may still return `1`
+when other files remain pending. Processing is a full scan; incremental caching is not implemented.
+
 ## 8. Economy, truth and limits
 
 ¶ 8 — Economy, truth and limits
@@ -377,3 +423,20 @@ Use `execution_runtime.py --root <project> migrate` for project adoption and ins
 enabling autonomy. Reconcile with `structure_tracker.py --root <project> scan`; resolve ambiguous
 movements explicitly. Source-provenance review and batch brownfield rediagramming are optional, scoped
 operations with attribution and a nonfunctional baseline preserved.
+
+## Licensing and official distribution
+
+¶ 15 — Licensing and Official Distribution
+
+The official Taller-maintained TASK distribution is
+[campzvini/taller-agent-system-kernel](https://github.com/campzvini/taller-agent-system-kernel).
+Third-party forks and adaptations are not official Taller releases.
+
+Original material is offered under the [Taller Personal Noncommercial License 1.0](LICENSE):
+individuals may use, study, adapt, and share it without charge for personal noncommercial purposes.
+Companies need a separate **paid commercial license**, including for internal use or evaluation.
+Other organizational use requires written permission. Distributed adaptations containing material
+covered by this license must retain notices, identify their changes and maintainer, and clearly
+state that they are unofficial. Contact [Vinícius Campos](https://github.com/campzvini) for licensing.
+This is a source-available license with use restrictions, not MIT, Apache 2.0, or OSI open source.
+

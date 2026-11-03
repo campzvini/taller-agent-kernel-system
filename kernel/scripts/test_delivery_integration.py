@@ -18,6 +18,7 @@ from pathlib import Path
 
 SOURCE = Path(__file__).resolve().parents[1]
 REPOSITORY = SOURCE.parent
+ADAPTERS = REPOSITORY / 'adapters' if (REPOSITORY / 'adapters').is_dir() else SOURCE / 'adapters'
 
 
 class InstalledIntegrationTests(unittest.TestCase):
@@ -28,11 +29,19 @@ class InstalledIntegrationTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         self.base = Path(temporary.name)
         self.install = self.base / "kernel"
-        shutil.copytree(SOURCE, self.install, ignore=shutil.ignore_patterns("__pycache__"))
+        for directory in ('scripts', 'docs', 'grammar', 'templates'):
+            shutil.copytree(SOURCE / directory, self.install / directory,
+                            ignore=shutil.ignore_patterns('__pycache__'))
+        # Runtime fixtures need contracts and skeletons, not unrelated personal skill payloads.
+        for source in (SOURCE / 'skills').glob('*/*'):
+            if source.is_file() and source.suffix in ('.md', '.tdsl'):
+                destination = self.install / 'skills' / source.relative_to(SOURCE / 'skills')
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, destination)
         self.project = self.base / "project"
         self.project.mkdir()
         for harness in ("codex", "claude"):
-            shutil.copyfile(REPOSITORY / f"adapters/{harness}/{harness}_hook.py",
+            shutil.copyfile(ADAPTERS / f"{harness}/{harness}_hook.py",
                             self.install / f"scripts/{harness}_hook.py")
 
     def command(self, script, *args, event=None):
@@ -85,6 +94,22 @@ class InstalledIntegrationTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             if result.stdout.strip():
                 self.assertNotEqual(json.loads(result.stdout).get("hookSpecificOutput", {}).get("permissionDecision"), "deny")
+
+
+    def test_diagram_cli_operates_without_governed_project(self):
+        source = self.project / 'engine.py'
+        source.write_bytes(b'def convert():\n    """Convert a frame."""\n    return 42\n')
+        preview = self.command('diagram_project.py', 'adopt', '--root', str(self.project))
+        self.assertEqual(preview.returncode, 0, preview.stderr)
+        self.assertFalse(json.loads(preview.stdout)['applied'])
+        applied = self.command('diagram_project.py', 'adopt', '--root', str(self.project), '--apply')
+        self.assertEqual(applied.returncode, 0, applied.stderr)
+        result = json.loads(applied.stdout)
+        verified = self.command('diagram_project.py', 'verify', '--root', str(self.project),
+                                '--snapshot', result['snapshot'])
+        self.assertEqual(verified.returncode, 0, verified.stderr)
+        self.assertTrue(json.loads(verified.stdout)['integrity'])
+        self.assertFalse((self.project / '.task/project.tdsl').exists())
 
 
 if __name__ == "__main__":
