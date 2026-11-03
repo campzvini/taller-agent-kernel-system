@@ -1,6 +1,6 @@
 ---
 name: tasks
-description: Author the executable task set as a tasks@1 TDSL artifact in .task/features/<id>/tasks.tdsl — an acyclic dependency DAG whose every node traces to a requirement, a plan part, and a validation. Use when the operator wants the recorded plan decomposed into work. Not for technical design (use plan) and not for tracking runtime progress.
+description: Author the executable task set as a tasks@2 TDSL artifact in .task/features/<id>/tasks.tdsl — an acyclic dependency DAG whose every node traces to a requirement, a plan part, and a validation. Use when the operator wants the recorded plan decomposed into work. Not for technical design (use plan) and not for tracking runtime progress.
 ---
 
 ¶ - Author acyclic task DAG, each traces to requirement, plan part, validation.
@@ -8,7 +8,7 @@ description: Author the executable task set as a tasks@1 TDSL artifact in .task/
 skill:
   id: @skill/tasks
   phase tasks
-  output_dialect tasks@1
+  output_dialect tasks@2
   output_path .task/features/<feature_id>/tasks.tdsl
   template {{KERNEL_HOME}}/skills/tasks/template.tdsl
 
@@ -34,14 +34,16 @@ traceability every task carries at least one requirement_ref, one plan_ref, and 
 file_refs exact paths when known; the whole-field state `unknown` when legitimately deferred
 depends_on IS the authoritative dependency DAG; it must be acyclic
 execution_order a deterministic topological linearization of that DAG only; it never adds an edge
-status fixed at `pending` for every task
+runtime_status omitted; legacy tasks@1 pending remains readable
+difficulty low | medium | high guides_grouping
+target_refs stable file and section identities; write_scope exclusive destinations
 story_refs omitted — journey-to-requirement traceability already exists upstream
 parallel omitted — safe parallelism is derived from dependency and file constraints, never authored as a second dependency model
 checkpoints omitted; evidence_refs omitted; runtime risks omitted
   reason readiness, in-progress state, completion evidence, findings and blockers are
   runtime state; it belongs to the execution journal, never to this record
-completion fixed: all_required_validation_pass, evidence_required, operator_acceptance required
-ban introducing architecture or authority absent from the plan
+completion all_required_validation_pass, evidence_required; closure follows constitution authority
+new_structure requires recorded rationale, affected_source_updates and constitution authority
 
 format:
   identity_header tdsl, schema_revision, id, version, status, purpose, spec_ref, plan_ref
@@ -62,5 +64,14 @@ format:
    and that execution_order does not contradict the DAG
 3 if: FAIL -> fix and recheck
 4 report the task count, the DAG roots and leaves, and any deferred file_refs
-5 stop. O registro está escrito. Se ele precisa mudar, o operador diz o que muda;
-  silêncio é concordância. Não existe passo de aceitação.
+5 return to protocol; continue within declared authority; material undelegated choices go to operator
+
+¶ 5 — Runtime Projection
+
+checklist:
+  source: execution_journal_only
+  renderer: runtime_journal.py_checklist
+  persistence: derived_projection_only
+rule: never_write_completion_into_tasks.tdsl
+rule: condition_is_agent_judgment_not_script_inference
+claim: conditional_task_requires_--condition-satisfied_<task_ref>_after_source_based_applicability_resolution

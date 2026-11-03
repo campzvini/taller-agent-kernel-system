@@ -32,6 +32,18 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|NotebookEdit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON}} {{KERNEL_HOME}}/scripts/claude_hook.py",
+            "timeout": 30
+          }
+        ]
+      }
     ]
   }
 }

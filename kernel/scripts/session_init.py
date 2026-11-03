@@ -302,6 +302,11 @@ def render_markdown(r: dict[str, Any]) -> str:
         for artifact, data in (protocol.get("artifacts") or {}).items():
             L.append(f"- {artifact}: {'presente' if data.get('present') else '—'}")
         L.append(f"- Próxima fase: `{protocol.get('next_phase')}`")
+        execution = protocol.get("execution")
+        if execution:
+            L.append(f"- Execução: `{execution['execution_mode']}`; concorrência: {execution['max_active_subagents']}")
+            L.append(f"- Scaffold registrado: {execution.get('scaffold_present', False)}")
+            L.append(f"- Unidades para retomada: {len(execution.get('units', {}))}")
         if protocol.get("routing_error"):
             L.append(f"- Bloqueio de roteamento: {protocol['routing_error']}")
         L.append("")

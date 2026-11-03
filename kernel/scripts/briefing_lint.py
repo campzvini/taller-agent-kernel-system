@@ -105,6 +105,19 @@ def verify_files_exist(files: list[str], base: Path) -> list[str]:
 # ── § 4 — LINT ──
 
 def lint_briefing(text: str, base: Path) -> dict[str, Any]:
+    # Typed briefings use the distributed contract; retain legacy Markdown lint.
+    if re.search(r"(?m)^unit_ref: @unit/", text):
+        from protocol_core import parse_flat, members
+        fields = parse_flat(text)
+        required = {"unit_ref", "task_refs", "write_scope", "governing_refs", "target_refs", "constraints", "validation", "return"}
+        missing = sorted(required - fields.keys())
+        for name in ("task_refs", "write_scope", "governing_refs"):
+            if name in fields and not members(fields[name]):
+                missing.append(name)
+        return {"status": "FAIL" if missing else "OK", "code": 2 if missing else 0,
+                "found": {key: key in fields for key in required}, "missing": missing,
+                "empty": [], "blockers": missing, "vague_terms": [],
+                "target_files": members(fields.get("write_scope", "[]")), "missing_target_files": []}
     headings = parse_headings(text)
     found: dict[str, bool] = {k: False for k in REQUIRED_FIELDS}
     empty: dict[str, bool] = {k: False for k in REQUIRED_FIELDS}

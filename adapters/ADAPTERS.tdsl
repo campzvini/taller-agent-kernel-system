@@ -4,7 +4,7 @@
 
 document:
   id: task.adapters@1
-  version: 1.1.0
+  version: 2.0.0
   status: active
   scope: claude_code, codex, antigravity, cline
 
@@ -70,3 +70,17 @@ rule any harness that reads a global instruction file and SKILL.md folders can h
 install policy into its global instruction file with the merge markers, skills into its skill directory
 no_skill_support -> append a skill index (name, description, path) to the policy; the agent reads SKILL.md on demand
 ```
+
+¶ 7 — Runtime Capability Boundaries
+
+capabilities:
+  codex_and_claude: supplied_hook_adapters_translate_available_events
+  post_write: reconcile_when_supported_by_host_hook_surface
+  unobserved_write: explicit_reconciliation_required
+  antigravity_and_cline: instruction_driven_until_adapter_available
+  independent_scan: always_available_via_structure_tracker.py
+  concurrency: limited_by_host_capacity_and_project_max_active_subagents
+  absent_subagent_support: report_capability_limit_do_not_claim_delegated_execution
+rule: hook_support_is_not_evidence_of_complete_write_interception
+rule: scripts_do_not_choose_architecture_or_judge_implementation
+rule: exclusive_write_ownership_includes_operational_files

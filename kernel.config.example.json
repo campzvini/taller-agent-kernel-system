@@ -1,6 +1,6 @@
 {
   "kernel": "taller-agent-system-kernel",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "kernel_home": "{{KERNEL_HOME}}",
   "python": "{{PYTHON}}",
   "signature": {
@@ -20,5 +20,9 @@
   "doc_edits": "require_explicit_request",
   "sdd_default_mode": "gradual",
   "test_stance": "required",
-  "harnesses": []
+  "harnesses": [],
+  "execution_mode": "interactive",
+  "max_active_subagents": 1,
+  "separate_test_author": true,
+  "autonomous_authorized": false
 }

@@ -54,3 +54,14 @@ protocol respects language characteristics (Rust differs from Python)
 approval criteria are verifiable, not subjective
 execution report includes evidence (command output)
 failures reported with sufficient context for diagnosis
+
+¶ 5 — Configurable Authorship
+
+authorship:
+  separate_test_author: project_default_true
+  separate: read_spec_plan_independent_reference_not_implementation
+  combined: expected_results_still_independent_of_implementation
+  gate_owner: orchestrator
+  executor: supplies_evidence_not_gate_verdict
+rule: topology_never_weakens_triage_or_required_validations
+rule: tracker_never_runs_tests_or_judges_results

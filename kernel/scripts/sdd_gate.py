@@ -13,7 +13,7 @@ from pathlib import Path
 
 from protocol_core import (
     FAIL, Workflow, State, cycle_nodes, build_payload, build_parser, journal_outcomes, members,
-    parse_blocks, parse_reference, read_text, resolve_state, run, top_level_value,
+    parse_blocks, parse_flat, parse_reference, read_text, resolve_state, run, top_level_value,
     write_analysis_cache,
 )
 
@@ -24,10 +24,12 @@ from protocol_core import (
 SDD = Workflow(
     name="sdd",
     project_artifact="constitution",
+    project_files={"architecture": "Architecture.md"},
     feature_artifacts=("spec", "plan", "tasks", "analysis"),
     phases={
         "initialize": ((), None),
         "constitution": ((), "constitution"),
+        "architecture": (("constitution",), "architecture"),
         "feature": (("constitution",), None),
         "specify": (("constitution",), "spec"),
         "clarify": (("constitution", "spec"), "spec"),
@@ -65,6 +67,8 @@ def check_tasks(path: Path) -> list[tuple[str, str]]:
     for duplicate in duplicates:
         findings.append((FAIL, f"duplicate task id: {duplicate}"))
     tasks = {tid: {f: members(v) for f, v in fields.items()} for tid, fields in raw.items()}
+    for fields in tasks.values():
+        fields["depends_on"] = [dep.rsplit("#task/", 1)[-1] for dep in fields.get("depends_on", [])]
 
     if not tasks:
         findings.append((FAIL, "no task blocks parsed; expected `task <id>:` two spaces inside `tasks:`"))
@@ -74,6 +78,15 @@ def check_tasks(path: Path) -> list[tuple[str, str]]:
         for required in ("requirement_refs", "plan_refs", "validation_refs"):
             if not fields.get(required):
                 findings.append((FAIL, f"task {task_id}: traceability incomplete, {required} empty"))
+        if parse_flat(text).get("tdsl") == "tasks@2":
+            original = raw[task_id]
+            if original.get("difficulty") not in {"low", "medium", "high"}:
+                findings.append((FAIL, f"task {task_id}: difficulty required"))
+            for name in ("target_refs", "write_scope"):
+                if not members(original.get(name, "")):
+                    findings.append((FAIL, f"task {task_id}: {name} required"))
+            if "status" in original:
+                findings.append((FAIL, f"task {task_id}: runtime status belongs in journal"))
         for edge in fields.get("depends_on", []):
             if edge not in tasks:
                 findings.append((FAIL, f"task {task_id}: depends_on unknown task {edge}"))
@@ -82,6 +95,7 @@ def check_tasks(path: Path) -> list[tuple[str, str]]:
         findings.append((FAIL, f"dependency cycle through task {node}"))
 
     order = members(top_level_value(text, "execution_order") or "")
+    order = [ref.rsplit("#task/", 1)[-1] for ref in order]
     if order:
         position = {t: i for i, t in enumerate(order)}
         for task_id in tasks:
@@ -243,6 +257,43 @@ def analyze_payload(state: State) -> dict:
             add("minor", "explicit_unknown",
                 f"{artifact} carries an unresolved explicit_unknown: {unknown}")
 
+    if (state.base / "execution.config.tdsl").is_file():
+        from execution_runtime import configuration, task_catalog, execution_status
+        from structure_scaffold import parse_architecture
+        from structure_tracker import scan_project, resolve_reference
+        from runtime_journal import read_entries
+        try:
+            config = configuration(state.root)
+            architecture = state.base / "Architecture.md"
+            if config["scaffold_required"]:
+                if not architecture.is_file():
+                    add("blocking", "architecture_absent", "Architecture.md does not exist")
+                else:
+                    parse_architecture(architecture)
+            task_catalog(state.root)
+            registry = scan_project(state.root)
+            for item in registry["issues"]:
+                if "duplicate" in item["code"] or "conflicting" in item["code"]:
+                    add("blocking", item["code"], str(item))
+            for tid, fields in tasks.items():
+                for target in members(fields.get("target_refs", "[]")):
+                    destination = resolve_reference(registry, target)
+                    if destination is None or destination.get("state") != "present":
+                        scopes = members(fields.get("write_scope", "[]"))
+                        severity = "observation" if scopes else "blocking"
+                        add(severity, "prospective_target" if scopes else "unresolved_target",
+                            f"task {tid}: {target}; declared destinations: {scopes}")
+            decisions = read_entries(state.root, "decision")
+            for entry in decisions:
+                if entry.get("supersedes_ref"):
+                    add("observation", "decision_supersession",
+                        f"{entry['decision_id']} supersedes {entry['supersedes_ref']} scope={entry.get('supersession_scope')}; affected={entry.get('affected_refs', [])}")
+            for issue in execution_status(state.root)["blockers"]:
+                if "immutable" in issue:
+                    add("blocking", "constitution_mutated", issue)
+        except (ValueError, OSError) as error:
+            add("blocking", "structural_contract", str(error))
+
     return build_payload(state, findings)
 
 
@@ -307,6 +358,8 @@ def cmd_trail(args, workflow: Workflow) -> int:
         if order:
             remaining = [t for t in order if t not in done]
             print(f"próximas: {' -> '.join(remaining) if remaining else '(nenhuma)'}")
+        for tid in tasks:
+            print(f"[{'x' if tid in done else ' '}] {tid}")
 
     print("")
     if missing:
@@ -331,6 +384,24 @@ def main() -> int:
     p = sub.add_parser("analyze", help="deterministic cross-record coherence pass")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_analyze)
+
+    def runtime_command(args, workflow):
+        from execution_runtime import reconcile, migrate
+        from structure_scaffold import scaffold_project
+        root = resolve_state(args, workflow).root
+        if args.command == "execute0":
+            result = scaffold_project(root, apply=args.apply)
+        else:
+            result = {"reconcile": reconcile, "migrate": migrate}[args.command](root)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0
+
+    p = sub.add_parser("execute0", help="inspect or create the intended product structure")
+    p.add_argument("--apply", action="store_true")
+    p.set_defaults(func=runtime_command)
+    for name in ("reconcile", "migrate"):
+        p = sub.add_parser(name, help="reconcile or adopt structural runtime contracts")
+        p.set_defaults(func=runtime_command)
 
     return run(parser, SDD)
 

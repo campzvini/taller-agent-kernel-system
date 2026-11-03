@@ -1,6 +1,6 @@
 ---
 name: specify
-description: Author the feature specification as a spec@1 TDSL artifact in .task/features/<id>/spec.tdsl — objective, user journeys, atomic requirements, measurable success criteria, explicit unknowns. Use when the operator wants to turn intent or a brainstorm into the observable behavior contract for the active feature, or to clarify and replace an existing spec. Not for technical design (use plan).
+description: Author the feature specification as a spec@2 TDSL artifact in .task/features/<id>/spec.tdsl — objective, user journeys, atomic requirements, measurable success criteria, explicit unknowns. Use when the operator wants to turn intent or a brainstorm into the observable behavior contract for the active feature, or to clarify and replace an existing spec. Not for technical design (use plan).
 ---
 
 ¶ - Author feature behavior contract: objective, journeys, requirements, criteria, unknowns.
@@ -8,7 +8,7 @@ description: Author the feature specification as a spec@1 TDSL artifact in .task
 skill:
   id: @skill/specify
   phase specify
-  output_dialect spec@1
+  output_dialect spec@2
   output_path .task/features/<feature_id>/spec.tdsl
   template {{KERNEL_HOME}}/skills/specify/template.tdsl
 
@@ -83,5 +83,13 @@ if: source_only_reformulation -> same meaning, same version, report it
 2 run: python {{KERNEL_HOME}}/scripts/sdd_gate.py check <path>
 3 if: FAIL -> fix and recheck
 4 report requirement ids, criteria, explicit_unknowns, and what the operator must decide
-5 stop. O registro está escrito. Se ele precisa mudar, o operador diz o que muda;
-  silêncio é concordância. Não existe passo de aceitação.
+5 return to protocol; continue within declared authority; material undelegated choices go to operator
+
+¶ 7 — Normative and Structural References
+
+references:
+  constitution: applicable_immutable_version
+  architecture: intended_destinations_via_external_registry
+  feature_dependencies: semantic_edges_not_id_order
+rule: do_not_duplicate_architecture_tree
+rule: resolve_known_answers_from_sources_within_authority

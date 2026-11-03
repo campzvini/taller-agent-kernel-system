@@ -35,6 +35,7 @@ POLICY = {"sdd": DOCS / "sdd.tdsl"}
 ARTIFACT_PHASE = {
     "sdd": {
         "constitution": "constitution",
+        "Architecture": "architecture",
         "spec": "specify",
         "plan": "plan",
         "tasks": "tasks",
@@ -144,6 +145,8 @@ def protocol_target(file_path: str) -> tuple[str, str, str] | None:
             or governed_parts == ("project.tdsl",)):
         return None
     name = Path(normalized).name
+    if name == "Architecture.md":
+        return "sdd", "Architecture", "architecture"
     if not name.endswith(".tdsl"):
         return None  # só artefatos TDSL são governados
     artifact = name[: -len(".tdsl")]
@@ -205,9 +208,11 @@ def handle_protocol_write(session_id: str, file_path: str,
             "or `workflow: cad` in .task/project.tdsl before writing this shared record."
         )
     directory = str(Path(file_path).parent)
+    target_feature = feature_of(file_path)
+    scope = ["--feature", target_feature] if target_feature else []
     try:
         proc = subprocess.run(
-            [sys.executable, str(GATES[workflow]), "--cwd", directory, "gate", phase],
+            [sys.executable, str(GATES[workflow]), "--cwd", directory, *scope, "gate", phase],
             capture_output=True, text=True, encoding="utf-8", errors="replace",
             timeout=20,
         )
@@ -222,20 +227,7 @@ def handle_protocol_write(session_id: str, file_path: str,
             f"  python ~/.codex/scripts/{GATES[workflow].name} init --name <project>"
         )
 
-    # The gate reasons about the active feature; a write aimed at a different
-    # feature directory would be validated against the wrong chain.
-    target = feature_of(file_path)
-    if target is not None:
-        current = active_feature(file_path)
-        if current != target:
-            deny(
-                f"This write targets feature `{target}` but the active feature is "
-                f"`{current or 'none'}`. The gate validates the active chain, so the "
-                "prerequisites it checked do not describe this file.\n"
-                f"Activate it first, with operator authorization:\n"
-                f"  python ~/.codex/scripts/{GATES[workflow].name} feature {target}"
-            )
-
+    # Targeted gates never mutate the cursor shared by concurrent units.
     if proc.returncode != 0:
         deny(
             f"The `{phase}` gate refuses this write to {artifact}.tdsl.\n\n"
@@ -269,6 +261,15 @@ def main() -> int:
     try:
         event = json.loads(sys.stdin.read() or "{}")
     except json.JSONDecodeError:
+        return 0
+
+    if event.get("hook_event_name") == "PostToolUse":
+        proc = subprocess.run(
+            [sys.executable, str(HARNESS / "scripts/post_write.py"),
+             "--cwd", event.get("cwd") or os.getcwd()],
+            capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if proc.stdout.strip():
+            inject(proc.stdout.strip(), "structural reconciliation", event_name="PostToolUse")
         return 0
 
     session_id = event.get("session_id", "")

@@ -38,6 +38,18 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON}} {{KERNEL_HOME}}/scripts/codex_hook.py",
+            "timeout": 30
+          }
+        ]
+      }
     ]
   }
 }
