@@ -1,6 +1,6 @@
 ---
 name: constitution
-description: Author or amend the project constitution as a constitution@1 TDSL artifact in .task/constitution.tdsl. Use when the operator wants to establish, review, or amend durable project policy — principles, authority boundaries, quality bar, safety rules, evidence requirements. Not for feature behavior (use specify) and not for technical design (use plan).
+description: Author or amend the project constitution as a constitution@2 TDSL artifact in .task/constitution.tdsl. Use when the operator wants to establish, review, or amend durable project policy — principles, authority boundaries, quality bar, safety rules, evidence requirements. Not for feature behavior (use specify) and not for technical design (use plan).
 ---
 
 ¶ - Author durable project policy: principles, authority, quality, safety, evidence.
@@ -8,7 +8,7 @@ description: Author or amend the project constitution as a constitution@1 TDSL a
 skill:
   id: @skill/constitution
   phase constitution
-  output_dialect constitution@1
+  output_dialect constitution@2
   output_path .task/constitution.tdsl
   template {{KERNEL_HOME}}/skills/constitution/template.tdsl
 
@@ -16,7 +16,7 @@ skill:
 
 1 run: python {{KERNEL_HOME}}/scripts/sdd_gate.py state
 2 if: no_.task_anchor -> propose `sdd_gate.py init --name <project>` -> await operator
-3 if: constitution exists and accepted -> this is an AMENDMENT, not authoring; go to ¶ 5
+3 if: constitution exists -> this is an AMENDMENT, not authoring; go to ¶ 5
 
 ¶ 2 — Load
 
@@ -45,7 +45,7 @@ offer_as_defaults: # propose; the operator keeps, edits or drops each
   principle problem-triage    global policy ¶10 problem_triage, stated for this project
   principle test-triage       skill test-protocol ¶3, stated for this project
   authority delivery_close    whether the delivery session may close a feature as delivered
-                              on passing validations without asking (sdd ¶14 loop step 6)
+                              on passing validations without asking (sdd ¶12 validation_and_closure)
   authority stop_conditions   what halts a delivery session besides explicit_unknowns
 
 ban: asking for feature behavior, technical stack, task decomposition
@@ -73,15 +73,24 @@ format:
 
 ¶ 5 — Amendment
 
-if: meaning_changes -> version+1, status: proposed, previous acceptance is voided
-if: source_only_reformulation_same_meaning -> version unchanged, report to operator
+if: meaning_changes -> explicit_revision_authority, preserve_previous_version, version+1, status: proposed
+if: change_to_published_version -> preserve_then_emit_next_version
 always: run analyze and say what the change made incoherent downstream
 
 ¶ 6 — Close
 
-1 write .task/constitution.tdsl
+1 preserve the existing published version before writing the next .task/constitution.tdsl
 2 run: python {{KERNEL_HOME}}/scripts/sdd_gate.py check .task/constitution.tdsl
 3 if: FAIL -> fix and recheck; never accept a failing source
 4 report the principle ids, the explicit_unknowns, and the amendment impact
-5 stop. O registro está escrito. Se ele precisa mudar, o operador diz o que muda;
-  silêncio é concordância. Não existe passo de aceitação.
+5 return to protocol; continue within declared authority; material undelegated choices go to operator
+
+¶ 7 — Immutable Versions and Authority
+
+constitution:
+  each_version: immutable
+  amendment: preserve_previous_in_.task/history/constitution/<version>.tdsl
+  authority: explicit_autonomous_scope_closure_rights_stop_conditions
+  code: observed_behavior_never_overrides_policy
+rule: explicit_revision_authority_required
+rule: planning_mode_never_delegates_execution_authority

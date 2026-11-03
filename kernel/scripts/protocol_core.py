@@ -74,10 +74,11 @@ class Workflow:
     terminal_phase: str
     skeleton_of: dict[str, str] = field(default_factory=dict)   # artifact -> skill owning its template
     dialect_checks: dict[str, Callable[[Path], list[tuple[str, str]]]] = field(default_factory=dict)
+    project_files: dict[str, str] = field(default_factory=dict)
 
     @property
     def artifacts(self) -> tuple[str, ...]:
-        return (self.project_artifact, *self.feature_artifacts)
+        return (self.project_artifact, *self.project_files, *self.feature_artifacts)
 
 
 # ── § 2 — IO — locate, read, digest ──
@@ -261,6 +262,8 @@ class State:
         return sorted(found)
 
     def path_of(self, artifact: str) -> Path | None:
+        if artifact in self.workflow.project_files:
+            return self.base / self.workflow.project_files[artifact]
         if artifact == self.workflow.project_artifact:
             return self.base / f"{artifact}.tdsl"
         if artifact in self.workflow.feature_artifacts:
@@ -299,7 +302,7 @@ class State:
                 "path": str(path.relative_to(self.root)) if path else None,
                 "present": self.exists(artifact),
             }
-        return {
+        snapshot = {
             "root": str(self.root),
             "workflow": self.workflow.name,
             "project": self.anchor.get("id", "unknown"),
@@ -319,6 +322,13 @@ class State:
             "planning_mode": self.mode,
             "next_feature": self.next_feature or self.feature or "unknown",
         }
+        if (self.base / "execution.config.tdsl").is_file():
+            from execution_runtime import configuration, load_units
+            snapshot["execution"] = configuration(self.root)
+            snapshot["execution"]["units"] = load_units(self.root)
+            snapshot["execution"]["scaffold_present"] = (self.base / "runtime/scaffold.json").is_file()
+            snapshot["execution"]["tracking_present"] = (self.base / "tracking/registry.json").is_file()
+        return snapshot
 
     def next_phase(self) -> str:
         """The next phase whose output does not exist yet. A suggestion, not an order.
@@ -332,13 +342,21 @@ class State:
             return "initialize"
         if not self.exists(self.workflow.project_artifact):
             return self.workflow.project_artifact
+        if (self.base / "execution.config.tdsl").is_file():
+            from execution_runtime import configuration
+            if configuration(self.root)["scaffold_required"] and not self.exists("architecture"):
+                return "architecture"
         if self.mode == "integral":
             # Plan everything first: the first active feature still missing a
             # planning record is where work goes, wherever the cursor points.
-            for row in self.roadmap():
+            roadmap = self.roadmap()
+            for row in roadmap:
                 if row["next"] != self.workflow.terminal_phase:
                     self.next_feature = row["feature"]
                     return row["next"]
+            if roadmap and (self.base / "execution.config.tdsl").is_file():
+                self.next_feature = self.feature or roadmap[0]["feature"]
+                return self.workflow.terminal_phase
         if not self.feature:
             # Nothing is pointed at. Whether that means "open the first feature"
             # or "nothing is pending" depends on whether this project ever had one.
@@ -349,23 +367,42 @@ class State:
         return self.workflow.terminal_phase
 
 
-def journal_outcomes(state: State) -> tuple[set[str], set[str]]:
+def journal_outcomes(state: State, include_runtime: bool = True) -> tuple[set[str], set[str]]:
     """Read the append-only execution journal: (completed, blocked) step ids."""
     if not state.feature:
         return set(), set()
     path = state.base / FEATURES / state.feature / JOURNAL
-    if not path.is_file():
-        return set(), set()
-    entries, _ = parse_blocks(read_text(path), "journal", "entry")
     done: set[str] = set()
     blocked: set[str] = set()
-    for step_id, fields in entries.items():
+    # Legacy labels were task ids. Reduce each physical entry in order instead
+    # of merging repeated labels and losing the outcome of a retry.
+    text = read_text(path) if path.is_file() else ""
+    chunks = re.split(r"(?m)^  entry ", text)[1:]
+    for chunk in chunks:
+        label, _, body = chunk.partition(":\n")
+        entries, _ = parse_blocks("journal:\n  entry " + label + ":\n" + body, "journal", "entry")
+        fields = entries.get(label, {})
+        step_id = fields.get("task_ref", label).rsplit("/", 1)[-1]
         outcome = fields.get("outcome", "").strip()
         if outcome == "completed":
             done.add(step_id)
             blocked.discard(step_id)
-        elif outcome in ("blocked", "failed") and step_id not in done:
+        elif outcome in ("blocked", "failed", "interrupted", "started"):
+            done.discard(step_id)
             blocked.add(step_id)
+    if include_runtime:
+        from runtime_journal import execution_state
+        prefix = f"@tasks/{state.feature}#task/"
+        for ref, fields in execution_state(state.root).items():
+            if not ref.startswith(prefix):
+                continue
+            tid = ref[len(prefix):]
+            done.discard(tid)
+            blocked.discard(tid)
+            if fields.get("outcome") == "completed":
+                done.add(tid)
+            elif fields.get("outcome") in ("blocked", "failed", "interrupted", "started"):
+                blocked.add(tid)
     return done, blocked
 
 
@@ -475,7 +512,14 @@ def resolve_state(args, workflow: Workflow) -> State:
     if root is None:
         print(f"FAIL: no {ROOT_DIR}/ anchor found from {args.cwd}. Run `init` first.")
         sys.exit(2)
-    return State(root, workflow)
+    state = State(root, workflow)
+    scope = getattr(args, "feature_scope", None)
+    if scope:
+        if scope not in state.known_features():
+            raise ValueError(f"unknown feature scope: {scope}")
+        state.cursor = scope
+        state.feature = scope if state.lifecycle_of(scope) == ROUTING_STATE else ""
+    return state
 
 
 def cmd_init(args, workflow: Workflow) -> int:
@@ -498,6 +542,8 @@ def cmd_init(args, workflow: Workflow) -> int:
         f"planning_mode: {args.mode}\n",
         encoding="utf-8", newline="\n")
     placed = place_scaffold(base, workflow)
+    from execution_runtime import migrate
+    migrate(root)
     print(f"OK: initialized {base} for workflow `{workflow.name}`")
     if placed:
         print(f"OK: {len(placed)} authoring skeletons in {ROOT_DIR}/{SCAFFOLD}/ "
@@ -591,7 +637,7 @@ def cmd_gate(args, workflow: Workflow) -> int:
         return 2
     required, _ = workflow.phases[phase]
     blocked: list[str] = []
-    if phase not in {"initialize", workflow.project_artifact, "feature"} and not state.feature:
+    if phase not in {"initialize", workflow.project_artifact, "feature", *workflow.project_files} and not state.feature:
         if state.cursor:
             blocked.append(
                 f"{state.cursor} is {state.lifecycle_of(state.cursor)}, not active; "
@@ -601,6 +647,11 @@ def cmd_gate(args, workflow: Workflow) -> int:
     for artifact in required:
         if not state.exists(artifact):
             blocked.append(f"{artifact} does not exist; `{phase}` references its parts")
+    if phase == "execute" and (state.base / "execution.config.tdsl").is_file():
+        from execution_runtime import execution_status, preserve_constitution
+        blocked.extend(execution_status(state.root)["blockers"])
+        if not blocked:
+            preserve_constitution(state.root)
     if blocked:
         for item in blocked:
             print(f"  FAIL {item}")
@@ -622,8 +673,14 @@ def cmd_check(args, workflow: Workflow) -> int:
         findings += extra(path)
     expected = workflow.dialect_of.get(artifact)
     actual = parse_flat(read_text(path)).get("tdsl")
-    if expected and actual != expected:
+    supported = {expected}
+    if expected and expected.endswith("@1") and artifact in {"constitution", "spec", "plan", "tasks", "analysis"}:
+        supported.add(expected[:-1] + "2")
+    if expected and actual not in supported:
         findings.append((FAIL, f"TDSL-E701 dialect is {actual}, expected {expected}"))
+    if actual and (actual.endswith("@2") or actual in {"project_execution@1", "execution_journal@1", "decision_journal@1", "failure_journal@1"}):
+        from contract_check import check_contract
+        findings.extend(check_contract(path))
     return emit(findings, f"check {path.name}")
 
 
@@ -674,7 +731,7 @@ def write_anchor(state: State, cursor: str | None = None,
                  "features:"]
         for fid in sorted(register):
             block.append(f"  feature {fid}:")
-            for name in ("lifecycle", "successor", "closed_at", "reason"):
+            for name in ("lifecycle", "successor", "closed_at", "reason", "depends_on"):
                 value = register[fid].get(name, "")
                 if value:
                     block.append(f"    {name}: {value}")
@@ -731,6 +788,17 @@ def cmd_close(args, workflow: Workflow) -> int:
     the whole bias: every answer the router could give was an imperative.
     """
     state = resolve_state(args, workflow)
+    if args.state == "delivered" and (state.base / "execution.config.tdsl").is_file():
+        from execution_runtime import latest_outcomes
+        task_path = state.base / FEATURES / args.id / "tasks.tdsl"
+        if not task_path.is_file():
+            print("FAIL: tasks missing; delivery cannot be established")
+            return 1
+        tasks, _ = parse_blocks(read_text(task_path), "tasks", "task")
+        outcomes = latest_outcomes(state.root)
+        if not tasks or any(outcomes.get(f"@tasks/{args.id}#task/{tid}", {}).get("outcome") != "completed" for tid in tasks):
+            print("FAIL: delivery requires completed journal evidence for every task")
+            return 1
     if args.state not in CLOSED_STATES:
         print(f"FAIL: --as must be one of {' '.join(CLOSED_STATES)}, got {args.state}")
         return 2
@@ -840,16 +908,27 @@ def cmd_feature(args, workflow: Workflow) -> int:
               "Pass --reopen to put it back in work, or pick another id.")
         return 1
 
-    (state.base / FEATURES / args.id).mkdir(parents=True, exist_ok=True)
     register = current_register(state)
     entry = register.setdefault(args.id, {})
     entry["lifecycle"] = ROUTING_STATE
+    dependencies = getattr(args, "depends_on", None)
+    if dependencies is not None:
+        dependencies = [dep.removeprefix("@feature/") for dep in dependencies]
+        if args.id in dependencies or any(dep not in state.known_features() for dep in dependencies):
+            print("FAIL: feature dependencies must name existing other features")
+            return 1
+        entry["depends_on"] = "[" + " ".join(dependencies) + "]"
+        graph = {fid: members(item.get("depends_on", "[]")) for fid, item in register.items()}
+        if cycle_nodes(graph):
+            print("FAIL: feature dependency cycle")
+            return 1
     if args.reopen:
         # Reopening does not rewrite history; it drops the closing facts that no
         # longer hold, and keeps nothing that would now be false.
         for stale in ("closed_at", "successor", "reason"):
             entry.pop(stale, None)
     try:
+        (state.base / FEATURES / args.id).mkdir(parents=True, exist_ok=True)
         write_anchor(state, cursor=args.id, register=register)
     except ValueError as error:
         print(f"FAIL: {error}; fix it by hand")
@@ -872,6 +951,7 @@ def write_analysis_cache(state: State, payload: dict) -> None:
 def build_parser(workflow: Workflow, description: str) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument("--cwd", default=".", help="directory to resolve the .task anchor from")
+    parser.add_argument("--feature", dest="feature_scope", help="inspect the target feature without moving the shared cursor")
     sub = parser.add_subparsers(dest="command", required=True)
 
     p = sub.add_parser("init", help="create the .task anchor")
@@ -904,6 +984,7 @@ def build_parser(workflow: Workflow, description: str) -> argparse.ArgumentParse
 
     p = sub.add_parser("feature", help="activate a feature id")
     p.add_argument("id")
+    p.add_argument("--depends-on", nargs="*", default=None, help="explicit predecessor feature ids")
     p.add_argument("--reopen", action="store_true",
                    help="put a closed feature back in work; drops its closing facts")
     p.set_defaults(func=cmd_feature)

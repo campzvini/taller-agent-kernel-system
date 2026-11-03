@@ -1,11 +1,13 @@
-# Authoring skeleton for the `analyze` phase.
+# ¶ - Authoring skeleton for the `analyze` phase.
 # NOT a template@1 document: the placeholder type contract is owned by the
 # schemas, never restated here. Emit this shape with the placeholders resolved.
+
+¶ 1 — Authoring Contract
 
 skeleton:
   id @skeleton/analysis
   purpose deterministic analysis skeleton
-  output_dialect analysis@1
+  output_dialect analysis@2
   provenance lima_canonical
   schema_lock {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
   field_contracts {{KERNEL_HOME}}/skills/_shared/field-contracts.tdsl
@@ -20,10 +22,12 @@ directives: # authoring instructions, never emitted into the artifact
   when <name>: emit only when present and material
   when_empty <name>: emit `name: []` when the required container has zero items
 
+¶ 2 — Output Shape
+
 shape:
 
-tdsl: analysis@1
-schema_revision: {schema_revision} # copy revisions.analysis@1 from schema_lock verbatim
+tdsl: analysis@2
+schema_revision: {schema_revision} # copy revisions.analysis@2 from schema_lock verbatim
 id: @analysis/{feature_id}
 version: {artifact_version}
 status: proposed
@@ -64,3 +68,9 @@ when limitations:
   limitations: [{*limitations}]
 when evidence_refs:
   evidence_refs: [{*evidence_refs}]
+
+when architecture_ref:
+  architecture_ref: {architecture_ref}
+
+when target_refs:
+  target_refs: [{*target_refs}]

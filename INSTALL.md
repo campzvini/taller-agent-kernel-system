@@ -81,6 +81,21 @@ sdd_default_mode:
       pro whole architecture settled and reviewable up front; con more planning before first result
   default gradual; switchable per project with `sdd_gate.py mode <value>`
 
+execution_authority:
+  options interactive | autonomous
+  default interactive
+  independent_of planning_mode
+  autonomous requires explicit constitution scope, stop conditions and closure authority
+  project_config .task/execution.config.tdsl; autonomous_authorized remains false until explicit grant
+  legacy_upgrade never enables autonomy implicitly
+
+execution_topology:
+  max_active_subagents positive integer, default 1
+  separate_test_author boolean, default true
+  parallel_requires independent units and exclusive source, journal, report and temporary destinations
+  combined_test_authorship never weakens independent criteria or orchestrator-owned test gate
+
+
 test_stance:
   options required (tests alongside code, never skipped) | operator_decides (agent proposes, operator chooses)
   default required
@@ -120,6 +135,7 @@ operator_has_several_harnesses -> offer to place the same kernel into each; one 
 
 ```text
 1 python {{KERNEL_HOME}}/scripts/selftest.py -> must print "selftest: OK"
+  python -m unittest discover -s {{KERNEL_HOME}}/scripts -p "test_*.py" -> must pass
 2 python {{KERNEL_HOME}}/scripts/diagram_check.py render header --file demo.py
     --project demo --version 0.1 --purpose "install check" -> shows the chosen signature lines
 3 confirm the harness sees the skills (list them, or ask the operator to restart the harness)
@@ -135,3 +151,17 @@ tell the operator, in their language:
   how to start: "start a governed project" -> skill(protocol); "index this code" -> skill(diagram) or skill(code-map)
   where backups are and how to uninstall (remove the task block, the copied skills, the hook entries, kernel_home)
 ```
+
+¶ 7 — Upgrade Projects Explicitly
+
+upgrade:
+  kernel: back_up_installed_copy_and_operator_configuration
+  project: inspect_existing_records_and_execution_authority_before_migration
+  command: python {{KERNEL_HOME}}/scripts/execution_runtime.py --root <project> migrate
+  legacy: preserve_planning_records_and_feature_execution_journals
+  autonomy: explicit_opt_in_only_never_implied_by_integral
+  identity: initialize_registry_without_mutating_original_source
+  unresolved_move: reconcile_explicitly_without_identity_guess
+  constitution: preserve_each_existing_published_version
+  verify: query_registry_and_compare_runtime_projection_before_resume
+rule: installation_upgrade_does_not_publish_merge_or_deploy_project_changes

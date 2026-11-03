@@ -1,8 +1,10 @@
 # TASK — Taller Agent System Kernel
 
+¶ - Governance, structural navigation and evidence across coding-agent harnesses.
+
 **A governance kernel for AI coding agents, installed before any harness and shared by all of them.**
 
-Version 1.1.0 · [Taller Personal Noncommercial License 1.0](LICENSE) · created by Vinícius Campos ([Taller](https://github.com/campzvini))
+Version 2.0.0 · [Taller Personal Noncommercial License 1.0](LICENSE) · created by Vinícius Campos ([Taller](https://github.com/campzvini))
 
 The Taller Agent System Kernel (TASK) is the operating layer I built to work with AI agents every day:
 a global policy, a language written for agents to read, a spec-driven workflow, a navigation index for
@@ -32,6 +34,8 @@ This README explains what each part is and, above all, **why** it exists.
 ---
 
 ## 1. The problem it solves
+
+¶ 1 — The problem it solves
 
 Working with an agent is communication over a noisy channel. Every instruction, briefing, spec and
 handoff is a message, and each one can be read more than one way. Prose is the noisiest encoding
@@ -67,6 +71,8 @@ form of the same noise, and each is answered by one deliberate choice described 
 
 ## 2. The idea: a kernel before the harness
 
+¶ 2 — The idea: a kernel before the harness
+
 TASK sits **underneath** the harness, the way an operating-system kernel sits under applications.
 There is one copy of the kernel on the machine (`~/.task`): scripts, policies, grammar, skills and your
 configuration. Each harness receives only a thin adapter — its rules file and its skill folder — that
@@ -84,6 +90,8 @@ points back to that single kernel.
   because the policy tells the agent which script to run and when.
 
 ## 3. TDSL — a language for agents
+
+¶ 3 — TDSL — a language for agents
 
 TDSL (Transformer Deterministic Semantic Language) is a small, line-oriented notation for writing instructions and
 records that agents read. A fragment:
@@ -119,6 +127,8 @@ model that reads them.
 
 ## 4. Who reads it decides the form
 
+¶ 4 — Who reads it decides the form
+
 Every document or message has one primary reader, and the reader decides its form:
 
 | Reader | Form | Examples |
@@ -136,6 +146,8 @@ interpretation; TDSL aimed at a human is hard to read. Deciding by reader, deter
 the guesswork and keeps delegation lossless.
 
 ## 5. Code anchors — `§`, `¶` and `※`
+
+¶ 5 — Code anchors — `§`, `¶` and `※`
 
 Every source file gets a comment-only index: a header with its purpose, and numbered chapters at
 module level.
@@ -155,6 +167,9 @@ module level.
 
 - `§` indexes source code (header `§ -` plus numbered chapters `§ n — DOMAIN — responsibility`).
 - `¶` indexes TDSL and agent-facing markdown the same way.
+- `◇` marks a provisional section; promotion to `§` preserves its stable `anchor_ref`.
+- Stable typed references identify directories, files and sections independently of paths and numbers.
+  Binary files and unsafe comment formats receive identities only in the external registry.
 - `※` marks an optional typed comment — `invariant`, `boundary`, `decision`, `risk`… — for context that
   cannot be read from the code itself.
 
@@ -169,15 +184,24 @@ module level.
 - **The banner is rendered by a script**, so every file in every project looks the same no matter which
   agent wrote it.
 
-**The gain:** large codebases become navigable at a fraction of the reading cost, and an index made
-by one agent is immediately usable by any other.
+The persistent identity registry is `.task/tracking/registry.json`; Markdown and machine projections
+under `.agent-cache/tracking/` are rebuildable. The tracker locates elements and references, reports
+ambiguity and records removals. It never runs tests, judges quality or declares tasks complete.
+
+Before an intervention: resolve the destination, consult governing sources and relevant history,
+inspect what exists, then reuse, modify, create or do nothing. Record material changes and reconcile
+the index afterwards. Hooks assist this process; explicit reconciliation covers changes they miss.
 
 ## 6. Spec-driven development — records, not bureaucracy
 
-Governed work moves through phases, each producing one TDSL record in `.task/`:
+¶ 6 — Spec-driven development — records, not bureaucracy
+
+Each planning phase produces its owned artifact in `.task/`; Architecture.md contains only the intended tree:
 
 ```
-constitution → spec → (clarify) → plan → tasks → analysis → execute
+constitution → Architecture.md → features → spec → (clarify) → plan → tasks → analysis
+                                                                     ↓
+                                      Execute 0 (integral) → execution loop
 ```
 
 A single entry skill, `protocol`, reads the project state and routes to the right phase; the agent
@@ -186,9 +210,9 @@ record is written.
 
 **Design choices and their reasons**
 
-- **Records, not authorities.** A record states decisions; it never carries "approved" or "passed".
-  The operator is in the room and decides. This avoids a ceremony of sign-offs that would attest
-  nothing the conversation does not already show.
+- **Constitutional authority.** The constitution is the highest project policy and each version is
+  preserved. Code establishes existing behavior; differences must be reconciled against policy.
+  Planning, observed structure and operational history remain distinct.
 - **The gate checks structure, never permission.** It refuses a broken reference (a plan without a
   spec), not a decision. Judgement stays with the operator; consistency is mechanical.
 - **One proposition, one location.** Downstream records reference upstream ids instead of restating
@@ -206,10 +230,25 @@ record is written.
 Switch at any time with `sdd_gate.py mode <gradual|integral>`; `sdd_gate.py roadmap` shows the
 planning position of every feature.
 
-**The gain:** decisions survive across sessions and agents, parallel agents work against the same
-plan, and code is written against something that can be checked.
+Planning mode and execution authority are independent. `interactive` is the default, including for
+existing projects. Explicitly authorized `autonomous` execution continues through the declared package
+until completion or a real block; choosing `integral` alone never grants that authority.
+
+`Architecture.md` contains only the intended directory and file tree. Integral execution starts with
+Execute 0: inspect existing destinations, create safe missing structure, add provisional `◇` sections
+and reconcile indices. Scaffold presence is never functional completion.
+
+The orchestrator selects a whole feature, task group or single task from dependencies, difficulty and
+write scope. `max_active_subagents` defaults to one. Parallel units require exclusive destinations,
+including reports and temporary files. Test-author separation is configurable; independent validation
+criteria and the orchestrator's test gate remain required.
+
+Execution, decisions and material failures have separate append-only journals. Completion checkboxes
+are projections of execution history, never a second mutable status inside the task plan.
 
 ## 7. Scripts gather, agents judge
+
+¶ 7 — Scripts gather, agents judge
 
 Everything mechanical is done by deterministic Python scripts: reading project state, rendering
 anchors, checking that an edit was comment-only, validating records, preparing commit context,
@@ -222,6 +261,8 @@ results reproducible across models and keeps the agent's attention on decisions.
 
 ## 8. Economy, truth and limits
 
+¶ 8 — Economy, truth and limits
+
 The global policy also fixes how the agent spends effort and what it trusts:
 
 - **Cost is turns × context.** Batch reads, chain commands, never re-read what is already in context.
@@ -229,9 +270,9 @@ The global policy also fixes how the agent spends effort and what it trusts:
 - **Inline first.** Spawning another agent costs a cold start that re-derives everything; the policy
   delegates only when work is large, parallel, would pollute the context, or needs a different model
   tier — and then with a TDSL briefing contract.
-- **Code is the truth.** Documents describe intent and may be out of date; when they disagree with the
-  code, the code wins and the divergence is reported. A build or test status is never asserted
-  without running the command.
+- **Authority and observation are distinct.** The constitution governs what is permitted; code
+  establishes what exists. Indices locate both without judging them. Build and test claims require
+  the relevant command to have run.
 - **Hard limits.** Destructive or outward-facing actions are confirmed first; production dependencies
   need the operator's approval; original source files are not rewritten without instruction.
 
@@ -240,19 +281,23 @@ repository.
 
 ## 9. Skills
 
+¶ 9 — Skills
+
 Skills are folders with a `SKILL.md` that the agent loads only when a task needs them, so they cost
 nothing until used.
 
 | Group | Skills |
 | --- | --- |
-| Governed workflow | `protocol` (entry and router), `constitution`, `specify`, `clarify`, `plan`, `tasks`, `decompose`, `analyze`, `execute` |
+| Governed workflow | `protocol` (entry and router), `constitution`, `specify`, `clarify`, `plan`, `tasks`, `decompose`, `analyze`, `execute`, `architecture` |
 | Code navigation | `diagram` (apply the anchors), `code-map` (index a file or a whole project) |
-| Session work | `commit`, `review`, `debug`, `handoff`, `refactor-plan`, `pr-description`, `dependency-check`, `doc-update`, `test-protocol` |
+| Session work | `commit`, `review`, `debug`, `handoff`, `refactor-plan`, `pr-description`, `dependency-check`, `doc-update`, `test-protocol`, `provenance` |
 
 Phase skills are deliberately reached only through `protocol`, so the order of the workflow is never
 skipped by accident.
 
 ## 10. Supported harnesses
+
+¶ 10 — Supported harnesses
 
 | Harness | Global rules | Skills | Mechanical enforcement (hooks) |
 | --- | --- | --- | --- |
@@ -264,6 +309,8 @@ skipped by accident.
 Any harness that reads a global instruction file can host the kernel; see `adapters/ADAPTERS.tdsl`.
 
 ## 11. Installation
+
+¶ 11 — Installation
 
 The installer is your own agent.
 
@@ -295,6 +342,8 @@ that block.
 
 ## 12. Repository layout
 
+¶ 12 — Repository layout
+
 ```
 INSTALL.md                  instructions executed by the installing agent (TDSL)
 kernel/policy.tdsl.md       the global policy template
@@ -309,5 +358,22 @@ kernel.config.example.json  shape of the installer's answers
 
 ## 13. Contributing
 
+¶ 13 — Contributing
+
 This is a contribution, not a product: issues, ideas and pull requests are welcome.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for conventions and versioning.
+
+## 14. Upgrade from 1.x
+
+¶ 14 — Upgrade from 1.x
+
+Keep a reviewable checkout before upgrading the installed kernel. Legacy planning records and
+feature journals remain readable; migration is explicit and preserves the existing interactive
+authority. New task contracts separate runtime state from planning. Do not rename a dialect header
+to migrate: use the matching schema and preserve predecessor versions. Schema revision hashes remain
+in use; structural identities do not depend on content hashes.
+
+Use `execution_runtime.py --root <project> migrate` for project adoption and inspect its output before
+enabling autonomy. Reconcile with `structure_tracker.py --root <project> scan`; resolve ambiguous
+movements explicitly. Source-provenance review and batch brownfield rediagramming are optional, scoped
+operations with attribution and a nonfunctional baseline preserved.

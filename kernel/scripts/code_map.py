@@ -20,6 +20,7 @@ from typing import Any
 SECTION = "§"   # § source code
 PILCROW = "¶"   # ¶ TDSL documents and agent-facing markdown
 CONTEXT = "※"   # typed semantic source comment
+PROVISIONAL = "◇"
 
 DOC_SUFFIXES = {".md", ".tdsl", ".txt", ".rst"}
 SOURCE_SUFFIXES = {
@@ -84,9 +85,10 @@ def parse_entries(path: Path, anchor: str) -> tuple[dict[str, Any] | None, list[
     with path.open("r", encoding="utf-8", errors="replace") as handle:
         for lineno, line in enumerate(handle, start=1):
             total = lineno
-            if anchor not in line or not opens_line(line, anchor):
+            marker = PROVISIONAL if PROVISIONAL in line and opens_line(line, PROVISIONAL) else anchor
+            if marker not in line or not opens_line(line, marker):
                 continue
-            tail = line[line.index(anchor) + 1:].rstrip("\n")
+            tail = line[line.index(marker) + 1:].rstrip("\n")
             chapter = CHAPTER_RE.match(tail)
             if chapter:
                 chapters.append({
@@ -94,6 +96,7 @@ def parse_entries(path: Path, anchor: str) -> tuple[dict[str, Any] | None, list[
                     "number": chapter.group("number"),
                     "title": TRAILING_DECOR.sub("", chapter.group("title")),
                     "level": chapter.group("number").count(".") + 1,
+                    "implementation_state": "provisional" if marker == PROVISIONAL else "implemented_marker",
                 })
                 continue
             header_match = HEADER_RE.match(tail)
@@ -375,7 +378,13 @@ def main() -> int:
     parser.add_argument("--anchor", choices=["section", "pilcrow"], default=None,
                         help="force an anchor instead of deriving it from the suffix")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--query", help="resolve an identity from structural indexes")
     args = parser.parse_args()
+    if args.query:
+        from structure_tracker import query_registry
+        root = Path(args.project or ".").resolve()
+        print(json.dumps(query_registry(root, args.query), ensure_ascii=False, indent=2))
+        return 0
 
     if args.project is not None and args.targets:
         parser.error("use file targets or --project, not both")
@@ -423,6 +432,13 @@ def main() -> int:
         json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8", newline="\n")
 
     if project_root is not None:
+        if (project_root / ".task/project.tdsl").is_file():
+            from structure_tracker import scan_project
+            registry = scan_project(project_root)
+            for result in results:
+                relative = Path(result["file"]).relative_to(project_root).as_posix()
+                result["identities"] = [ref for ref, item in registry["elements"].items()
+                                        if item["path"] == relative and item["state"] == "present"]
         project_payload = {
             "schema": "taller.project-code-map/1",
             "authority": "initial_context_only",

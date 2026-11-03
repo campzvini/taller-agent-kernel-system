@@ -1,11 +1,13 @@
-# Authoring skeleton for the `tasks` phase.
+# ¶ - Authoring skeleton for the `tasks` phase.
 # NOT a template@1 document: the placeholder type contract is owned by the
 # schemas, never restated here. Emit this shape with the placeholders resolved.
+
+¶ 1 — Authoring Contract
 
 skeleton:
   id @skeleton/tasks-efficient
   purpose compact traceable dependency DAG with fixed completion semantics
-  output_dialect tasks@1
+  output_dialect tasks@2
   provenance operator
   schema_lock {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
   field_contracts {{KERNEL_HOME}}/skills/_shared/field-contracts.tdsl
@@ -20,10 +22,12 @@ directives: # authoring instructions, never emitted into the artifact
   when <name>: emit only when present and material
   when_empty <name>: emit `name: []` when the required container has zero items
 
+¶ 2 — Output Shape
+
 shape:
 
-tdsl: tasks@1
-schema_revision: {schema_revision} # copy revisions.tasks@1 from schema_lock verbatim
+tdsl: tasks@2
+schema_revision: {schema_revision} # copy revisions.tasks@2 from schema_lock verbatim
 id: @tasks/{feature_id}
 version: {artifact_version}
 status: proposed
@@ -36,7 +40,9 @@ tasks:
     task {task.id}:
       action ln: |
         {task.action}
-      status: pending
+      difficulty: {task.difficulty}
+      target_refs: [{*task.target_refs}]
+      write_scope: [{*task.write_scope}]
       requirement_refs: [{*task.requirement_refs}]
       plan_refs: [{*task.plan_refs}]
       file_refs: {task.file_refs}
@@ -53,4 +59,5 @@ validation:
 
 completion:
   evidence_required: true
-  operator_acceptance: required
+  # Reference the immutable governing constitution revision, never an acceptance record.
+  authority_ref: {authority_ref}

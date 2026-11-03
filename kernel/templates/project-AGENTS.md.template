@@ -1,15 +1,14 @@
 # AGENTS.md — <Projeto>
-# Entrada humana / retomada. Linguagem natural. Fino por design.
-# A política agent-facing (tooling, §, economia, commits, DSL) HERDA de ~/.codex/AGENTS.md — não repetir.
+¶ - Entrada humana para retomada e localização das fontes do projeto.
 
-## Retomada
-Antes de qualquer tarefa, leia nesta ordem:
-1. `AGENTS.md` (este diretório) — fronteiras, layout, comandos, estado
-2. <índice/memória operacional do projeto, se houver>
-3. <spec ativa em docs/specs/active/, se a sessão for dirigida por uma>
+¶ 1 — Objetivo
 
-## Objetivo
-<uma linha: o que o projeto é e qual seu papel>
+<Uma linha sobre o propósito e o papel do projeto.>
 
-## Quando trabalhar aqui
-→ <regra de entrada específica do projeto, se houver>
+¶ 2 — Retomada
+
+Consulte as fronteiras locais e o estado em `.task/project.tdsl`. A árvore pretendida fica em `.task/Architecture.md`; identidades e destinos ficam em `.task/tracking/registry.json`. Use os índices para localizar as fontes e leia os trechos necessários à intervenção.
+
+¶ 3 — Autoridade e Histórico
+
+A constituição governa as decisões. O código mostra o comportamento existente. Os journals em `.task/journals/` preservam execução, decisões e falhas; o progresso visual é derivado deles. O modo de planejamento não concede autonomia de execução.

@@ -1,6 +1,6 @@
 ---
 name: analyze
-description: The only tool in the lifecycle that emits a verdict — runs the deterministic coherence pass over constitution, spec, plan and tasks, then judges what a script cannot: policy alignment, duplicated propositions, intent drift. Emits an analysis@1 record with routed findings. Use before executing, or whenever the operator wants the records checked against each other for contradiction, ambiguity or gaps. Read-only and advisory: it reports, the operator decides.
+description: The only tool in the lifecycle that emits a verdict — runs the deterministic coherence pass over constitution, spec, plan and tasks, then judges what a script cannot: policy alignment, duplicated propositions, intent drift. Emits an analysis@2 record with routed findings. Use before executing, or whenever the operator wants the records checked against each other for contradiction, ambiguity or gaps. Read-only and advisory: it reports, the operator decides.
 ---
 
 ¶ - Deterministic coherence pass over records, then judges alignment and drift.
@@ -8,7 +8,7 @@ description: The only tool in the lifecycle that emits a verdict — runs the de
 skill:
   id: @skill/analyze
   phase analyze
-  output_dialect analysis@1
+  output_dialect analysis@2
   output_path .task/features/<feature_id>/analysis.tdsl
   template {{KERNEL_HOME}}/skills/analyze/template.tdsl
   posture read_only
@@ -22,7 +22,7 @@ skill:
 
 scope:
   gradual the active feature
-  integral the whole package in one pass, run by one subagent (sdd ¶13 integral_package);
+  integral the whole package in one pass, run by one subagent (sdd ¶6 planning_modes);
     one analysis.tdsl per feature; a cross-feature finding routes to the record that owns it
 ```
 
@@ -32,8 +32,8 @@ scope:
 read_only with respect to inspected artifacts, implementation files, external effects
 may_write only its own analysis record
 ban editing an inspected artifact to make a finding disappear
-ban treating your own verdict as a gate; you report, the operator decides
-ban withholding execution; nothing here blocks a transition
+ban treating verdict as authority; resolve within delegated scope or report real choices
+ban inventing approval layers; unresolved_integrity_and_declared_stop_conditions_remain_enforced
 ```
 
 ¶ 3 — Deterministic pass first
@@ -141,3 +141,17 @@ routing:
 5 stop. Your verdict is advice. It withholds nothing, and you never declare a
   phase complete.
 ```
+
+¶ 9 — Extended Coherence
+
+scope:
+  intended: constitution_architecture_feature_spec_plan_task
+  observed: resolved_file_section_destinations
+  historical: relevant_decisions_failures_execution
+checks:
+  mechanical: dangling_refs_duplicate_identity_feature_DAG_write_conflicts
+  judgment: policy_alignment_decision_precedence_structure_and_scope
+  precedence: explicit_supersession_not_timestamp
+  provisional: scaffold_not_implementation
+rule: identify_index_or_targeted_read_stage_for_each_finding
+rule: route_known_defects_to_owner_within_authority

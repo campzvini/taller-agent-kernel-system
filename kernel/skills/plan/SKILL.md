@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Author the technical plan as a plan@1 TDSL artifact in .task/features/<id>/plan.tdsl — components, boundaries, interfaces, data and state, and the validation map that proves the spec. Use when the operator wants the technical approach for an accepted specification. Not for task decomposition (use tasks) and not for behavior (use specify).
+description: Author the technical plan as a plan@2 TDSL artifact in .task/features/<id>/plan.tdsl — components, boundaries, interfaces, data and state, and the validation map that proves the spec. Use when the operator wants the technical approach for an accepted specification. Not for task decomposition (use tasks) and not for behavior (use specify).
 ---
 
 ¶ - Author technical approach: components, boundaries, interfaces, data, validation map.
@@ -8,7 +8,7 @@ description: Author the technical plan as a plan@1 TDSL artifact in .task/featur
 skill:
   id: @skill/plan
   phase plan
-  output_dialect plan@1
+  output_dialect plan@2
   output_path .task/features/<feature_id>/plan.tdsl
   template {{KERNEL_HOME}}/skills/plan/template.tdsl
 
@@ -67,5 +67,15 @@ format:
 2 run: python {{KERNEL_HOME}}/scripts/sdd_gate.py check <path>
 3 if: FAIL -> fix and recheck
 4 report components, boundaries, the requirement-to-validation coverage map, and explicit_unknowns
-5 stop. O registro está escrito. Se ele precisa mudar, o operador diz o que muda;
-  silêncio é concordância. Não existe passo de aceitação.
+5 return to protocol; continue within declared authority; material undelegated choices go to operator
+
+¶ 5 — Structural Reconciliation
+
+structure:
+  architecture: .task/Architecture.md_is_tree_authority
+  targets: stable_directory_file_section_refs
+  components: associate_existing_or_intended_destinations
+  new_destination: inspect_then_record_reason_update_affected_sources
+  decisions: explicit_supersedes_target_and_partial_or_full_scope
+rule: no_duplicate_architecture_tree
+rule: reconcile_before_intervention_and_after_material_change

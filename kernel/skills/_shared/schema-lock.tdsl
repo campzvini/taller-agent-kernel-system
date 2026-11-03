@@ -10,17 +10,27 @@ schema_lock:
   registry tdsl.schema-registry@1
 
   revisions:
-    analysis@1: sha256:972c50aa163b09ff0eac4e2590909ac0b4c650ec4b0a3a6a092e8df7cd2d794e
-    constitution@1: sha256:93d274567bf4218c253f9b2d0648c0cade51673c4781970d08dfb5a37acf4159
-    context_projection@1: sha256:e6a7d6e8029304a5254892a95f50348ffec524e0e29c5c60cf774bb9ad2ecf96
-    core-types@1: sha256:bc9c60439ea0495421889aee5fd2f70ccb304473f241e1eed18cc79b02023c75
-    header_profile@1: sha256:6b2682030f4a84690e576f8a99021504a63ad908ae812ea42eb44cba9d7fe0ae
-    phase_package@1: sha256:2655aa727d24e61ad52a5bf12a5e4098378b032aa50574a12bf862197f9b3a16
-    plan@1: sha256:b27adb8064aaea96c282fbae9f16b2ac656a630e5f0bdf8f5fd98ec95826fc44
-    schema@1: sha256:f1a5248710121e8f0a629638bfc048d8ee3ab43226fe31b034ffa2e5bb2836ea
-    spec@1: sha256:38f0d41e524d2ae403dd825c0b94f3c7ae9958d44bc3f94e5d1db4c871dd0cc1
-    tasks@1: sha256:b76fc32e774d7a1b538cd4109adeaebb41341318fcb28b1e7b9d9776d9646a72
-    template@1: sha256:33089a77b44032e5520f59f4b74ae277741013fd5dfa22cbd42c21ae598126c0
+    analysis@1: sha256:78d1588dacae405685ad3904eaabad122b08096ca2815fad25cde1062fcb957c
+    analysis@2: sha256:0565ea33ffd40e467aad8a4aefc30e01935bb1992b3d849b6df8cf6f45454731
+    constitution@1: sha256:a01550e4e0cb314086c5ff5a85ec068f52cc3a11d231fbf6e3bd835b28526268
+    constitution@2: sha256:5cc3ccc51608754dd44197db15d46d81b0802b49ff600a06417f9dd9ebcd82e2
+    context_projection@1: sha256:1ad3bd4dca939e002cad14b219dd919947198ce4b664f626a699d5acad6f398b
+    core-types@1: sha256:8bdff995f4e83a93465500ee59694c86e9734e9725e927f44fb713e478aba52a
+    decision_journal@1: sha256:a2d9b59a9d7058b0489dc28895a37413b5d68b876848fe1fcfc22d572be2ba96
+    execution_journal@1: sha256:bdc783582d601a6f7335066285239885eb40dfbb689365fc373ab9b548dcc522
+    failure_journal@1: sha256:2be6dbd5bf55bfcdeb9c392047267315ccf7f1d88385c980a7265f6346e332f1
+    header_profile@1: sha256:d6dd7c10d5a38802b71f4c947dc3bdf4889982cec17b8147e1ee33d617813367
+    phase_package@1: sha256:183eefffc5e8d8e83477b9d15df62a3b73ebb27ae371593eaec745eff76627fb
+    plan@1: sha256:27d4af436d14d364d7f79cdc6c1d3c45f6e28681f248e720d437a57beb916111
+    plan@2: sha256:3d502ec10761eef01847267d0ccf11bb4fa9235b4922c82b50aed1c1abf3e253
+    project_execution@1: sha256:6233d020efa9f20f136171ecf9f35193b3c2a648af8e2b8854dbcfa090cc519b
+    schema@1: sha256:e2966416dc0e469b28e76c36103951f8807f1a8497a2ee8c15c9a8045266f4d6
+    spec@1: sha256:19cc6f93120bef63a27a12dbb7ccb758bad525ed896d67f321867bd90d038d74
+    spec@2: sha256:e97c26f13b92e757df82335f5cb9477255c0d6ca8cc22c1c10a34dee3521e5d3
+    structure_registry@1: sha256:12b09bc47ad425bde9d74e95f753df090738192f9ad4bdd87114cfcc4d39bf7c
+    tasks@1: sha256:57f56eaaed847277b69b3d33564f7431278cbbd0ff27fd8a12967ee09a526609
+    tasks@2: sha256:1bbdad016ca824ce4934e764b3828afcf01856dbb85ad2e6bcb4d57eef94e1ef
+    template@1: sha256:93653f9cbdf07c248094ed855456d28502f607fc36a0d9beabc35ad6549b2893
 
   rule copy the revision of the emitted dialect verbatim into the artifact `schema_revision` field
   rule never infer a revision from filename, path, branch, or prose

@@ -98,3 +98,16 @@ ban treating structure, titles or typed comments as current behavior without sou
 ban extracting ordinary comments into preliminary context
 diagram_repair belongs to skill(diagram); ¶-anchored documents have no automated renderer
 ```
+
+¶ 6 — Tracker Queries
+
+tracking:
+  reconcile: python {{KERNEL_HOME}}/scripts/structure_tracker.py --root . scan
+  query: python {{KERNEL_HOME}}/scripts/structure_tracker.py --root . query <ref>
+  registry: .task/tracking/registry.json
+  projection: .agent-cache/tracking/index.md
+  anchors: ¶_document_§_implemented_◇_provisional
+  identity: anchor_ref_independent_of_number_title_line
+rule: universal_tracker_inventory_differs_from_filtered_source_navigation
+rule: resolve_ref_then_current_range_then_verify_source
+rule: ambiguous_ref -> reconciliation_not_guessing

@@ -1,26 +1,24 @@
-# AGENTS.md — agent-facing. TDSL puro. Só o LOCAL e NÃO-DERIVÁVEL do global.
-# Não repetir política de tooling/§/economia/commits — isso herda de ~/.codex/AGENTS.md.
+# Project Agent Context
+¶ - Local non-derivable boundaries; inherits installed TASK policy.
 
-project <nome>
-stack <linguagens/motores>
-role <propósito em uma linha>
-
-boundaries:            # fronteiras que NUNCA se cruza
-  never <regra transversal>
-
-layout:                # diretório -> papel (uma linha cada)
-  <dir> -> <papel>
-
+project: <name>
+stack: <languages_and_engines>
+role: <one_line_purpose>
+boundaries:
+  never: <local_constraint>
+layout:
+  source: <source_directory>
 commands:
-  test <cmd>
-  build <cmd>
-  lint <cmd>
-
+  test: <command>
+  build: <command>
+  lint: <command>
 conventions:
-  inherit ~/.codex/AGENTS.md   # annex_b §, lang, commits, §_protocol
-  local <só o que desvia ou estende o global>
-
+  inherit: {{KERNEL_HOME}}/policy.tdsl.md
+  local: <only_local_extensions>
 state:
-  active_specs docs/specs/active/
-  adr docs/adr/
-  open <concern transversal atual, se houver>
+  governed: .task/project.tdsl
+  architecture: .task/Architecture.md
+  identity: .task/tracking/registry.json
+  history: .task/journals/
+rule: query_index_before_targeted_source
+rule: authority_declared_not_inferred_from_planning_mode

@@ -1,17 +1,23 @@
-# briefing.template — prompt de subagent executor. TDSL. Alvo <~400 tokens.
-# Aponta pro spec (lido uma vez); NÃO inline design_notes nem mandato de leitura scoped.
+# Executor Briefing
+¶ - Minimal unit context, exclusive write ownership and verifiable return evidence.
 
-task <imperativo em uma linha>
-root <path absoluto>
-spec <path> status=read_once authoritative    # se existe: é a fonte da profundidade
-scope in: <o que está no escopo> | out: <o que não tocar>
-key_files:                                     # só path + papel; detalhe fica no spec
-  <path> -> <papel em uma linha>
-constraints: <lista>
+unit_ref: @unit/<id>
+root: <absolute_project_root>
+task_refs: [<task_refs>]
+governing_refs: [<constitution_version_ref> <spec_ref> <plan_ref>]
+target_refs: [<file_or_section_refs>]
+write_scope: [<exclusive_source_test_report_and_temporary_paths>]
+key_files:
+  source: <path_and_one_line_role>
+constraints:
+  others_work_here: do_not_revert_their_changes
+  scope: <in_scope_and_exclusions>
+  test_gate: orchestrator_only
+  test_edits: <allowed_role_or_forbidden>
 validation:
-  cmd <comando de teste/build — suíte inteira, encadeie com && se multi-stack>
-  criteria <condição objetiva de "passou">
-report files_changed, test_tally, deviations+reason, blockers
-on_block briefing_ambíguo|complexidade>estimativa -> stop_and_report, no_guess
-on_test teste_contestado -> devolve ao orquestrador com o motivo; ban editar ou apagar teste
-on_problem problem_triage (treino -> web -> só então orquestrador); nunca escala direto ao operador
+  criteria: <declared_objective_criteria>
+  commands: <declared_commands_for_orchestrator>
+return:
+  fields: [unit_ref files_changed outcome evidence_refs decisions failures deviations blockers]
+  language: TDSL
+on_problem: solve_known_answer_within_authority_else_report_to_orchestrator

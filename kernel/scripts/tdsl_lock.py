@@ -20,7 +20,7 @@ SCHEMA_SUBPATH = "schemas"
 SHARED = KERNEL_HOME / "skills/_shared"
 
 # dialects the harness authors; core-types and template are support dialects
-AUTHORED = ("constitution@1", "spec@1", "plan@1", "tasks@1", "analysis@1")
+AUTHORED = tuple(sorted(p.name.removesuffix(".schema.json") for p in (DEFAULT_KERNEL / SCHEMA_SUBPATH).glob("*.schema.json")))
 
 
 def emit(path: Path, lines: list[str]) -> None:

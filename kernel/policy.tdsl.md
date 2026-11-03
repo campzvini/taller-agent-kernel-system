@@ -4,7 +4,7 @@
 
 document:
   id: task.global-policy@1
-  version: 1.1.0
+  version: 2.0.0
   status: active
   language: TDSL v3
   scope: operator_boundary, language, routing, orchestration, economy, anchors, response, truth, hard_bans
@@ -103,7 +103,9 @@ identity AI-assisted engineering, spec-driven. No vibe coding.
 execution deterministic Python in {{KERNEL_HOME}}/scripts/ over ad-hoc shell
 separation scripts gather, parse, validate (mechanical); agent evaluates (judgment)
 protocol python {{KERNEL_HOME}}/scripts/<name>.py [args]
-output writes to git-ignored .agent-cache/
+derived_output writes to git-ignored .agent-cache/
+persistent_identity .task/tracking/; historical_events .task/journals/
+tracker identity_location_relationships_only; never_tests_quality_or_completion
 ```
 
 ¶ 7 — Token Economy
@@ -135,7 +137,12 @@ no_reread what is already in context
   form `※ <kind> — <current verifiable statement>`
   rules {{KERNEL_HOME}}/docs/engineering.tdsl ¶6
 
-learn_a_file -> search "¶" | "§" for the index, then read only the target range
+◇ provisional_source_section; executor_promotes_to_§_preserving_anchor_ref
+identity typed_refs_for_documents_parts_directories_files_sections_events_decisions_failures_evidence_units
+identity_location separate; no_content_hash_identity
+external_registry .task/tracking/registry.json; unsafe_formats_use_external_identity_only
+intervene -> resolve, consult_normative_sources, consult_history, inspect_existing, reuse_modify_create_or_no_action, record, reconcile
+learn_a_file -> search "¶" | "§" | "◇" for the index, then read only the target range
 learn_a_project -> skill(code-map)
 read_full only_if file_small | genuinely_need_whole_file
 edit_or_write_a_file -> ensure the header and chapters exist and are current; skill(diagram)
@@ -163,10 +170,13 @@ rule report only what changed plus decisions owed to the operator
 ¶ 10 — Truth Order
 
 ```text
-code absolute_truth
-architecture_docs target_state, may_be_outdated
+constitution highest_project_normative_authority; each_version_immutable
+code material_truth_of_existing_behavior
+architecture_docs intended_state, may_be_outdated
+indices preliminary_navigation_only
+journals historical_evidence
 agent_instructions stable_by_design
-source_divergence -> code_wins, report_divergence(operator)
+source_divergence -> identify_observed_behavior, reconcile_against_constitution_within_authority
 state_assertion -> require_targeted_code_search
 assert_build_or_test_status -> run the relevant command first
 compile_errors, warnings, failed_tests -> pure_feedback, no_premature_refactor
@@ -202,7 +212,11 @@ hooks_available -> the harness enforces the above mechanically; otherwise the ag
 governed_work:
   trigger operator wants to start, resume, inspect or advance a governed project
   entry skill(protocol) # reads state, dispatches the phase
-  planning_mode gradual | integral # default {{SDD_DEFAULT_MODE}}; operator may switch at any time
+  planning_mode gradual | integral # default {{SDD_DEFAULT_MODE}}
+  execution_mode interactive | autonomous # independent; explicit_authority_required
+  legacy_configuration -> interactive; never_infer_autonomy_from_integral
+  max_active_subagents default 1; exclusive_write_scopes_required
+  separate_test_author configurable; validation_criteria_remain_independent
   ban choosing constitution, specify, clarify, plan, tasks, analyze or execute directly
 
 session_work:

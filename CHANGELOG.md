@@ -1,5 +1,17 @@
 # Changelog
 
+¶ - Release changes and migration boundaries.
+
+¶ 1 — Version 2.0.0
+
+## 2.0.0 — Unreleased
+
+Adds intended/observed/historical state, immutable constitutional revisions, tree-only architecture,
+stable structural identity and provisional sections. Introduces deterministic reconciliation and
+safe integral scaffolding, adaptive execution units, explicit autonomy, configurable test authorship,
+and execution/decision/failure journals with derived progress. Legacy projects retain interactive
+authority; adopting new contracts requires migration. This branch is pending operator review.
+
 ## 1.1.0 — 2026-11-02
 
 Renamed to TASK — Taller Agent System Kernel. Delivery model reworked.

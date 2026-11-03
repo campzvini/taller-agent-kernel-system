@@ -149,3 +149,39 @@ dir {{KERNEL_HOME}}/skills/<skill>/template.tdsl
   rule authoring shape only; the type contract belongs to the schemas
   rule loaded only when its skill is invoked
 ```
+
+¶ 8 — Stable Identity and Provisional Sections
+
+identity:
+  registry: .task/tracking/registry.json
+  directory: @dir/<id>
+  file: @file/<id>
+  section: @file/<id>#section/<id>
+  declaration: anchor_ref_full_line_comment_after_section_marker
+  number_and_title: navigation_only_not_identity
+provisional:
+  marker: ◇
+  purpose: structural_destination_not_implemented
+  promotion: executor_replaces_◇_with_§_preserving_anchor_ref
+  tracker: records_change_without_judging_correctness
+coverage:
+  all_project_elements: addressable_within_declared_boundary
+  binary_or_unsafe_format: external_identity_only
+  symlink: inventory_boundary_no_unbounded_traversal
+  removed: tombstone_preserves_historical_refs
+  ambiguous_move: unresolved_not_guessed
+rule: generated_Markdown_indices_rebuildable_not_authority
+
+¶ 9 — Semantic Audit and Brownfield
+
+audit:
+  mechanical: shape_duplicates_unresolved_refs_objective_generic_titles
+  agent: observable_responsibility_useful_division_navigation_value
+  evidence: targeted_source_after_index_triage
+brownfield:
+  optional: operator_selected_scope
+  baseline: capture_before_change
+  diagram_edits: comment_only
+  verify: diagram_guard_and_declared_nonfunctional_checks
+  provenance: origin_license_attribution_functional_vs_documentary_adaptations
+ban: regex_title_check_as_semantic_proof

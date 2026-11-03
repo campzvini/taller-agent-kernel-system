@@ -86,6 +86,10 @@ object_contracts: # `{#name}` in a template body expands to exactly these fields
     evidence_required boolean
     operator_acceptance required
     # unknown fields forbidden
+  object:task_set_completion_v2:
+    authority_ref reference
+    evidence_required boolean
+    # unknown fields forbidden
   object:task_set_validation:
     completion_rule all_required_validation_pass
     required_refs reference_list
@@ -100,18 +104,6 @@ object_contracts: # `{#name}` in a template body expands to exactly these fields
 ¶ 2 — Enums
 
 enums: # closed vocabularies per dialect; any other value refuses
-  constitution@1:
-    status: [draft proposed superseded]
-  spec@1:
-    journey.priority: [P1 P2 P3]
-    status: [draft proposed superseded]
-  plan@1:
-    interface.kind: [public internal external]
-    status: [draft proposed superseded]
-    validation.level: [unit contract integration end_to_end acceptance]
-  tasks@1:
-    status: [draft proposed superseded]
-    task.status: [pending ready in_progress blocked completed superseded]
   analysis@1:
     finding.class: [requirement_gap requirement_ambiguity constitution_conflict design_gap design_conflict task_gap task_conflict traceability_gap freshness_blocker authority_boundary]
     finding.confidence: [high medium low]
@@ -119,16 +111,106 @@ enums: # closed vocabularies per dialect; any other value refuses
     finding.severity: [blocking material minor observation]
     result: [pass fail inconclusive]
     status: [draft proposed superseded]
+  analysis@2:
+    finding.class: [requirement_gap requirement_ambiguity constitution_conflict design_gap design_conflict task_gap task_conflict traceability_gap freshness_blocker authority_boundary]
+    finding.confidence: [high medium low]
+    finding.route: [constitution specify clarify plan tasks stop_and_report_operator]
+    finding.severity: [blocking material minor observation]
+    result: [pass fail inconclusive]
+    status: [draft proposed superseded]
+  constitution@1:
+    status: [draft proposed superseded]
+  constitution@2:
+    status: [draft proposed superseded]
+  context_projection@1:
+    available_actions: [context.open context.expand context.refresh context.release operator.question proposal.submit]
+    exclusion.reason: [phase_irrelevant kernel_only sensitivity budget superseded stale_not_allowed duplicate]
+    insufficient_budget_behavior: [drop_optional_then_request_narrowing request_narrowing refuse_required_context]
+    mode: [bootstrap initial expansion refresh delta]
+    output_mode: [typed_proposal tdsl_source operator_decision none]
+    result: [ready blocked_budget blocked_authority blocked_sensitivity blocked_stale_required_context]
+    slice.authority_class: [operator constitution architecture accepted_artifact executed_evidence repository_observation research informational]
+    slice.freshness: [fresh stale stale_derived unknown]
+    slice.range_kind: [full_document section lines]
+    slice.requirement: [required optional expansion]
+    slice.sensitivity: [public project confidential]
+    status: [proposed]
+  decision_journal@1:
+    entry.supersession_scope: [full partial]
+    status: [draft proposed superseded]
+  execution_journal@1:
+    entry.outcome: [started completed blocked failed interrupted]
+    status: [draft proposed superseded]
+  failure_journal@1:
+    entry.materiality: [material recurring architectural contract consequential]
+    entry.resolution_state: [open investigating resolved superseded]
+    status: [draft proposed superseded]
+  header_profile@1:
+    applies_to: [source text]
+    status: [draft proposed superseded]
+  phase_package@1:
+    assurance_requirement: [none policy_selected required]
+    available_agent_actions: [context.open context.expand context.refresh context.release operator.question proposal.submit]
+    context_strategy: [exact_refs_then_index_ranges]
+    expansion_policy: [none phase_scoped_pull operator_mediated]
+    status: [draft proposed superseded]
+  plan@1:
+    interface.kind: [public internal external]
+    status: [draft proposed superseded]
+    validation.level: [unit contract integration end_to_end acceptance]
+  plan@2:
+    interface.kind: [public internal external]
+    status: [draft proposed superseded]
+    validation.level: [unit contract integration end_to_end acceptance]
+  project_execution@1:
+    execution_mode: [interactive autonomous]
+    status: [draft proposed superseded]
+  schema@1:
+    acceptance: [external_record none]
+    posture: [closed extensible]
+  spec@1:
+    journey.priority: [P1 P2 P3]
+    status: [draft proposed superseded]
+  spec@2:
+    journey.priority: [P1 P2 P3]
+    status: [draft proposed superseded]
+  tasks@1:
+    status: [draft proposed superseded]
+    task.status: [pending ready in_progress blocked completed superseded]
+  tasks@2:
+    status: [draft proposed superseded]
+    task.difficulty: [low medium high]
+  template@1:
+    placeholder.collection_semantics: [ordered set]
+    placeholder.kind: [scalar ln collection object block_list]
+    status: [draft proposed superseded]
 
 ¶ 3 — Cardinality
 
 cardinality: # reference fields whose member count is constrained
+  analysis@1:
+    finding.owner_artifact one
+    finding.source_refs one_or_more
+    findings min_items=0
+  analysis@2:
+    finding.owner_artifact one
+    finding.source_refs one_or_more
+    findings min_items=0
   constitution@1:
     principles min_items=1
-  spec@1:
-    requirements min_items=1
-    success_criteria min_items=1
-    user_journeys min_items=1
+  constitution@2:
+    principles min_items=1
+  context_projection@1:
+    excluded_context min_items=0
+    exclusion.source_ref one
+    selected_context min_items=0
+    slice.source_ref one
+  decision_journal@1:
+    journal min_items=0
+  execution_journal@1:
+    journal min_items=0
+  failure_journal@1:
+    journal min_items=0
   plan@1:
     boundaries min_items=1
     boundary.between two
@@ -137,6 +219,22 @@ cardinality: # reference fields whose member count is constrained
     interfaces min_items=0
     validation.proves one_or_more
     validations min_items=1
+  plan@2:
+    boundaries min_items=1
+    boundary.between two
+    components min_items=1
+    interface.owner one
+    interfaces min_items=0
+    validation.proves one_or_more
+    validations min_items=1
+  spec@1:
+    requirements min_items=1
+    success_criteria min_items=1
+    user_journeys min_items=1
+  spec@2:
+    requirements min_items=1
+    success_criteria min_items=1
+    user_journeys min_items=1
   tasks@1:
     parallel_group.task_refs two_or_more
     parallel_groups min_items=0
@@ -144,7 +242,12 @@ cardinality: # reference fields whose member count is constrained
     task.requirement_refs one_or_more
     task.validation_refs one_or_more
     tasks min_items=1
-  analysis@1:
-    finding.owner_artifact one
-    finding.source_refs one_or_more
-    findings min_items=0
+  tasks@2:
+    parallel_group.task_refs two_or_more
+    parallel_groups min_items=0
+    task.plan_refs one_or_more
+    task.requirement_refs one_or_more
+    task.validation_refs one_or_more
+    tasks min_items=1
+  template@1:
+    placeholders min_items=0

@@ -219,6 +219,13 @@ def build_report(
         "cache_reports": cache_reports,
         "observations": observations,
     }
+    if (root / ".task/project.tdsl").is_file():
+        from execution_runtime import execution_status
+        try:
+            data["execution"] = execution_status(root)
+            md += "\n\n## Execution recovery\n\n```json\n" + json.dumps(data["execution"], ensure_ascii=False, indent=2) + "\n```\n"
+        except (ValueError, OSError) as error:
+            data["execution"] = {"reconciliation_required": str(error)}
 
     return md, data
 

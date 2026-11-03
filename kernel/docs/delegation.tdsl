@@ -1,54 +1,61 @@
 # Delegation
 
-¶ - Briefing contract and error escalation. Routed from the global policy ¶5; read before the first spawn of a session.
+¶ - Adaptive execution units, exclusive write ownership and evidence returns.
 
 document:
-  id: task.delegation@1
-  version: 1
+  id: task.delegation@2
+  version: 2
   status: proposed
   authority_basis: [@task/global-policy]
-  scope: briefing, escalation
-  excludes: inline_vs_spawn_decision # global policy owns it
+  scope: briefing, units, concurrency, return_handling
+  excludes: lifecycle, test_protocol
 
 ¶ 1 — Briefing Contract
 
-```text
-language TDSL, pure # overrides the harness push toward prose briefings
-return_language TDSL, pure # the executor answers the orchestrator in TDSL, never prose
-required [explicit_paths functional_spec validation_criteria constraints minimal_technical_context]
-briefing_misses_any_required -> abort_spawn, refine_spec
+briefing:
+  language: TDSL
+  required: [unit_ref task_refs governing_refs target_refs write_scope validation_criteria constraints]
+  root: explicit_absolute_project_root
+  key_files: path_and_one_line_role
+  minimal_context: index_refs_then_required_source_ranges
+  target_tokens: 400
+  ownership: exclusive_paths_including_reports_and_temporaries
+  constraints: others_work_here_do_not_revert_their_changes
+  template: {{KERNEL_HOME}}/templates/briefing.template
+rule: missing_required_field -> refine_before_spawn
+rule: depth_lives_in_referenced_sources_not_repeated_briefing
 
-economy briefing is resent every turn × every subagent -> keep it minimal
-rule point to the artifact file; the agent reads it once
-rule key_files are path plus a one-line role, nothing deeper
-rule deep detail lives in the spec, never inlined in the briefing
-ban mandating scoped reads # drives a tool-call storm and inflates cost
-target <~400 tokens
-template {{KERNEL_HOME}}/templates/briefing.template
-```
+¶ 2 — Units and Concurrency
 
-¶ 2 — Escalation
+unit:
+  identity: @unit/<id>
+  members: feature_or_dependency_valid_task_group_or_task
+  selection: difficulty_dependencies_context_and_destinations
+  difficulty: [low medium high]
+  low: may_batch
+  medium: batch_when_dependencies_and_context_allow
+  high: prefer_dedicated_executor
+concurrency:
+  max_active_subagents: 1
+  parallel_requires: independent_units_disjoint_write_scopes
+  shared_outputs: one_designated_writer
+  accounting: active_agents_not_total_created_agents
+rule: executor_replaced_after_delivery; failed_attempt_may_reuse_same_executor
+rule: no_overwriting_another_agents_source_journal_report_or_temporary
 
-```text
-1 analyze executor return
-2 ambiguous_briefing -> clarify_briefing, reopen_same_executor
-3 underestimated_complexity -> upgrade_model_tier, new_briefing
-4 insufficient_context -> research inline or spawn a research agent, retry
-5 fail_persists(2_attempts) -> problem_triage (global policy ¶10); operator only at its step 3
+¶ 3 — Escalation and Return
 
-rate_limit -> scale_if_permitted, pause_and_report(operator)
-unexpected_complexity -> executor_signals_escalation
-```
-
-¶ 3 — Return Handling
-
-```text
-executor_claims_success -> verify against the validation criteria, never take it at face value
-executor_contradicts_prior_finding -> re-derive from code before accepting the correction
-precise_failures -> back to the same executor (SendMessage), never a fresh spawn
-executor_contests_a_test -> it returns the test and the reason; the orchestrator judges against
-  spec and independent reference, then reopens test_author or rejects the claim
-```
-
-The roles of a delivery session (orchestrator, test_author, executor) and who
-triggers each are owned by sdd ¶14; this document only carries the contract.
+return:
+  language: TDSL
+  required: [unit_ref files_changed outcome evidence_refs deviations blockers]
+  material_decision: record_when_taken
+  material_failure: record_with_resolution_or_open_state
+  success_claim: orchestrator_verifies_declared_criteria
+  contested_test: return_reason_do_not_edit_or_delete_test
+  precise_failures: same_executor_when_available
+escalation:
+  known_answer: solve_within_authority
+  insufficient_context: targeted_research_then_retry
+  outside_authority_or_real_unknown: orchestrator_reports_to_operator
+  executor: never_escalates_directly_to_operator
+  test_gate: orchestrator_only

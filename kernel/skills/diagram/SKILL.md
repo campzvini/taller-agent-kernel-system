@@ -11,8 +11,8 @@ skill:
 ¶ 1 — Invariantes
 
 NEVER write a banner by hand. Always generate via `diagram_check.py render`.
-ALWAYS run `diagram_check.py guard` before committing. If it fails, ABORT the file and report — guard failure means code was altered.
-NEVER nest chapter inside a block (class, impl, function). Chapter is module-level only, column zero.
+Run `diagram_check.py guard` for changes claimed to be comment-only. Functional edits use the normal declared validation and are never reverted merely because this guard detects code changes.
+Top-level chapters remain module-level at column zero. A subsection may split one oversized item using its native indentation, as engineering ¶5 permits.
 Header respects the language's anchor: shebang (`#!`) stays on line 1; Rust crate attributes (`#![...]`), `package`/`<?php`/pragmas come before the header. The header never pushes these lines down.
 Do not invent a chapter where there is no logical boundary. Skip it and report; generic titles pollute the code-map.
 Chapter titles declare a domain plus an observable responsibility or result. `UTILS`, `HELPERS`, `MISC`, `LOGIC`, and `METHODS` alone are invalid navigation context.
@@ -26,8 +26,8 @@ Chapter titles declare a domain plus an observable responsibility or result. `UT
   b decide chapter boundaries and titles (JUDGMENT). Level 1 in UPPERCASE, level 2 in TitleCase, numbering l1=integer, l2=integer.integer; every title names a domain and observable responsibility
   c generate each piece with `diagram_check.py render` (see examples below), passing `--file <path>` to infer delimiter and language
   d insert pieces via edit: header at top (respecting invariant 4), chapters immediately before each logical section
-3 run `python {{KERNEL_HOME}}/scripts/diagram_check.py guard <file>` for each edited file. If any returns `fail`/`error`, revert that file and report; do NOT commit.
-4 if all pass guard, commit in its own atomic commit: `style(diagram): apply section banners`. Never mix with functional commit, never amend.
+3 for diagram-only edits run `python {{KERNEL_HOME}}/scripts/diagram_check.py guard <file>`. A failure requires targeted diagnosis and correction; preserve functional and unrelated edits.
+4 when a commit is authorized, keep diagram-only work traceable with `chore(diagram): apply section banners`; never fabricate a nonfunctional baseline for functional work.
 5 report to operator: files diagrammed, skipped and why.
 
 ¶ 3 — Render Examples
@@ -104,10 +104,30 @@ Block style (<!-- --> for HTML, XML, SVG):
 ¶ 4 — Critérios
 
 no banner written by hand; all via `render`
-guard run and green before any commit; failure => file reverted
-chapters at module level only; never nested
+diagram-only guard green for diagram-only changes; functional work uses its declared validation
+top-level chapters at module level; oversized-item subsections follow engineering ¶5
 header respects shebang/attributes/pragmas of language
 titles meaningful; file without clear boundary is skipped, not invented
 semantic comments explain only non-local rationale, invariants, boundaries, decisions, effects, assumptions, relations or risks
 code remains the source of truth; index and context comments are preliminary navigation context
 block-comment language uses line-by-line wrapped banner
+
+¶ 5 — Provisional Identity and Audit
+
+provisional:
+  marker: ◇
+  identity: anchor_ref_preserved_on_executor_promotion_to_§
+  validation: promotion_not_proof
+coverage:
+  safe_comments: physical_markers
+  unsafe_formats: external_registry_only
+audit:
+  script: shape_duplicates_unresolved_refs_generic_title_patterns
+  agent: title_and_boundary_usefulness_from_targeted_source
+brownfield:
+  opt_in: selected_files_only
+  baseline: before_changes
+  verification: comment_only_guard_for_diagram_only_edits
+  preserve: origin_and_attribution
+rule: functional_changes_use_normal_validation_not_comment_guard
+rule: never_revert_unrelated_changes_on_guard_failure

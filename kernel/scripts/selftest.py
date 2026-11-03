@@ -143,6 +143,7 @@ def run_sdd(root: Path) -> None:
           "next_phase: constitution" in out, out)
 
     write(base / "constitution.tdsl", CONSTITUTION)
+    write(base / "Architecture.md", "src/\n")
 
     # D1: an anchor with no active_feature field used to be rewritten unchanged
     # while the command still printed OK.
@@ -174,6 +175,8 @@ def run_sdd(root: Path) -> None:
 
     # The whole point: a delivered feature and a feature mid-flight used to be
     # the same state, because only file existence was consulted.
+    from runtime_journal import append_entry
+    append_entry(root, "execution", {"task_ref": "@tasks/001-fixture#task/T001", "outcome": "completed", "evidence_refs": ["@ev/fixture"]})
     code, out = gate(root, "sdd", "close", "001-fixture", "--as", "delivered")
     check("close records delivery", code == 0, out)
     code, out = gate(root, "sdd", "state")
@@ -300,6 +303,7 @@ def run_integral(root: Path) -> None:
     code, out = gate(root, "sdd", "init", "--name", "plano", "--mode", "integral")
     check("integral init succeeds", code == 0, out)
     write(root / ".task" / "constitution.tdsl", "tdsl: constitution@1\n")
+    write(root / ".task" / "Architecture.md", "src/\n")
     for fid in ("001-alpha", "002-beta"):
         (root / ".task" / "features" / fid).mkdir(parents=True, exist_ok=True)
     for a in ("spec", "plan", "tasks", "analysis"):

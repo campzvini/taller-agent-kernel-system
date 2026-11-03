@@ -263,6 +263,7 @@ def guard_file(path: Path, against: str) -> dict[str, Any]:
 # ── § 5 — SCAN — detect headers, chapters and legacy style ──
 
 def scan_file(path: Path) -> dict[str, Any]:
+    from code_map import opens_line
     cfg = comment_cfg(path)
     rec: dict[str, Any] = {
         "file": str(path), "kind": cfg["kind"], "lang": cfg["lang"],
@@ -291,17 +292,24 @@ def scan_file(path: Path) -> dict[str, Any]:
     for lineno, ln in enumerate(lines, start=1):
         if lineno > 14 and is_legacy_rule(ln):
             rec["legacy_banners"] += 1
-        if "§" not in ln:
+        marker = "◇" if "◇" in ln else "§"
+        if marker not in ln or not opens_line(ln, marker):
             continue
-        tail = ln[ln.index("§"):]
+        tail = ln[ln.index(marker):].replace("◇", "§", 1)
         m = CHAPTER_RE.match(tail)
         number = (m.group(1) or "").strip() if m else ""
+        if not number:
+            if not tail.startswith("§ - "):
+                rec["warnings"].append(f"line {lineno}: malformed chapter marker")
+            continue
         title = (m.group(2) or "").strip() if m else tail.strip()
         title = title.rstrip("─*/->! ").strip()
         rec["chapters"].append({"line": lineno, "number": number,
-                                "title": title})
+                                 "title": title, "provisional": marker == "◇"})
         if number.count(".") >= 1:
             rec["subchapters"] += 1
+        if title.upper() in {"UTILS", "HELPERS", "MISC", "LOGIC", "METHODS"} or not title.strip():
+            rec["warnings"].append(f"line {lineno}: title has no navigational responsibility")
 
     if cfg["kind"] == "unknown":
         rec["status"] = "warn"
@@ -319,6 +327,8 @@ def scan_file(path: Path) -> dict[str, Any]:
             rec["status"] = "warn"
             rec["warnings"].append(
                 "capítulos em estilo legado (===); migrar para § + ──")
+    if rec["warnings"] and rec["status"] == "ok":
+        rec["status"] = "warn"
     return rec
 
 

@@ -1,645 +1,254 @@
-# TDSL SDD Dialects and Workflow Contract
+# TASK Development Contracts
 
-¶ - Define the host-neutral constitution-to-planning backbone, artifact ownership, phase packages, controlled returns, and acceptance authority.
+¶ - Bundled development dialect interpretation, authority boundaries and runtime separation.
 
 document:
-  id: tdsl.sdd@3
-  version: 3
+  id: @arch/tdsl-sdd
+  version: 2
   status: proposed
-  authority_basis: [@constitution/current @arch/tdsl-language @arch/tdsl-schema-contract @arch/tdsl-runtime-contract @arch/product]
-  scope: constitution, feature_activation, specify, clarify, plan, tasks, analyze, planning_accept, planning_ready
-  excludes: implementation_phase, host_adapter, provider_selection, product_packaging
+  purpose: define_TASK_development_contracts_without_a_second_approval_system
+  grammar: @arch/tdsl-language
+  field_authority: schemas/registry.json
+  lifecycle_authority: @task/sdd-policy
 
 ¶ 1 — Backbone
 
-```text
-project:
-  discover
-  -> initialize
-  -> constitution_author
-  -> constitution_accept
-  -> governed
-
-feature:
-  propose
-  -> provisional
-  -> operator_activate
-  -> active
-  -> specify
-  -> clarify_or_accept_spec
-  -> plan
-  -> accept_plan
-  -> tasks
-  -> accept_tasks
-  -> analyze
-  -> satisfy_assurance
-  -> operator_accept_planning
-  -> planning_ready
-```
-
-Conversation remains free. Only authenticated operations and decision records
-create project, feature, artifact, or transition authority.
+backbone: constitution_architecture_features_specs_plans_tasks_analysis_execute_zero_execution
+rule: execute_zero_required_for_integral_mode
+rule: gradual_mode_may_create_structure_as_needed
+rule: dependencies_not_directory_names_select_order
 
 ¶ 2 — Actor Authority
 
-```text
-operator:
-  intent
-  project_principles
-  feature_activation
-  material_decisions
-  artifact_acceptance
-  risk_acceptance
-  planning_acceptance
-
-agent:
-  interpretation
-  targeted_questions
-  semantic_artifact_proposals
-  labeled_derivations
-  analysis_proposal
-
-kernel:
-  identity
-  exact_schema_and_template
-  workflow_state
-  context_projection
-  validation
-  acceptance_binding
-  freshness
-  transition
-  persistence
-  refusal
-
-gateway:
-  bounded_effect
-  observed_result
-  effect_evidence
-
-client_or_adapter:
-  UX
-  event_translation
-  model_callback
-  result_presentation
-```
-
-Agent-authored `status`, `result`, prose, or confidence never replaces operator
-decision or kernel validation.
+authority:
+  operator: intent_constitution_material_undelegated_choices_and_authority_grants
+  agent: resolve_known_technical_choices_within_authority
+  orchestrator: recover_select_delegate_verify_record_update
+  executor: implement_assigned_unit_with_exclusive_write_scope
+  test_author: independent_when_configured
+  script: mechanical_parsing_integrity_indexing_and_projection
+rule: constitution_highest_project_normative_authority
+rule: code_material_truth_of_existing_behavior
+rule: neither_existing_code_nor_script_result_grants_authority
 
 ¶ 3 — Artifact and Runtime Status
 
-Artifact source owns only content lifecycle:
-
-```text
-content_status:
-  draft
-  proposed
-  superseded
-```
-
-The artifact envelope owns:
-
-```text
-acceptance_status:
-  pending
-  accepted
-  rejected
-
-freshness_status:
-  fresh
-  stale
-  stale_derived
-  invalid
-```
-
-Acceptance requires an authenticated external decision record. Freshness is
-calculated by the kernel and is never agent-authored.
+planning:
+  content_status: draft_proposed_superseded
+  runtime_progress: excluded
+runtime:
+  source: append_only_execution_journal
+  attempts: unique_event_identity_plus_task_ref
+  completion: required_validation_pass_with_evidence
+  checklist: derived_only
+rule: no_per_task_runtime_status_in_tasks@2
+rule: legacy_tasks@1_remain_readable
 
 ¶ 4 — Project and Feature Lifecycle
 
-Project lifecycle:
+project:
+  planning_mode: gradual_integral
+  execution_mode: interactive_autonomous
+  legacy_default: interactive
+feature:
+  lifecycle: active_delivered_heritage_historical_superseded_abandoned
+  depends_on: explicit_feature_DAG
+  cursor: navigation_only
+  closure: operator_direction_or_explicit_delegation
+rule: autonomous_requires_explicit_scope_and_stop_conditions
+rule: mode_name_never_grants_authority
 
-```text
-unmanaged
--> discovered
--> adoption_proposed
--> governed
-```
+¶ 5 — Artifact DAG and Change
 
-Discovery is read-only. Adoption is explicit.
+dag:
+  constitution -> architecture, spec, plan, tasks, analysis
+  architecture -> structural_destinations
+  spec -> plan, tasks, analysis
+  plan -> tasks, analysis
+  tasks -> analysis, execution_events
+change:
+  semantic: preserve_relevant_history_update_owning_sources_reconcile_refs
+  cosmetic: no_invented_semantic_staleness
+  decision_precedence: explicit_supersession_not_date
+rule: no_content_hash_structural_identity
+rule: schema_revision_hashes_remain_required
 
-Feature lifecycle:
+¶ 6 — Artifact and Structural Identity
 
-```text
-proposed
--> provisional
--> active
--> planning_ready
--> pending_acceptance
--> complete
--> archived
+identity:
+  project: @project/<id>
+  directory: @dir/<id>
+  file: @file/<id>
+  section: @file/<id>#section/<id>
+  task: @tasks/<feature>#task/<id>
+  execution: @event/<id>
+  decision: @decision/<id>
+  failure: @failure/<id>
+  evidence: @ev/<id>
+  unit: @unit/<id>
+rule: position_title_line_and_path_are_not_stable_identity
+rule: duplicates_or_ambiguous_moves_are_unresolved_not_merged
 
-any_nonterminal -> blocked
-```
+¶ 7 — Dialect Family
 
-Activation:
-
-```text
-feature_proposed
-  + project_governed
-  + constitution_accepted_fresh
-  -> feature_provisional
-
-feature_provisional
-  + operator_explicit_activation
-  + no_other_active_feature
-  -> feature_active
-```
-
-Only one feature holds execution authority per workflow unless a future
-workflow explicitly defines concurrency.
-
-¶ 5 — Artifact DAG and Staleness
-
-```text
-constitution -> spec
-constitution -> plan
-constitution -> analysis
-
-spec -> plan
-spec -> tasks
-spec -> analysis
-
-plan -> tasks
-plan -> analysis
-
-tasks -> analysis
-```
-
-Direct artifact or part references establish direct dependencies unless the
-schema marks a reference informational-only.
-
-```text
-direct_semantic_change:
-  direct_dependents -> stale
-  transitive_dependents -> stale_derived
-
-source_only_change_with_same_ir:
-  revalidate_source_IR_pair
-  regenerate_source-sensitive_publication_if_needed
-  do_not_stale_semantic_dependents
-```
-
-Staleness uses predecessor semantic `ir_digest`, relevant acceptance decision,
-and applicable policy revision. It never uses timestamps, file recency, branch
-names, or unchecked boxes.
-
-Part-level narrowing is valid only when the dependency basis records exact part
-references and the changed parts cannot affect the dependent.
-
-¶ 6 — Artifact-Part Identity
-
-```text
-@spec/<feature>#journey/<id>
-@spec/<feature>#requirement/<id>
-@spec/<feature>#criterion/<id>
-@plan/<feature>#component/<id>
-@plan/<feature>#boundary/<id>
-@plan/<feature>#interface/<id>
-@plan/<feature>#validation/<id>
-@tasks/<feature>#task/<id>
-@analysis/<feature>#finding/<id>
-```
-
-Part IDs are unique within artifact and kind. Renaming an ID is a semantic
-change. Tasks trace to stable requirement, plan-part, and validation references.
-
-¶ 7 — Canonical Dialect Family
-
-The initial family is:
-
-```text
-constitution@1
-spec@1
-plan@1
-tasks@1
-analysis@1
-phase_package@1
-template@1
-header_profile@1
-```
-
-Exact schemas and revisions are owned by:
-
-```text
-docs/architecture/tdsl/schemas/registry.json
-docs/architecture/tdsl/schemas/*.schema.json
-```
-
-Prose in this document explains workflow meaning. Schema files own field types,
-cardinality, value states, reference targets, accumulated blocks, object fields,
-content statuses, invariants, renderers, and compatibility.
+schemas:
+  authority: schemas/registry.json
+  revision: explicit_schema_revision_in_each_tracked_artifact
+  legacy: old_major_contracts_remain_readable
+  successor: major_for_changed_authority_required_fields_or_semantics
+rule: never_infer_dialect_or_revision_from_filename
+rule: schema_lock_and_field_contracts_generated_by_tdsl_lock.py
 
 ¶ 8 — Constitution
 
-`constitution@1` is project policy, not a normal feature artifact.
+constitution:
+  scope: principles_authority_quality_safety_evidence_amendment
+  each_version: immutable
+  amendment: explicit_revision_authority_and_preserved_predecessor
+  current: .task/constitution.tdsl
+  history: .task/history/constitution/<version>.tdsl
+rule: normative_conflict_requires_reconciliation_even_if_code_exists
 
-```text
-author:
-  agent proposes
-  operator decides
-  kernel validates
+¶ 9 — Specification
 
-accept:
-  exact source + IR pair
-  exact schema revision
-  operator decision record
-  constitution version
-```
-
-An amendment that changes meaning:
-
-- creates a new version;
-- requires operator acceptance;
-- recalculates affected freshness through the DAG;
-- cannot silently grant effect authority;
-- records impact and semantic-version consequence.
-
-Project branding and personal header signatures are not constitution semantics
-unless the operator explicitly declares them as project policy.
-
-¶ 9 — Specification and Clarification
-
-`spec@1` owns feature intent, user journeys, requirements, criteria, edge cases,
-decisions, unknowns, and evidence references.
-
-```text
-spec_proposal_valid
-  + no_material_unknowns
-  + operator_spec_acceptance
-  -> spec_accepted_fresh
-```
-
-Clarify is a governed replacement operation:
-
-```text
-input:
-  current_spec
-  material_unknowns
-  operator_dialogue
-
-output:
-  next_spec_version
-
-prohibited:
-  in_place_mutation
-  competing_primary_clarify_artifact
-  inferred_operator_answer
-```
-
-A semantic replacement invalidates downstream artifacts according to the DAG.
-A source-only reformulation with identical semantic IR does not.
+specification:
+  owns: objective_journeys_atomic_requirements_measurable_criteria_unknowns
+  references: applicable_constitution_and_feature
+  excludes: technical_design_and_duplicate_architecture_tree
+  clarification: governed_next_version
+rule: known_source_answer_is_resolved_before_operator_question
+rule: genuine_material_unknown_remains_explicit
 
 ¶ 10 — Plan
 
-`plan@1` resolves the technical approach under accepted policy and specification.
-It uses identified parts:
-
-```text
-component <id>
-boundary <id>
-interface <id>
-validation <id>
-```
-
-A valid plan:
-
-- references accepted fresh constitution and spec;
-- reflects repository reality;
-- identifies components and responsibilities;
-- declares boundaries and their contracts;
-- binds material authority boundaries to decisions;
-- identifies interfaces and owners;
-- defines data and state behavior;
-- defines stable validation parts referenced by tasks;
-- separates architecture from task decomposition;
-- preserves technical unknowns.
-
-Acceptance:
-
-```text
-plan_proposed_valid
-  + constitution_gate_pass
-  + required_decisions_bound
-  + operator_plan_acceptance
-  -> plan_accepted_fresh
-```
+plan:
+  owns: components_boundaries_interfaces_data_state_and_validation_map
+  structural_targets: stable_refs_into_intended_architecture
+  validation: each_required_behavior_has_observable_proof
+  decisions: refs_to_material_decision_records
+  new_structure: justified_and_reconciled_with_sources
+rule: no_silent_architecture_or_authority_expansion
 
 ¶ 11 — Tasks
 
-`tasks@1` is a set-level artifact. Each task item maps semantically to inherited
-`task@1`; this is not schema subtyping.
-
-```text
-task@1.id:
-  tasks@1 labeled block id
-
-task@1.action:
-  task.action
-
-task@1.status:
-  task.status
-
-task@1.evidence_refs:
-  task.evidence_refs
-```
-
-`tasks@1` additionally owns story, requirement, plan-part, file, validation,
-dependency, parallelism, condition, and blocker references.
-
-A valid task set:
-
-- has unique task IDs;
-- has an acyclic dependency graph;
-- traces every task to at least one requirement, plan part, and validation part;
-- uses exact file references when known and the permitted whole-field `unknown`
-  state when legitimately deferred;
-- declares validation before completion;
-- requires evidence for completed tasks;
-- does not introduce architecture or authority absent from accepted plan.
-
-Acceptance:
-
-```text
-tasks_proposed_valid
-  + DAG_acyclic
-  + traceability_complete
-  + operator_tasks_acceptance
-  -> tasks_accepted_fresh
-```
+tasks:
+  dialect: tasks@2
+  owns: action_requirement_refs_plan_refs_target_refs_validation_refs_dependencies_difficulty_write_scope
+  difficulty: low_medium_high
+  dependency: acyclic_DAG
+  execution_order: deterministic_linearization_not_second_graph
+  runtime_status: absent
+  evidence: journal_only
+rule: difficulty_guides_unit_selection_not_automatic_model_choice
+rule: legacy_file_refs_and_tasks@1_are_supported_at_read_boundary
 
 ¶ 12 — Analysis
 
-`analysis@1` is read-only with respect to inspected artifacts, implementation
-files, and external effects. It may write only its own analysis artifact,
-provenance, evidence, and transition candidate.
-
-Severity:
-
-```text
-blocking
-material
-minor
-observation
-```
-
-Result:
-
-```text
-pass
-fail
-inconclusive
-```
-
-`pass` requires complete required coverage and no unresolved blocking or
-material finding. Zero findings are represented as `findings: []`. Every
-finding cites canonical sources and routes to its owning artifact or to an
-operator decision boundary.
-
-Analysis is an agent-authored proposal validated by the kernel. It cannot grant
-planning acceptance or mutate defects silently.
-
-¶ 13 — Acceptance Records
-
-Constitution, spec, plan, and tasks acceptance are external records:
-
-```text
-acceptance_record:
-  decision_ref
-  operator_identity
-  artifact_ref
-  source_digest
-  ir_digest
-  schema_revision
-  accepted_at_operation_ref
-  scope
-```
-
-The record binds one exact artifact candidate. A replacement version or semantic
-digest change requires a new record. An agent cannot author an accepted source
-state that bypasses this record.
-
-¶ 14 — Assurance
-
-Independent review is policy-selected:
-
-```text
-assurance_requirement selected_by:
-  project_constitution
-  affected_boundary
-  explicit_operator_decision
-```
-
-It is not universal to every consumer. For development of LIMA, current project
-policy may require it at material boundaries.
-
-Assurance produces evidence and a disposition. It does not replace operator
-acceptance.
-
-¶ 15 — Planning-Ready Gate
-
-`planning_ready` requires all of:
-
-```text
-feature:
-  active
-
-constitution:
-  accepted
-  fresh
-
-spec:
-  accepted
-  fresh
-
-plan:
-  accepted
-  fresh
-
-tasks:
-  accepted
-  fresh
-
 analysis:
-  schema_valid
-  references_valid
-  coverage_complete
-  result_pass
-  no_unresolved_blocking_or_material_findings
+  mechanical: references_coverage_dependency_cycles_identity_and_write_conflicts
+  judgment: policy_alignment_material_scope_decision_precedence_navigation_value
+  method: index_triage_targeted_read_then_full_only_when_necessary
+  outcome: findings_routed_to_owning_source
+rule: no_additional_approval_layer
+rule: real_blocks_and_integrity_failures_are_not_silently_ignored
 
-assurance:
-  passed_or_not_required
+¶ 13 — Operational Records
 
-operator_planning_acceptance:
-  recorded
-```
+execution:
+  required: event_id_task_ref_attempt_timestamp_outcome_validation_and_evidence
+decision:
+  required: decision_id_task_ref_timestamp_question_choice_rationale_evidence_refs
+  supersedes: explicit_target_and_scope
+failure:
+  required: failure_id_task_ref_cause_effect_resolution_rationale_evidence_refs_resolution_state
+  inclusion: material_recurring_architectural_contract_or_consequential
+rule: append_only_corrections_retries_and_resolutions
+rule: trivial_immediate_errors_omitted
+rule: failure_triggering_decision_cross_references_it
 
-No artifact self-promotes this transition.
+¶ 14 — Assurance and Test Authorship
 
-¶ 16 — Controlled Returns
+validation:
+  policy: constitution_then_test_protocol
+  gate: orchestrator
+  separate_test_author: configurable_default_true
+  criteria: independent_even_with_combined_authorship
+  missing_required_validation: blocked
+  completion: evidence_of_required_validation_pass
+tracker: never_runs_tests_or_judges_implementation
 
-A controlled return records:
+¶ 15 — Planning Readiness
 
-```text
-finding_ref
-from_phase
-to_phase
-owner_artifact_ref
-affected_artifact_refs
-stale_artifact_refs
-authority_ref
-reason
-old_version_refs
-replacement_version_ref?
-```
+readiness:
+  gradual: current_feature_records_resolve
+  integral: all_declared_features_planned_and_cross_feature_analysis_done
+  execution: authority_present_dependencies_satisfied_destinations_resolved
+  scaffold: integral_before_functional_execution
+rule: readiness_is_not_quality_acceptance_or_new_authority
 
-Rules:
+¶ 16 — Controlled Return
 
-- return to the artifact owning the semantic defect;
-- preserve current, rejected, and replacement versions;
-- do not mutate unrelated predecessors;
-- calculate stale derivatives through the DAG;
-- require operator decision when changing product intent, architecture, public
-  contract, persistence, dependency, security, data safety, risk, or acceptance;
-- require renewed acceptance when accepted semantic meaning changes;
-- allow bounded correction inside an authorized envelope;
-- treat attempt count as telemetry, never authority.
+return:
+  defect -> owning_record
+  known_answer -> agent_resolves_within_authority
+  new_material_choice -> decision_journal_and_affected_source_update
+  real_unknown_or_outside_authority -> operator
+rule: never_modify_unrelated_predecessor_to_make_check_pass
 
-¶ 17 — Concrete Phase Packages
+¶ 17 — Execution Units
 
-The canonical proposed phase-package instances are:
+unit:
+  may_be: feature_task_group_or_task
+  selection: difficulty_dependencies_context_and_write_scope
+  max_active_subagents: default_1
+  parallel: independent_units_exclusive_paths
+  write_scope: includes_source_tests_reports_journals_indices_temporaries
+  lifecycle: claim_implement_return_validate_record_release
+rule: interruption_recovered_explicitly_before_retry
 
-```text
-docs/architecture/tdsl/phase-packages/initialize-project.tdsl
-docs/architecture/tdsl/phase-packages/constitution-author.tdsl
-docs/architecture/tdsl/phase-packages/constitution-accept.tdsl
-docs/architecture/tdsl/phase-packages/feature-propose.tdsl
-docs/architecture/tdsl/phase-packages/feature-activate.tdsl
-docs/architecture/tdsl/phase-packages/specify.tdsl
-docs/architecture/tdsl/phase-packages/clarify.tdsl
-docs/architecture/tdsl/phase-packages/plan.tdsl
-docs/architecture/tdsl/phase-packages/tasks.tdsl
-docs/architecture/tdsl/phase-packages/analyze.tdsl
-docs/architecture/tdsl/phase-packages/planning-accept.tdsl
-```
+¶ 18 — Authoring Shapes
 
-A phase package is host-neutral policy and orchestration data. It defines input
-and output dialects, exact output revision, selected template, context,
-questions, agent constraints, deterministic kernel actions, allowed references,
-allowed capabilities, prerequisites, transitions, controlled returns, and
-assurance requirement.
-
-Phase packages do not live in consumer repositories as prompt authority.
-
-¶ 18 — Template Family
-
-```text
-docs/architecture/tdsl/templates/constitution.tdsl
-docs/architecture/tdsl/templates/spec.tdsl
-docs/architecture/tdsl/templates/plan.tdsl
-docs/architecture/tdsl/templates/tasks.tdsl
-docs/architecture/tdsl/templates/analysis.tdsl
-docs/architecture/tdsl/templates/phase-package.tdsl
-```
-
-Templates are `template@1` documents. They declare typed placeholders and exact
-output revisions. Required zero-item accumulated containers use `when_empty` to
-emit `container: []`; they never emit an empty indented block.
+templates:
+  phase_owned: load_only_when_dispatched
+  skeleton: shape_not_record
+  placeholder: never_in_emitted_record
+  generated_contracts: schema_lock_and_field_contracts
+architecture:
+  format: tree_only_Markdown
+  metadata: external_registry
 
 ¶ 19 — Greenfield
 
-```text
-open_empty_project
--> read_only_discovery
--> free_conversation
--> explicit_initialize
--> constitution_author
--> operator_constitution_accept
--> project_governed
--> feature_propose
--> operator_feature_activate
--> specify
-```
-
-Discussion alone creates no project or feature authority.
+greenfield:
+  order: constitution_then_architecture_then_feature_planning
+  execute_zero: create_only_safe_missing_structure
+  provisional: ◇_with_stable_anchor_ref
+  promotion: executor_changes_to_§_without_identity_change
+rule: scaffold_does_not_prove_behavior
+rule: no_fake_binary_manifest_or_lockfile
 
 ¶ 20 — Brownfield
 
-Discovery classifies without mutation:
-
-```text
-LIMA_managed_active
-LIMA_managed_idle
-Spec_Kit_existing
-unmanaged
-```
-
-Minimal project anchor:
-
-```text
-lima:
-  project_ref
-  constitution_ref
-  workflow_ref
-  schema_lock_ref
-```
-
-The anchor contains no runtime session, secret, cache, prompt pack, or agent
-memory.
-
-Rules:
-
-- code and executed evidence outrank documentation for observed state;
-- Spec Kit artifacts enter as provenance and candidate semantics, not automatic
-  runtime authority;
-- exact revisions are recovered from tracked artifact headers and schema lock;
-- ambiguous active feature or workflow position refuses;
-- adoption does not rewrite repository history;
-- newest file, branch, or unchecked task is never selected heuristically.
-
-¶ 21 — Backbone Acceptance
-
-A generic host-neutral harness must eventually demonstrate:
-
-```text
-greenfield:
-  initialize
-  accept_constitution
-  activate_feature
-  produce_and_accept_spec
-  clarify_or_explicitly_skip
-  produce_and_accept_plan
-  produce_and_accept_tasks
-  produce_validated_analysis
-  satisfy_assurance
-  record_planning_acceptance
-  reach_planning_ready
-
 brownfield:
-  discover_without_mutation
-  adopt_or_resume_explicitly
-  recover_exact_schema_and_position
-  preserve_history
+  inspect_existing: before_any_creation
+  identity: register_without_mutating_original_sources
+  ambiguity: unresolved_explicit_reconciliation
+  rediagramming: optional_scoped_baseline_and_nonfunctional_guard
+  provenance: preserve_origin_license_attribution_and_adaptation_classes
+rule: absent_index_entry_never_proves_absent_behavior
 
-control:
-  refuse_invalid_transition
-  refuse_stale_predecessor
-  route_controlled_return
-  distinguish_source_only_from_semantic_change
-  persist_source_IR_envelope_publication_evidence
-  recover_interrupted_publication
-  operate_without_host_specific_semantics
-```
+¶ 21 — Migration and Boundaries
 
-This is a future implementation gate. No Codex, Claude Code, Cline, or
-proprietary-client integration is required to define the backbone.
+migration:
+  explicit: preserve_old_records_and_history
+  default_authority: interactive
+  new_autonomy: explicit_opt_in
+  legacy_journals: remain_readable
+  runtime_progress: derive_without_rewriting_planning
+boundaries:
+  tracker: identity_location_relationship_and_index_only
+  index: reconstructible_projection
+  registry: persistent_identity_binding
+  hooks: assistance_not_complete_interception
+  reconciliation: independently_available
+ban: second_Git_or_content_hash_identity

@@ -1,11 +1,13 @@
-# Authoring skeleton for the `constitution` phase.
+# ¶ - Authoring skeleton for the `constitution` phase.
 # NOT a template@1 document: the placeholder type contract is owned by the
 # schemas, never restated here. Emit this shape with the placeholders resolved.
+
+¶ 1 — Authoring Contract
 
 skeleton:
   id @skeleton/constitution-efficient
   purpose compact normative project constitution with explicit authority and minimal policy duplication
-  output_dialect constitution@1
+  output_dialect constitution@2
   provenance operator
   schema_lock {{KERNEL_HOME}}/skills/_shared/schema-lock.tdsl
   field_contracts {{KERNEL_HOME}}/skills/_shared/field-contracts.tdsl
@@ -20,10 +22,12 @@ directives: # authoring instructions, never emitted into the artifact
   when <name>: emit only when present and material
   when_empty <name>: emit `name: []` when the required container has zero items
 
+¶ 2 — Output Shape
+
 shape:
 
-tdsl: constitution@1
-schema_revision: {schema_revision} # copy revisions.constitution@1 from schema_lock verbatim
+tdsl: constitution@2
+schema_revision: {schema_revision} # copy revisions.constitution@2 from schema_lock verbatim
 id: @project/constitution
 version: {artifact_version}
 status: proposed
@@ -73,3 +77,10 @@ when profiles:
 
 when explicit_unknowns:
   explicit_unknowns: [{*explicit_unknowns}]
+
+when supersedes_ref:
+  supersedes_ref: {supersedes_ref}
+
+when execution_authority:
+  execution_authority ln: |
+    {execution_authority}
