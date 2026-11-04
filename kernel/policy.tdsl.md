@@ -141,13 +141,13 @@ no_reread what is already in context
 identity typed_refs_for_documents_parts_directories_files_sections_events_decisions_failures_evidence_units
 identity_location separate; no_content_hash_identity
 external_registry .task/tracking/registry.json; unsafe_formats_use_external_identity_only
-intervene -> resolve, consult_normative_sources, consult_history, inspect_existing, reuse_modify_create_or_no_action, record, reconcile
+intervene -> consult_applicable_sources, reuse_existing_mapping, act_within_authority, record; reconciliation_only_on_express_operator_request
 learn_a_file -> search "¶" | "§" | "◇" for the index, then read only the target range
-learn_a_project -> skill(code-map)
+learn_a_project -> consult_available_map; absent_map_report_unavailable
 read_full only_if file_small | genuinely_need_whole_file
-edit_or_write_a_file -> ensure the header and chapters exist and are current; skill(diagram)
+diagramming -> only_when_an_open_feature_explicitly_assigns_it
 read_only_consultation -> NEVER stop to diagram
-no_anchor_present -> read normally; diagram only if editing
+no_anchor_present -> read_normally; no_implicit_diagramming_task
 tooling python {{KERNEL_HOME}}/scripts/diagram_check.py render|scan|guard
 tooling python {{KERNEL_HOME}}/scripts/code_map.py <file>... | --project .
 
@@ -217,7 +217,7 @@ governed_work:
   legacy_configuration -> interactive; never_infer_autonomy_from_integral
   max_active_subagents default 1; exclusive_write_scopes_required
   separate_test_author configurable; validation_criteria_remain_independent
-  ban choosing constitution, specify, clarify, plan, tasks, analyze or execute directly
+  ban choosing constitution, specify, clarify, plan, tasks or analyze directly; execute_requires_explicit_operator_command
 
 session_work:
   trigger a bounded act on the repository as it is
@@ -255,3 +255,13 @@ contexts:
   project AGENTS.md | CLAUDE.md | GEMINI.md local
   governed .task/
 ```
+
+¶ 15 — Explicit Skill Entry and Read-Only Navigation
+
+rule: execute_skill_only_on_explicit_operator_command_$execute_or_/execute
+rule: execute_reads_AGENTS_then_constitution_then_open_features_then_performs_authorized_work
+rule: phase_reports_and_protocol_do_not_invoke_execute
+rule: reconciliation_only_on_express_operator_request
+rule: code_map_returns_available_map_or_reports_unavailable_without_rebuild_or_reconciliation
+rule: diagramming_only_when_an_open_feature_explicitly_assigns_it
+rule: skills_propose_loops_not_additional_task_execution_procedures

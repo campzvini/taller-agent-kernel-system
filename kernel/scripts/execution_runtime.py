@@ -328,24 +328,6 @@ def execution_status(root: Path) -> dict:
         for artifact in ("spec", "plan", "tasks", "analysis"):
             if not state.feature_has(fid, artifact):
                 blockers.append(f"{fid}: {artifact} missing")
-    if config["scaffold_required"] and state.mode == "integral":
-        marker = root / ".task/runtime/scaffold.json"
-        preparation = root / ".task/runtime/scaffold-preparation.json"
-        if not marker.is_file() and not preparation.is_file():
-            blockers.append("Execute 0 required")
-        else:
-            from structure_scaffold import scaffold_project
-            preview = scaffold_project(root, apply=False)
-            recorded = json.loads((preparation if preparation.is_file() else marker).read_text(encoding="utf-8"))
-            if recorded.get("inventory") != preview["inventory"] or any(action["action"] == "create" for action in preview["actions"]):
-                blockers.append("Execute 0 reconciliation required")
-            pending = [action["path"] for action in preview["actions"] if action["action"] == "pending"]
-            if pending:
-                tasks, _ = task_catalog(root)
-                declared_scopes = [scope for fields in tasks.values() for scope in scopes_for(root, fields)]
-                for path in pending:
-                    if not overlaps([normalized_scope(root, path)], declared_scopes):
-                        blockers.append(f"deferred destination has no owning task: {path}")
     return {"configuration": config, "planning_mode": state.mode, "blockers": blockers,
             "units": load_units(root), "next_phase": state.next_phase()}
 
@@ -361,14 +343,13 @@ def reconcile(root: Path) -> dict:
 
 def resolve_intervention(root: Path, task_ref: str) -> dict:
     """Locate normative sources, exact destinations and relevant operational history."""
-    from structure_tracker import query_registry, scan_project
+    from structure_tracker import query_registry
     from runtime_journal import read_entries
     tasks, _ = task_catalog(root)
     if task_ref not in tasks:
         raise ValueError("unknown task reference")
     fields = tasks[task_ref]
     feature = fields["feature"]
-    scan_project(root)
     targets = []
     for ref in members(fields.get("target_refs", "[]")):
         try:

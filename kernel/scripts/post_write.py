@@ -1,6 +1,6 @@
 # ────────────────────────────────────────────
 # TASK 2.0 — post_write.py
-# § - Reconcile structural indexes after writes without judging implementation · Python
+# § - Reconcile structural indexes only on explicit invocation · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────
 
@@ -12,13 +12,12 @@ from pathlib import Path
 
 from protocol_core import find_root
 
-# § 1 — RECONCILIATION — Refresh derived navigation after intercepted writes
+# § 1 — RECONCILIATION — Refresh derived navigation on explicit request
 
 
 def post_write(cwd: Path) -> dict:
     """Reconcile structure independently of tool name; hooks never claim validation."""
     from structure_tracker import scan_project
-    from diagram_check import scan_file
     root = find_root(cwd.resolve())
     if root is None:
         return {"governed": False}
@@ -26,25 +25,15 @@ def post_write(cwd: Path) -> dict:
         from execution_runtime import preserve_constitution
         preserve_constitution(root)
     registry = scan_project(root)
-    records = []
-    for item in registry["elements"].values():
-        if item["kind"] == "file" and item["state"] == "present":
-            path = root / item["path"]
-            record = scan_file(path)
-            if record["status"] not in ("skip", "ok"):
-                records.append(record)
-    directory = root / ".agent-cache/tracking"
-    (directory / "diagram.json").write_text(json.dumps(records, ensure_ascii=False, indent=2) + "\n",
-                                            encoding="utf-8", newline="\n")
     return {"governed": True, "generation": registry["generation"],
-            "structural_issues": len(registry["issues"]), "diagram_issues": len(records),
+            "structural_issues": len(registry["issues"]),
             "details": ".agent-cache/tracking"}
 
 
 # § 2 — ENTRY — Report compact mechanical feedback without blocking a harness
 
 def main() -> int:
-    """Allow adapters and manual callers to invoke the same reconciliation path."""
+    """Run reconciliation when explicitly invoked by the operator."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--cwd", type=Path, default=Path.cwd())
     args = parser.parse_args()

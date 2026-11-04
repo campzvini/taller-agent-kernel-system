@@ -249,12 +249,6 @@ def main() -> int:
         return 0
 
     if event.get("hook_event_name") == "PostToolUse":
-        proc = subprocess.run(
-            [sys.executable, str(HARNESS / "scripts/post_write.py"),
-             "--cwd", event.get("cwd") or os.getcwd()],
-            capture_output=True, text=True, encoding="utf-8", errors="replace")
-        if proc.stdout.strip():
-            respond({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": proc.stdout.strip()}})
         return 0
 
     session_id = event.get("session_id", "")

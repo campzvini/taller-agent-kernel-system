@@ -72,17 +72,25 @@ class InstalledIntegrationTests(unittest.TestCase):
         result = self.command("structure_tracker.py", "--root", str(self.project), "query", ref)
         self.assertTrue(json.loads(result.stdout)["exists"])
 
-    def test_both_installed_hooks_reconcile_after_external_write(self):
+    def test_installed_navigation_and_hooks_do_not_reconcile(self):
         self.initialize()
+        result = self.command("structure_tracker.py", "--root", str(self.project), "scan")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        registry = self.project / ".task/tracking/registry.json"
+        before = registry.read_bytes()
         (self.project / "photo.bin").write_bytes(bytes(range(256)))
+        result = self.command("code_map.py", "--project", str(self.project), "--json")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(registry.read_bytes(), before)
         for harness in ("codex", "claude"):
             result = self.command(harness + "_hook.py", event={"hook_event_name": "PostToolUse",
                                   "cwd": str(self.project), "tool_name": "apply_patch"})
             self.assertEqual(result.returncode, 0, result.stderr)
-            payload = json.loads(result.stdout)
-            self.assertEqual(payload["hookSpecificOutput"]["hookEventName"], "PostToolUse")
-            registry = json.loads((self.project / ".task/tracking/registry.json").read_text())
-            self.assertTrue(any(item["path"] == "photo.bin" for item in registry["elements"].values()))
+            self.assertEqual(result.stdout.strip(), "")
+            self.assertEqual(registry.read_bytes(), before)
+        result = self.command("structure_tracker.py", "--root", str(self.project), "scan")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(any(item["path"] == "photo.bin" for item in json.loads(registry.read_text())["elements"].values()))
 
     def test_architecture_write_gate_works_without_active_feature(self):
         self.initialize()

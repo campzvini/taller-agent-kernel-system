@@ -75,10 +75,10 @@ no_skill_support -> append a skill index (name, description, path) to the policy
 
 capabilities:
   codex_and_claude: supplied_hook_adapters_translate_available_events
-  post_write: reconcile_when_supported_by_host_hook_surface
-  unobserved_write: explicit_reconciliation_required
+  post_write: no_automatic_reconciliation
+  unobserved_write: reconciliation_only_on_express_operator_request
   antigravity_and_cline: instruction_driven_until_adapter_available
-  independent_scan: always_available_via_structure_tracker.py
+  independent_scan: explicit_operator_request_via_structure_tracker.py
   concurrency: limited_by_host_capacity_and_project_max_active_subagents
   absent_subagent_support: report_capability_limit_do_not_claim_delegated_execution
 rule: hook_support_is_not_evidence_of_complete_write_interception

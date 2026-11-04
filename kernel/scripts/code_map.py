@@ -433,8 +433,8 @@ def main() -> int:
 
     if project_root is not None:
         if (project_root / ".task/project.tdsl").is_file():
-            from structure_tracker import scan_project
-            registry = scan_project(project_root)
+            from structure_tracker import load_registry
+            registry = load_registry(project_root)
             for result in results:
                 relative = Path(result["file"]).relative_to(project_root).as_posix()
                 result["identities"] = [ref for ref, item in registry["elements"].items()

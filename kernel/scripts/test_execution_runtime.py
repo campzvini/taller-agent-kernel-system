@@ -189,14 +189,28 @@ class ExecutionTests(unittest.TestCase):
         self.assertEqual(execution_status(self.root)["blockers"], [])
         claim(self.root, "@unit/U1", ["@tasks/001-one#task/T1"], "a")
 
-    def test_deferred_manifest_without_owner_is_reported(self):
+    def test_status_does_not_reconcile_deferred_structure(self):
         from structure_scaffold import scaffold_project
         anchor = self.root / ".task/project.tdsl"
         anchor.write_text(anchor.read_text().replace("gradual", "integral"), encoding="utf-8")
         self.write(".task/Architecture.md", "package.json\n")
         migrate(self.root)
         scaffold_project(self.root, apply=True)
-        self.assertIn("deferred destination has no owning task: package.json", execution_status(self.root)["blockers"])
+        before = (self.root / ".task/tracking/registry.json").read_bytes()
+        self.assertEqual(execution_status(self.root)["blockers"], [])
+        self.assertEqual((self.root / ".task/tracking/registry.json").read_bytes(), before)
+
+    def test_stale_scaffold_inventory_does_not_block_existing_work(self):
+        anchor = self.root / ".task/project.tdsl"
+        anchor.write_text(anchor.read_text().replace("gradual", "integral"), encoding="utf-8")
+        self.write(".task/Architecture.md", "src/\n  a.py\n")
+        self.write("src/a.py", "value = 1\n")
+        migrate(self.root)
+        self.write(".task/runtime/scaffold-preparation.json", '{"inventory": []}\n')
+        before = (self.root / ".task/tracking/registry.json").read_bytes()
+        claim(self.root, "@unit/existing", ["@tasks/001-one#task/T1"], "a")
+        self.assertEqual((self.root / ".task/tracking/registry.json").read_bytes(), before)
+        self.assertEqual((self.root / "src/a.py").read_text(), "value = 1\n")
 
     def test_unit_identity_is_not_reused_after_interruption(self):
         claim(self.root, "@unit/U1", ["@tasks/001-one#task/T1"], "a")

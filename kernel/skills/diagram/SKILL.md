@@ -1,6 +1,6 @@
 ---
 name: diagram
-description: Apply or repair the § header and chapter markers in source files, via diagram_check.py. Use when delivering new code, or when code-map reports a file has no anchors.
+description: Apply or repair the § header and chapter markers in source files, via diagram_check.py. Use only when an open feature explicitly assigns diagramming; missing anchors or code edits alone do not activate it.
 ---
 
 ¶ - Apply TDSL anchor diagramming with section markers to source files
@@ -131,3 +131,9 @@ brownfield:
   preserve: origin_and_attribution
 rule: functional_changes_use_normal_validation_not_comment_guard
 rule: never_revert_unrelated_changes_on_guard_failure
+
+¶ 6 — Applicability
+
+rule: no_open_feature_task_for_diagramming -> not_applicable
+rule: missing_map_missing_anchors_or_source_edits_do_not_create_diagramming_work
+rule: code_map_reports_availability_only_and_never_dispatches_this_skill

@@ -15,7 +15,7 @@ document:
 
 flow:
   planning -> constitution, architecture, features, specs, plans, tasks, analysis
-  integral_ready -> execute_zero, execution_loop
+  integral_ready -> authorized_feature_work_without_automatic_structural_preparation
   gradual_ready -> execution_loop
   execution_loop -> resolve, verify, delegate, record, update, next_eligible_unit
   exhausted -> report, idle
@@ -84,7 +84,7 @@ controlled_return:
   semantic_defect -> owning_record
   technical_answer_available -> resolve_within_authority, record_material_decision
   real_unknown_or_outside_authority -> operator
-  structural_change -> update_architecture_and_affected_planning, reconcile_index
+  structural_change -> update_affected_authorized_records; reconcile_only_on_express_operator_request
   preserve: decision_and_failure_history
 ban: mutating_unrelated_predecessor_to_satisfy_a_check
 ban: inferring_an_operator_preference
@@ -100,7 +100,7 @@ execution_mode:
 configuration:
   max_active_subagents: 1
   separate_test_author: true
-rule: autonomous_integral -> complete_package_then_execute_zero_then_loop
+rule: autonomous_integral -> follow_authorized_feature_scope; execute_skill_requires_explicit_operator_command
 rule: integral_interactive -> package_ready_report_then_execute_only_when_authorized
 rule: planning_mode_and_execution_mode_are_independent
 rule: feature_dependencies_form_a_DAG; ids_are_tie_breakers_not_dependencies
@@ -122,12 +122,12 @@ rule: inspect_existing_structure_before_creation
 ¶ 8 — Execute Zero
 
 execute_zero:
-  applies: integral_mode
+  applies: only_when_explicitly_requested_by_operator
   implementation: structure_scaffold.py
   before_creation: resolve_destinations, inspect_existing, preserve_existing_files
   creates: missing_safe_directories_and_source_placeholders
   sections: provisional_marker_◇_with_stable_anchor_ref
-  after_creation: reconcile_registry_and_indices, record_result
+  after_creation: record_result; reconcile_only_on_express_operator_request
   unsafe_placeholder: pending_with_reason
   excludes: fake_binaries_invalid_manifests_fake_lockfiles
 rule: scaffold_is_not_implementation_or_validation
@@ -144,7 +144,7 @@ intervention:
   5: choose_reuse_modify_create_or_no_action
   6: execute_within_authority_and_write_scope
   7: record_material_events_decisions_failures
-  8: reconcile_indices
+  8: reconcile_only_on_express_operator_request
 read_strategy: index_then_targeted_range_then_expand_only_when_insufficient
 ban: rereading_all_documents_per_task
 
@@ -159,7 +159,7 @@ rules:
   close: operator_direction_or_predelegated_constitution_authority
   next_feature: only_within_declared_package_and_authority
   retry: new_event_identity_preserves_previous_attempt
-  interrupted_unit: reconcile_claim_and_attempt_before_resuming
+  interrupted_unit: consult_existing_claim_and_attempt; reconciliation_requires_express_operator_request
   completion: never_inferred_from_promotion_or_scaffold_presence
 rule: no_work_remaining -> idle_without_new_scope
 
@@ -228,9 +228,9 @@ tracker:
   projections: Markdown_and_machine_queries
 hooks:
   before_write: load_policy_and_validate_relevant_contract
-  after_write_when_supported: reconcile_and_report_structural_findings
-  missing_hook: explicit_reconciliation_command
-  independent: full_scan_at_resume_and_before_closure
+  after_write_when_supported: no_automatic_reconciliation
+  missing_hook: no_automatic_reconciliation
+  independent: scan_only_on_express_operator_request
 rule: hook_failure_never_substitutes_for_explicit_reconciliation
 
 ¶ 15 — Commands and Compatibility
@@ -252,3 +252,12 @@ compatibility:
   hashes: schema_revision_only_not_element_identity
   unsafe_placeholder: defer_to_declared_owner_task_after_safe_scaffold_preparation_never_block_its_creation
   legacy_markdown_specs: operator_directed_adoption
+
+¶ 16 — Skill Procedure Boundary
+
+rule: execute_entry_is_explicit_operator_command_then_AGENTS_constitution_open_features_work
+rule: skills_propose_consultation_loops_without_imposing_task_execution_sequences
+rule: kernel_source_evaluation_and_decision_mechanisms_are_not_redefined_by_execute_skill
+rule: code_map_delivers_existing_map_or_reports_unavailable_without_side_effects
+rule: diagramming_only_when_an_open_feature_explicitly_assigns_it
+rule: reconciliation_only_on_express_operator_request
