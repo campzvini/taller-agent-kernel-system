@@ -128,8 +128,10 @@ class InstalledIntegrationTests(unittest.TestCase):
         originals = {path: path.read_bytes() for path in (config, personal, journal)}
         backup = self.base / "upgrade-backup"
         shutil.copytree(self.install, backup)
-        shutil.copytree(SOURCE, self.install, dirs_exist_ok=True,
-                        ignore=shutil.ignore_patterns("__pycache__", "backups"))
+        departments = json.loads((SOURCE / "system/routing/departments.json").read_text())["departments"]
+        for directory in ("scripts", "docs", "grammar", "templates", "skills", "adapters", *departments):
+            shutil.copytree(SOURCE / directory, self.install / directory, dirs_exist_ok=True,
+                            ignore=shutil.ignore_patterns("__pycache__"))
         for path, content in originals.items():
             self.assertEqual(path.read_bytes(), content)
         self.assertEqual((backup / "kernel.config.json").read_bytes(), originals[config])
