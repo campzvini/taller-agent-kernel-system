@@ -1,14 +1,33 @@
-# AGENTS.md — <Projeto>
-¶ - Entrada humana para retomada e localização das fontes do projeto.
+# Project Agent Context
+¶ - Locate project authority and resume only the context missing from the current session.
 
-¶ 1 — Objetivo
+¶ 1 — Project Boundary
 
-<Uma linha sobre o propósito e o papel do projeto.>
+project: <project_name>
+purpose: <one_line_role>
+local_boundaries: <constraints_not_derivable_from_source>
 
-¶ 2 — Retomada
+¶ 2 — Existing Sources
 
-Consulte as fronteiras locais e o estado em `.task/project.tdsl`. A árvore pretendida fica em `.task/Architecture.md`; identidades e destinos ficam em `.task/tracking/registry.json`. Use os índices para localizar as fontes e leia os trechos necessários à intervenção.
+sources:
+  anchor: .task/project.tdsl
+  features: .task/features/
+  configuration: .task/execution.config.tdsl
+  constitution: .task/constitution.tdsl
+  intended_tree: .task/Architecture.md
+  identity: .task/tracking/registry.json
+  history: .task/journals/
+rule: constitution_is_normative_code_is_observed_behavior_indices_are_navigation
+rule: planning_mode_does_not_grant_autonomy
 
-¶ 3 — Autoridade e Histórico
+¶ 3 — Contextual Resume
 
-A constituição governa as decisões. O código mostra o comportamento existente. Os journals em `.task/journals/` preservam execução, decisões e falhas; o progresso visual é derivado deles. O modo de planejamento não concede autonomia de execução.
+resume:
+  warm: reuse_loaded_sources_and_confirm_required_mutable_facts
+  cold: recover_applicable_AGENTS_project_open_features_configuration_constitution_and_relevant_artifacts
+  history: only_relevant_events_and_interrupted_claims
+  insufficient: {{KERNEL_HOME}}/behavior/loops/L02.tdsl
+  execution: {{KERNEL_HOME}}/behavior/loops/L04.tdsl
+  delivery: {{KERNEL_HOME}}/behavior/loops/L08.tdsl
+rule: no_automatic_structural_reconciliation_or_diagramming_preflight
+rule: validated_owned_code_commit_requires_applicable_authority

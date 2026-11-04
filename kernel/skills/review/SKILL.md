@@ -28,3 +28,10 @@ analysis goes beyond syntax errors; addresses logic and architecture
 each critique is specific and referenced to code (line or function)
 suggestions are actionable, not abstract
 classification is justified by identified points
+
+¶ 4 — Context and Delivery
+
+rule: before_commit_review_the_actual_owned_diff_including_additions_and_deletions
+rule: separate_preexisting_and_third_party_changes_from_the_work
+rule: review_and_commit_do_not_substitute_for_functional_validation
+reference: {{KERNEL_HOME}}/behavior/loops/L08.tdsl

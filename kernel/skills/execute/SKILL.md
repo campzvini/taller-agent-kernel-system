@@ -30,3 +30,13 @@ rule: reconciliation_only_on_express_operator_request
 rule: diagramming_is_relevant_only_when_an_open_feature_explicitly_assigns_it
 rule: unavailable_map_does_not_create_a_diagramming_task
 rule: preserve_history_and_report_only_observed_results
+
+¶ 3 — Contextual Resume and Delivery
+
+references:
+  context_sufficiency: {{KERNEL_HOME}}/behavior/loops/L02.tdsl
+  warm_cold_entry: {{KERNEL_HOME}}/behavior/loops/L04.tdsl
+  validated_delivery: {{KERNEL_HOME}}/behavior/loops/L08.tdsl
+rule: reuse_already_loaded_entry_sources_when_still_sufficient
+rule: confirm_mutable_points_without_reconstructing_warm_context
+rule: existing_kernel_loops_own_execution_and_authorized_commit_before_delivery

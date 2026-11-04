@@ -4,7 +4,7 @@
 
 **A governance kernel for AI coding agents, installed before any harness and shared by all of them.**
 
-Version 2.1.0 · [Licensing and official distribution](#licensing-and-official-distribution) · created by Vinícius Campos ([Taller](https://github.com/campzvini))
+Version 2.2.0 · [Licensing and official distribution](#licensing-and-official-distribution) · created by Vinícius Campos ([Taller](https://github.com/campzvini))
 
 The Taller Agent System Kernel (TASK) is the operating layer I built to work with AI agents every day:
 a global policy, a language written for agents to read, a spec-driven workflow, a navigation index for
@@ -33,6 +33,7 @@ This README explains what each part is and, above all, **why** it exists.
 13. [Contributing](#13-contributing)
 14. [Upgrade from 1.x](#14-upgrade-from-1x)
 15. [Licensing and official distribution](#licensing-and-official-distribution)
+16. [Departments and behavioral loops](#16-departments-and-behavioral-loops)
 
 ---
 
@@ -397,7 +398,16 @@ INSTALL.md                  instructions executed by the installing agent (TDSL)
 kernel/policy.tdsl.md       the global policy template
 kernel/docs/                routed policies: engineering, sdd, delegation
 kernel/skills/              skills (SKILL.md folders)
-kernel/scripts/             deterministic Python tooling and self-test
+kernel/scripts/             compatible public Python entrypoints
+kernel/system/              grammar checks and department ownership registry
+kernel/governance/          SDD, planning and specification implementations
+kernel/behavior/            loop contracts and delegation validation
+kernel/context/             acquisition, mapping and session implementation
+kernel/runtime/             execution and structural identity mechanisms
+kernel/memory/              journal and handoff implementations
+kernel/assurance/           tests, validation and diagram integrity
+kernel/delivery/            scoped commit observation and comparison report
+kernel/integration/         installed layout and upgrade contract
 kernel/grammar/             canonical TDSL grammar and JSON schemas
 kernel/templates/           AGENTS.md, briefing and cross-model prompt templates
 adapters/                   per-harness placement and hook configuration
@@ -441,3 +451,41 @@ Other organizational use requires written permission. Distributed adaptations co
 covered by this license must retain notices, identify their changes and maintainer, and clearly
 state that they are unofficial. Contact [Vinícius Campos](https://github.com/campzvini) for licensing.
 This is a source-available license with use restrictions, not MIT, Apache 2.0, or OSI open source.
+
+
+## 16. Departments and behavioral loops
+
+¶ 16 — Departments and Behavioral Loops
+
+A department is a permanent area of responsibility; a function is a concrete or instructed capability.
+A loop defines behavioral decisions, while an entrypoint exposes a function to an agent, hook or tool.
+
+TASK 2.2 uses nine functional departments: system, governance, behavior, context, runtime, memory,
+assurance, delivery and integration. Ownership and public-to-implementation paths are recorded in
+`kernel/system/routing/departments.json`; loop ownership is in `kernel/behavior/loops/catalog.tdsl`.
+Existing grammar, schemas, skill names and consumer project records keep their contracts.
+
+Python implementations live under their departments. The public `kernel/scripts/*.py` files are thin
+compatibility entrypoints, sharing the same imported module identity. They keep `__file__` at the
+public path to preserve existing sibling imports, schema resolution and installed test fixtures;
+tracebacks point to the departmental source. `__task_implementation__` identifies that source.
+Distribute all of `kernel/`, not just the compatibility scripts. The existing INSTALL.md procedure
+owns clean installation and upgrade; no second installer or operational journal is introduced.
+
+L02 checks context sufficiency after each necessary acquisition. It reuses applicable session
+context, distinguishes general knowledge from evidence of current project behavior, and confirms
+mutable facts only when the answer depends on them. Mapping remains optional, read-only navigation.
+
+L04 distinguishes warm contextual entry from cold recovery. A warm agent confirms necessary mutable
+facts and retains the runtime's eligibility, claim and ownership checks. A cold agent recovers only
+the missing instructions, project, feature, authority and relevant history, consulting L02 as needed.
+Warm/cold is not persisted in configuration, tasks or journals. Hooks provide compact recovery hints;
+they do not decide semantic sufficiency or bypass the explicit execute skill invocation contract.
+
+L08 validates work, records the operational outcome, reviews actual owned code changes and checks
+commit permission before final delivery. Existing authorization for both work and commit needs no
+second confirmation. Blocked commits are reported explicitly as uncommitted. `commit_context.py`
+observes additions, modifications, removals and renames, including untracked files, without staging
+anything. Its optional `--owned-path` limits the proposed scope; it never grants ownership or authority.
+No code changes means no empty or duplicate commit. A commit is distinct from validation and feature
+closure, and PostToolUse never commits. Handoff includes HEAD and the observed outstanding changes.

@@ -84,3 +84,11 @@ rule: reconciliation_only_on_express_operator_request
 rule: existing_structure_and_mapping_are_reused_not_reprepared
 rule: diagramming_only_when_explicitly_assigned_by_an_open_feature
 rule: routing_suggests_navigation_never_adds_tasks_or_mandatory_execution_procedure
+
+¶ 7 — Context and Delivery
+
+rule: reuse_recovered_phase_and_authority_while_they_remain_applicable
+rule: warm_resume_confirms_only_required_mutable_facts
+rule: missing_context_routes_to_L02_not_a_full_recovery_cycle
+rule: completion_consults_L08_for_owned_code_commit_before_final_delivery
+reference: {{KERNEL_HOME}}/behavior/loops/L04.tdsl

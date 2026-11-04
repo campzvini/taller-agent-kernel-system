@@ -1,3 +1,7 @@
+¶ - Author the optional decomposition shape without replacing the task dependency contract.
+
+¶ 1 — Authoring Skeleton
+
 # Authoring skeleton for the optional `decompose` phase.
 # NOT a template@1 document. Emit this shape with the placeholders resolved.
 
@@ -13,6 +17,8 @@ directives: # authoring instructions, never emitted into the artifact
   {*name} zero-or-more collection members
   {alias.field} repeated-item value inside a `for`
   for <collection> as <alias>: repeat the block per item
+
+¶ 2 — Output Shape
 
 shape:
 

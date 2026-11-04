@@ -1,0 +1,210 @@
+{
+  "format": "task.departments@1",
+  "departments": {
+    "system": {
+      "responsibility": "grammar_policy_authority_and_initial_routing",
+      "existing": [
+        "grammar/",
+        "policy.tdsl.md",
+        "skills/_shared/"
+      ]
+    },
+    "governance": {
+      "responsibility": "constitution_specification_planning_and_normative_control",
+      "existing": [
+        "docs/sdd.tdsl",
+        "skills/constitution/",
+        "skills/architecture/",
+        "skills/specify/",
+        "skills/clarify/",
+        "skills/plan/",
+        "skills/tasks/",
+        "skills/analyze/",
+        "skills/protocol/",
+        "skills/decompose/"
+      ]
+    },
+    "behavior": {
+      "responsibility": "loop_contracts_delegation_and_problem_resolution",
+      "existing": [
+        "docs/delegation.tdsl",
+        "skills/execute/",
+        "skills/debug/"
+      ]
+    },
+    "context": {
+      "responsibility": "progressive_context_sufficiency_mapping_and_session_recovery",
+      "existing": [
+        "skills/code-map/",
+        "skills/dependency-check/",
+        "skills/refactor-plan/"
+      ]
+    },
+    "runtime": {
+      "responsibility": "eligibility_ownership_concurrency_and_explicit_reconciliation",
+      "existing": []
+    },
+    "memory": {
+      "responsibility": "journals_history_and_session_continuity",
+      "existing": [
+        "skills/handoff/",
+        "skills/provenance/"
+      ]
+    },
+    "assurance": {
+      "responsibility": "testing_validation_integrity_and_review",
+      "existing": [
+        "skills/test-protocol/",
+        "skills/review/",
+        "docs/engineering.tdsl",
+        "skills/diagram/"
+      ]
+    },
+    "delivery": {
+      "responsibility": "commit_reporting_and_delivery",
+      "existing": [
+        "skills/commit/",
+        "skills/pr-description/",
+        "skills/doc-update/"
+      ]
+    },
+    "integration": {
+      "responsibility": "installation_adapters_hooks_and_harness_compatibility",
+      "existing": [
+        "templates/"
+      ]
+    }
+  },
+  "entrypoints": {
+    "scripts/briefing_lint.py": {
+      "department": "behavior",
+      "implementation": "behavior/delegation/briefing_lint.py"
+    },
+    "scripts/code_map.py": {
+      "department": "context",
+      "implementation": "context/mapping/code_map.py"
+    },
+    "scripts/commit_context.py": {
+      "department": "delivery",
+      "implementation": "delivery/commit/commit_context.py"
+    },
+    "scripts/contract_check.py": {
+      "department": "system",
+      "implementation": "system/grammar/contract_check.py"
+    },
+    "scripts/detect_project.py": {
+      "department": "context",
+      "implementation": "context/acquisition/detect_project.py"
+    },
+    "scripts/diagram_check.py": {
+      "department": "assurance",
+      "implementation": "assurance/integrity/diagram_check.py"
+    },
+    "scripts/diagram_project.py": {
+      "department": "assurance",
+      "implementation": "assurance/integrity/diagram_project.py"
+    },
+    "scripts/diagram_python.py": {
+      "department": "assurance",
+      "implementation": "assurance/integrity/diagram_python.py"
+    },
+    "scripts/execution_runtime.py": {
+      "department": "runtime",
+      "implementation": "runtime/execution/execution_runtime.py"
+    },
+    "scripts/handoff_snapshot.py": {
+      "department": "memory",
+      "implementation": "memory/handoff/handoff_snapshot.py"
+    },
+    "scripts/post_write.py": {
+      "department": "runtime",
+      "implementation": "runtime/structure/post_write.py"
+    },
+    "scripts/protocol_core.py": {
+      "department": "governance",
+      "implementation": "governance/sdd/protocol_core.py"
+    },
+    "scripts/runtime_journal.py": {
+      "department": "memory",
+      "implementation": "memory/journals/runtime_journal.py"
+    },
+    "scripts/sdd_gate.py": {
+      "department": "governance",
+      "implementation": "governance/sdd/sdd_gate.py"
+    },
+    "scripts/selftest.py": {
+      "department": "assurance",
+      "implementation": "assurance/testing/selftest.py"
+    },
+    "scripts/session_init.py": {
+      "department": "context",
+      "implementation": "context/session/session_init.py"
+    },
+    "scripts/spec_lint.py": {
+      "department": "governance",
+      "implementation": "governance/specification/spec_lint.py"
+    },
+    "scripts/structure_scaffold.py": {
+      "department": "governance",
+      "implementation": "governance/planning/structure_scaffold.py"
+    },
+    "scripts/structure_tracker.py": {
+      "department": "runtime",
+      "implementation": "runtime/structure/structure_tracker.py"
+    },
+    "scripts/tdsl_lock.py": {
+      "department": "system",
+      "implementation": "system/grammar/tdsl_lock.py"
+    },
+    "scripts/test_contract_check.py": {
+      "department": "assurance",
+      "implementation": "assurance/testing/test_contract_check.py"
+    },
+    "scripts/test_delivery_integration.py": {
+      "department": "assurance",
+      "implementation": "assurance/testing/test_delivery_integration.py"
+    },
+    "scripts/test_diagram_project.py": {
+      "department": "assurance",
+      "implementation": "assurance/testing/test_diagram_project.py"
+    },
+    "scripts/test_execution_runtime.py": {
+      "department": "assurance",
+      "implementation": "assurance/testing/test_execution_runtime.py"
+    },
+    "scripts/test_loops_delivery.py": {
+      "department": "assurance",
+      "implementation": "assurance/testing/test_loops_delivery.py"
+    },
+    "scripts/test_runtime_journal.py": {
+      "department": "assurance",
+      "implementation": "assurance/testing/test_runtime_journal.py"
+    },
+    "scripts/test_structure.py": {
+      "department": "assurance",
+      "implementation": "assurance/testing/test_structure.py"
+    }
+  },
+  "external_integration": [
+    "INSTALL.md",
+    "adapters/ADAPTERS.tdsl",
+    "adapters/codex/",
+    "adapters/claude/",
+    "kernel.config.example.json"
+  ],
+  "loops": "behavior/loops/catalog.tdsl",
+  "compatibility_runtime": "scripts/_entrypoint.py",
+  "native_format_boundaries": {
+    "grammar/schemas/": "JSON schemas retain their native identities; comment anchors would invalidate JSON",
+    "../kernel.config.example.json": "Deployment configuration retains its native format",
+    "../VERSION": "Machine-readable version value",
+    "../LICENSE": "License terms remain unchanged",
+    "skills/architecture/template.md": "Tree-only scaffold; headings would invalidate the architecture parser"
+  },
+  "levels": {
+    "department": "permanent_area_of_responsibility",
+    "function": "implemented_or_instructed_capability",
+    "loop": "behavioral_decision_flow",
+    "entrypoint": "agent_hook_or_tool_interface_to_a_function"
+  }
+}

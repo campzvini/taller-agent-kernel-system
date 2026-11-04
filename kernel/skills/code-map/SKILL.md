@@ -28,3 +28,9 @@ rule: brownfield_without_available_map -> report_unavailable_without_requiring_a
 rule: this_skill_never_instructs_creation_repair_diagramming_or_other_task_execution
 rule: diagramming_is_relevant_only_when_an_open_feature_explicitly_assigns_it
 rule: preserve_existing_files_and_history
+
+¶ 2 — Context and Delivery
+
+rule: consult_L02_before_requesting_additional_mapping_context
+rule: sufficient_loaded_context_does_not_trigger_map_consultation
+reference: {{KERNEL_HOME}}/behavior/loops/L02.tdsl

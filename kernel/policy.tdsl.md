@@ -4,7 +4,7 @@
 
 document:
   id: task.global-policy@1
-  version: 2.0.0
+  version: 2.2.0
   status: active
   language: TDSL v3
   scope: operator_boundary, language, routing, orchestration, economy, anchors, response, truth, hard_bans
@@ -77,9 +77,9 @@ agent_to_agent:
 ¶ 4 — Session Boot
 
 ```text
-1 read project AGENTS.md / CLAUDE.md / GEMINI.md if present; git status and recent log if a repository
-2 governed project (.task/ present) -> python {{KERNEL_HOME}}/scripts/session_init.py, render state
-3 next_phase present -> route via skill(protocol)
+1 reuse_applicable_loaded_instructions; recover_missing_project_instructions_only; confirm_required_mutable_Git_state
+2 use_existing_compact_session_snapshot_when_sufficient; missing_observations -> existing_session_init_entrypoint
+3 consult_recovered_phase_only_when_relevant; no_implicit_execute_skill
 4 proceed
 ban a script electing a trajectory by heuristic; the gate reports phase, the operator decides
 ```
@@ -113,6 +113,7 @@ tracker identity_location_relationships_only; never_tests_quality_or_completion
 ```text
 principle cost = turns × (fixed_prompt + accumulated_context)
 target minimize turns and tool calls, NOT bytes per read
+context_sufficiency {{KERNEL_HOME}}/behavior/loops/L02.tdsl; stop_acquisition_when_sufficient
 known_targets(>=2) -> ONE turn, ONE command, never sequential
 reads issue multiple reads/searches in a single turn
 shell chain with && as one execution
@@ -152,6 +153,7 @@ tooling python {{KERNEL_HOME}}/scripts/diagram_check.py render|scan|guard
 tooling python {{KERNEL_HOME}}/scripts/code_map.py <file>... | --project .
 
 staged_review:
+  condition: available_context_insufficient_for_the_delimited_question
   1 index pull every § and ¶ index in scope, in one batched call
   2 triage reason over the index alone
   3 targeted read only the chapter ranges that can hold the answer
@@ -265,3 +267,19 @@ rule: reconciliation_only_on_express_operator_request
 rule: code_map_returns_available_map_or_reports_unavailable_without_rebuild_or_reconciliation
 rule: diagramming_only_when_an_open_feature_explicitly_assigns_it
 rule: skills_propose_loops_not_additional_task_execution_procedures
+
+¶ 16 — Context Sufficiency and Operational Continuity
+
+contracts:
+  context: {{KERNEL_HOME}}/behavior/loops/L02.tdsl
+  execution: {{KERNEL_HOME}}/behavior/loops/L04.tdsl
+  delivery: {{KERNEL_HOME}}/behavior/loops/L08.tdsl
+rule: evaluate_sufficiency_before_each_additional_context_acquisition
+rule: reuse_loaded_context_and_confirm_only_needed_mutable_facts
+rule: cold_entry_recovers_missing_instructions_project_feature_authority_and_relevant_history
+rule: warm_cold_is_contextual_not_persisted_configuration
+rule: preserve_runtime_eligibility_ownership_authority_and_interruption_contracts
+rule: validated_owned_code_requires_commit_check_before_final_delivery
+rule: existing_authorization_for_work_and_commit_needs_no_repeated_confirmation
+rule: blocked_commit_is_reported_as_uncommitted_not_as_completed_delivery
+rule: hooks_do_not_judge_semantic_sufficiency_or_commit_code

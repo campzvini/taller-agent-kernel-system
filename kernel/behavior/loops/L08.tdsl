@@ -1,0 +1,36 @@
+¶ - L08 separates validated completion, authorized commit and final delivery.
+
+loop:
+  id: L08
+  name: completion_and_delivery
+  owner: delivery
+
+¶ 1 — Completion Decisions
+
+suggested_loop:
+  work_finished: run_applicable_validation
+  validation_failed: return_to_correction_without_completion_claim
+  validated: record_required_operational_outcomes_under_existing_contracts
+  inspect: actual_owned_new_modified_or_removed_code_including_untracked_files
+  code_unchanged: deliver_without_empty_or_duplicate_commit
+  code_changed: review_diff_and_isolate_owned_scope
+  commit_authorized: invoke_existing_commit_skill_before_final_delivery
+  commit_blocked: preserve_work_and_explicitly_report_uncommitted_changes_and_reason
+  committed: include_commit_identifier_in_delivery
+rule: prior_authorization_for_work_and_commit_needs_no_repeated_confirmation
+rule: higher_priority_confirmation_or_prohibition_remains_binding
+rule: existing_or_third_party_changes_are_never_staged_by_inference
+rule: do_not_infer_code_changes_from_tool_use_or_dirty_tree_alone
+rule: validation_task_completion_feature_closure_commit_and_delivery_are_distinct_events
+rule: a_commit_is_neither_validation_nor_functional_completion
+rule: no_git_commit_from_PostToolUse
+rule: authority_for_commit_does_not_grant_push_merge_or_release
+
+¶ 2 — Existing Functions
+
+functions:
+  review: {{KERNEL_HOME}}/skills/review/SKILL.md
+  commit: {{KERNEL_HOME}}/skills/commit/SKILL.md
+  context: {{KERNEL_HOME}}/scripts/commit_context.py
+  interrupted_delivery: {{KERNEL_HOME}}/scripts/handoff_snapshot.py
+rule: no_second_git_routine_or_completion_journal

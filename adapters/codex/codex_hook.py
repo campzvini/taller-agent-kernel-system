@@ -1,7 +1,6 @@
 # ────────────────────────────────────────────
-# TASK 1.1.0 — codex_hook.py
+# TASK 2.2.0 — codex_hook.py
 # § - PreToolUse router: enforce the .task gate, force-load routed policy once · Python
-# Taller Dev 2026
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────
 
@@ -71,7 +70,7 @@ def already_loaded(session_id: str, name: str) -> bool:
     return False
 
 
-# ── § 3 — RESPONSES ──
+# ── § 3 — RESPONSES — Locate responses responsibilities ──
 
 
 def respond(payload: dict) -> None:
@@ -113,7 +112,7 @@ def read_doc(path: Path) -> str:
         return ""
 
 
-# ── § 4 — HANDLERS ──
+# ── § 4 — HANDLERS — Locate handlers responsibilities ──
 
 
 def handle_subagent_start() -> None:
@@ -254,7 +253,7 @@ def handle_source_write(session_id: str, file_path: str) -> None:
     inject(body, "engineering standards loaded for this session")
 
 
-# ── § 5 — ENTRY ──
+# ── § 5 — ENTRY — Dispatch explicit commands and report failures ──
 
 
 def main() -> int:

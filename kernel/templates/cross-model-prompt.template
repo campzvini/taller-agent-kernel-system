@@ -1,10 +1,14 @@
-# cross-model-prompt.template — prompt autocontido para modelo EXTERNO (GPT/Gemini/etc.).
-# Sem referência a spec/§/AGENTS/arquivos do ecossistema do kernel — o modelo externo não tem acesso.
-# TDSL. Inglês se o destino for melhor servido nisso.
+# Cross-Model Prompt
+¶ - Supply an external agent with self-contained inputs and an explicit acceptance boundary.
 
-context <background mínimo, 1-3 linhas>
-task <imperativo>
-inputs: <dados/trechos colados INLINE — sem paths, o modelo não lê arquivos>
-constraints: <lista>
-output_format <forma exata da saída esperada>
-done_when <critério de aceite objetivo>
+¶ 1 — Self-Contained Task
+
+context ln: |
+  <minimum_background>
+task: <requested_action>
+inputs ln: |
+  <inline_data_and_source_excerpts_available_to_the_recipient>
+constraints: [<constraints>]
+output_format: <exact_expected_form>
+done_when: <objective_acceptance_criterion>
+rule: do_not_reference_files_or_private_context_unavailable_to_the_recipient

@@ -59,3 +59,19 @@ escalation:
   outside_authority_or_real_unknown: orchestrator_reports_to_operator
   executor: never_escalates_directly_to_operator
   test_gate: orchestrator_only
+
+¶ 4 — Context Sufficiency and Operational Continuity
+
+contracts:
+  context: {{KERNEL_HOME}}/behavior/loops/L02.tdsl
+  execution: {{KERNEL_HOME}}/behavior/loops/L04.tdsl
+  delivery: {{KERNEL_HOME}}/behavior/loops/L08.tdsl
+rule: evaluate_sufficiency_before_each_additional_context_acquisition
+rule: reuse_loaded_context_and_confirm_only_needed_mutable_facts
+rule: cold_entry_recovers_missing_instructions_project_feature_authority_and_relevant_history
+rule: warm_cold_is_contextual_not_persisted_configuration
+rule: preserve_runtime_eligibility_ownership_authority_and_interruption_contracts
+rule: validated_owned_code_requires_commit_check_before_final_delivery
+rule: existing_authorization_for_work_and_commit_needs_no_repeated_confirmation
+rule: blocked_commit_is_reported_as_uncommitted_not_as_completed_delivery
+rule: hooks_do_not_judge_semantic_sufficiency_or_commit_code

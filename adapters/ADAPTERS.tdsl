@@ -4,7 +4,7 @@
 
 document:
   id: task.adapters@1
-  version: 2.0.0
+  version: 2.2.0
   status: active
   scope: claude_code, codex, antigravity, cline
 
@@ -84,3 +84,16 @@ capabilities:
 rule: hook_support_is_not_evidence_of_complete_write_interception
 rule: scripts_do_not_choose_architecture_or_judge_implementation
 rule: exclusive_write_ownership_includes_operational_files
+
+¶ 8 — Departmental Compatibility and Behavioral Entry
+
+contracts:
+  layout: {{KERNEL_HOME}}/integration/installation/layout.tdsl
+  loops: {{KERNEL_HOME}}/behavior/loops/catalog.tdsl
+  SessionStart: existing_session_init_entrypoint_with_compact_context_snapshot
+  SubagentStart: minimal_delegation_context_then_L04_cold_recovery_as_needed
+  PreToolUse: existing_write_gates_and_once_per_session_policy_loading
+  PostToolUse: no_automatic_reconciliation_or_commit
+rule: host_without_hooks_uses_the_same_policy_and_skill_contracts
+rule: deploy_all_departmental_dependencies_with_public_scripts
+rule: hooks_never_classify_semantic_sufficiency_or_warm_cold_state

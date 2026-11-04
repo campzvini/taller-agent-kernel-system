@@ -1,6 +1,6 @@
 ---
 name: debug
-description: Structured diagnosis of a bug or unexpected behavior: symptom, scope, ranked hypotheses, evidence. Use when investigating an error, a divergence, or a surprising test result.
+description: "Structured diagnosis of a bug or unexpected behavior: symptom, scope, ranked hypotheses, evidence. Use when investigating an error, a divergence, or a surprising test result."
 ---
 
 ¶ - Structured debugging protocol for bug investigation

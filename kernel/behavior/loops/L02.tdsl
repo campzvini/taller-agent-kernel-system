@@ -1,0 +1,34 @@
+¶ - L02 context acquisition evaluates successive sufficiency without selecting a mandatory source sequence.
+
+loop:
+  id: L02
+  name: context_acquisition
+  owner: context
+  entry: delimited_question_or_task
+  sufficiency: precision_currency_authority_and_evidence_for_that_request
+
+¶ 1 — Progressive Acquisition
+
+suggested_loop:
+  general_request: assess_available_model_knowledge_first
+  project_request: prefer_loaded_local_instructions_and_actual_project_sources
+  sufficient_reliable_context: answer_or_act_within_authority
+  insufficient_context: identify_next_relevant_source_then_read_minimum_scope
+  after_each_read: reevaluate_sufficiency_immediately
+  more_sources_available: continue_only_if_still_insufficient
+  exhausted_sources: report_missing_evidence_insufficient_context_or_real_impossibility_distinctly
+rule: training_does_not_establish_current_repository_behavior
+rule: reuse_session_context_when_sufficient_and_still_applicable
+rule: verify_mutable_facts_when_the_result_depends_on_current_state
+rule: information_sufficiency_never_grants_execution_authority
+rule: available_map_is_optional_navigation_not_a_required_preflight
+rule: missing_map_is_reported_without_mapping_rebuild_or_diagramming
+rule: no_new_persistent_sufficiency_state_or_journal
+
+¶ 2 — Existing Functions
+
+functions:
+  mapping: {{KERNEL_HOME}}/skills/code-map/SKILL.md
+  snapshot: {{KERNEL_HOME}}/scripts/session_init.py
+  query: {{KERNEL_HOME}}/scripts/structure_tracker.py
+  source_reading: applicable_policy_and_targeted_source_ranges

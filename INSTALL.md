@@ -4,7 +4,7 @@
 
 document:
   id: task.install@1
-  version: 1.1.0
+  version: 2.2.0
   status: active
   audience: the AI agent the operator pointed at this folder
   scope: preflight, interview, render, place, verify, report
@@ -104,7 +104,9 @@ test_stance:
 ¶ 3 — Render
 
 ```text
-1 create {{KERNEL_HOME}}; copy kernel/scripts, kernel/docs, kernel/grammar, kernel/skills, kernel/templates into it
+1 create {{KERNEL_HOME}}; copy all children of kernel/ into it, preserving their relative paths
+  include all nine departments plus scripts, docs, grammar, skills, templates and policy.tdsl.md
+  scripts are compatibility entrypoints; departmental implementations are required dependencies
   copy LICENSE into {{KERNEL_HOME}}; preserve its notices and terms
   copy adapters/ into {{KERNEL_HOME}}/adapters for installed-layout validation; this does not activate hooks
 2 copy the harness hook script (adapters/<harness>/*_hook.py) into {{KERNEL_HOME}}/scripts/ when the harness has hooks
@@ -118,6 +120,7 @@ test_stance:
     DOC_EDIT_RULE "require_explicit_request" | "allowed_when_relevant"
 5 render {{KERNEL_HOME}}/docs/engineering.tdsl placeholders (SIGNATURE_AUTHOR SIGNATURE_TAGLINE OPERATOR_ORG OPERATOR_MISSION)
 6 replace {{KERNEL_HOME}} in every copied .md, .tdsl and .template file
+  copy grammar/schema JSON bytes verbatim; do not render or normalize pinned schema files
 7 verify no `{{` remains in {{KERNEL_HOME}} except inside kernel.config.example.json
 ```
 
@@ -127,7 +130,8 @@ test_stance:
 follow adapters/ADAPTERS.tdsl for the detected harness:
   back up every file you will touch into {{KERNEL_HOME}}/backups/<timestamp>/
   policy merge between `<!-- task:begin -->` and `<!-- task:end -->`; replace only that block on upgrade
-  skills copy {{KERNEL_HOME}}/skills/* into the harness skill directory
+  skills copy {{KERNEL_HOME}}/skills/* recursively into the harness skill directory, including agents/openai.yaml
+  keep allow_implicit_invocation=false for execute; harnesses without this setting follow its explicit-command contract
   hooks merge the adapter hook config with {{PYTHON}} -> python_cmd and {{KERNEL_HOME}} resolved;
     keep the operator's existing hooks
 operator_has_several_harnesses -> offer to place the same kernel into each; one kernel_home serves all
@@ -167,3 +171,18 @@ upgrade:
   constitution: preserve_each_existing_published_version
   verify: query_registry_and_compare_runtime_projection_before_resume
 rule: installation_upgrade_does_not_publish_merge_or_deploy_project_changes
+
+¶ 8 — Departmental Upgrade and Loop Verification
+
+upgrade_2_2:
+  contract: {{KERNEL_HOME}}/integration/installation/layout.tdsl
+  manifest: {{KERNEL_HOME}}/system/routing/departments.json
+  backup: distribution_files_before_replacement_and_existing_operator_configuration
+  preserve: kernel_configuration_personal_skills_existing_harness_hooks_and_consumer_project_records
+  migrate: kernel_implementation_locations_only_not_project_schemas_or_journals
+  compatibility: keep_public_script_and_skill_names_and_sibling_imports
+  context: compact_session_snapshot_is_optional_observed_context_not_warm_cold_configuration
+  validation: run_installed_tests_and_selftest_with_departmental_dependencies_present
+rule: L02_L04_L08_are_instruction_contracts_and_do_not_require_complete_hook_interception
+rule: never_commit_from_PostToolUse_or_decide_semantic_sufficiency_in_a_hook
+rule: installing_the_distribution_does_not_authorize_project_execution_or_Git_effects

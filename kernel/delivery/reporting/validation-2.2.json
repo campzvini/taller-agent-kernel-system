@@ -1,0 +1,29 @@
+{
+  "version": "2.2.0",
+  "baseline_revision": "3d0a1be",
+  "source_document_sha256": "8cec2ea8435d2098a98b9fb995a676c007f7be5c236a4e4b986d2fc0f1d6354b",
+  "baseline_tests": 90,
+  "source_tests": 98,
+  "installed_tests": 98,
+  "installed_selftest": "OK",
+  "departments": 9,
+  "single_python_implementations": 27,
+  "unchanged_original_algorithm_ASTs": 22,
+  "diagrammed_python_files": 57,
+  "schema_bytes_unchanged": true,
+  "consumer_record_migration": false,
+  "checks": [
+    {
+      "name": "source-suite",
+      "exit_code": 0
+    },
+    {
+      "name": "installed-suite",
+      "exit_code": 0
+    },
+    {
+      "name": "installed-selftest",
+      "exit_code": 0
+    }
+  ]
+}
