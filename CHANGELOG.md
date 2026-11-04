@@ -2,6 +2,12 @@
 
 ¶ - Release changes and migration boundaries.
 
+## Unreleased
+
+Fix explicit execution entry and reuse of prepared structure. Code-map and tool hooks no longer
+trigger reconciliation; stale scaffold inventory no longer blocks claims. Diagramming is limited
+to explicit feature tasks. Keep the current version unchanged.
+
 ¶ 1 — Version 2.1.0
 
 ## 2.1.0 — 2026-11-03

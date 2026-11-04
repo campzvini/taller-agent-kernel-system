@@ -192,8 +192,8 @@ under `.agent-cache/tracking/` are rebuildable. The tracker locates elements and
 ambiguity and records removals. It never runs tests, judges quality or declares tasks complete.
 
 Before an intervention: resolve the destination, consult governing sources and relevant history,
-inspect what exists, then reuse, modify, create or do nothing. Record material changes and reconcile
-the index afterwards. Hooks assist this process; explicit reconciliation covers changes they miss.
+inspect what exists, then reuse, modify, create or do nothing. Reuse available maps and consult
+sources as needed. Reconciliation runs only on an express operator request; hooks do not trigger it.
 
 ## 6. Spec-driven development — records, not bureaucracy
 
@@ -204,11 +204,12 @@ Each planning phase produces its owned artifact in `.task/`; Architecture.md con
 ```
 constitution → Architecture.md → features → spec → (clarify) → plan → tasks → analysis
                                                                      ↓
-                                      Execute 0 (integral) → execution loop
+                                      explicit $execute or /execute → authorized work
 ```
 
-A single entry skill, `protocol`, reads the project state and routes to the right phase; the agent
-never picks a phase on its own. A gate script checks that a phase's predecessors exist before its
+The `protocol` skill reports planning position without automatically invoking `execute`. The operator
+invokes `$execute` or `/execute` explicitly; it reads AGENTS.md, the constitution and open features,
+then performs the authorized work using the existing kernel decision mechanisms. A gate script checks that a phase's predecessors exist before its
 record is written.
 
 **Design choices and their reasons**
@@ -237,9 +238,10 @@ Planning mode and execution authority are independent. `interactive` is the defa
 existing projects. Explicitly authorized `autonomous` execution continues through the declared package
 until completion or a real block; choosing `integral` alone never grants that authority.
 
-`Architecture.md` contains only the intended directory and file tree. Integral execution starts with
-Execute 0: inspect existing destinations, create safe missing structure, add provisional `◇` sections
-and reconcile indices. Scaffold presence is never functional completion.
+`Architecture.md` contains only the intended directory and file tree. Execute 0 is an explicit
+structural operation, not an automatic execution prerequisite. Existing structure and mapping are
+reused. Diagramming is relevant only when an open feature assigns it. An unavailable map is reported
+without creating a diagramming task. Scaffold presence is never functional completion.
 
 The orchestrator selects a whole feature, task group or single task from dependencies, difficulty and
 write scope. `max_active_subagents` defaults to one. Parallel units require exclusive destinations,
@@ -439,4 +441,3 @@ Other organizational use requires written permission. Distributed adaptations co
 covered by this license must retain notices, identify their changes and maintainer, and clearly
 state that they are unofficial. Contact [Vinícius Campos](https://github.com/campzvini) for licensing.
 This is a source-available license with use restrictions, not MIT, Apache 2.0, or OSI open source.
-
