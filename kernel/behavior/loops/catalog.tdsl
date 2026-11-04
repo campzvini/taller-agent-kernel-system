@@ -1,0 +1,43 @@
+¶ - Stable L01 through L08 ownership locates existing behavior without duplicating it.
+
+¶ 1 — Loop Ownership
+
+loops:
+  L01:
+    responsibility: request_routing
+    owner: system
+    source: {{KERNEL_HOME}}/policy.tdsl.md#routing
+  L02:
+    responsibility: context_acquisition
+    owner: context
+    source: {{KERNEL_HOME}}/behavior/loops/L02.tdsl
+  L03:
+    responsibility: governed_planning
+    owner: governance
+    source: {{KERNEL_HOME}}/docs/sdd.tdsl
+  L04:
+    responsibility: execution_and_delegation
+    owner: behavior
+    source: {{KERNEL_HOME}}/behavior/loops/L04.tdsl
+  L05:
+    responsibility: implementation
+    owner: runtime
+    source: {{KERNEL_HOME}}/docs/engineering.tdsl
+  L06:
+    responsibility: validation_and_review
+    owner: assurance
+    source: {{KERNEL_HOME}}/docs/sdd.tdsl#validation
+  L07:
+    responsibility: history_and_continuity
+    owner: memory
+    source: {{KERNEL_HOME}}/docs/sdd.tdsl#journals
+  L08:
+    responsibility: completion_and_delivery
+    owner: delivery
+    source: {{KERNEL_HOME}}/behavior/loops/L08.tdsl
+
+¶ 2 — Preservation
+
+rule: L01_L03_L05_L06_L07_name_existing_responsibilities_without_changing_their_contracts
+rule: L02_L04_L08_are_the_only_behavioral_changes_in_2_2
+rule: skill_ids_and_CLI_entrypoints_remain_stable

@@ -1,37 +1,33 @@
 ---
 name: commit
-description: Compose a conventional commit from the current repository state. Use when the operator authorizes a commit or a logical unit of work is finished.
+description: Commit validated owned changes when authorized, including normal code delivery. Reuse existing authorization; report an explicit uncommitted state when blocked.
 ---
 
-¶ - Generate conventional commits from repository state
+¶ - Commit scoped validated changes through the existing Git context helper.
 
 skill:
   id: @skill/commit
+  loop: {{KERNEL_HOME}}/behavior/loops/L08.tdsl
 
-¶ 1 — Gatilho
+¶ 1 — Suggested Commit Loop
 
-condition(operator_authorized | end_of_approved_unit) -> invoke
+suggested_loop:
+  context: python {{KERNEL_HOME}}/scripts/commit_context.py
+  ownership: compare_current_changes_with_work_scope_and_initial_state
+  review: inspect_owned_diff_with_existing_review_skill
+  validation: require_applicable_validation_before_commit
+  no_remaining_owned_code_changes: skip_empty_or_duplicate_commit
+  authorized_work_and_commit: stage_exact_owned_paths_and_commit_without_repeated_confirmation
+  higher_confirmation_required: obtain_it_before_mutation
+  forbidden_or_unknown_authority: preserve_work_and_report_uncommitted_paths_and_reason
+  success: include_commit_identifier_in_delivery
 
-¶ 2 — Procedimento
+¶ 2 — Boundaries
 
-1 execute `python {{KERNEL_HOME}}/scripts/commit_context.py`
-2 read `.agent-cache/commit-context.md` to understand state and file grouping
-3 classify commit type
-  feat: nova funcionalidade
-  fix: correção de bug
-  docs: alteração apenas em documentação
-  refactor: reorganização sem mudança de comportamento
-  test: adição ou ajuste de testes
-  chore: configuração, build, dependências
-4 identify scope from file grouping in the report
-5 compose description: imperative, present tense, short
-6 assemble message: `type(scope): description`
-7 present message to operator for confirmation
-8 after confirmation, execute `git add` (if needed) and `git commit`
-
-¶ 3 — Critérios
-
-message reflects what effectively changed
-scope is specific (module) not generic (entire project)
-description fits within 50 characters when possible
-commit is atomic: one logical unit per commit
+rule: helper_reports_changes_and_never_grants_authority_or_stages_files
+rule: code_candidates_are_not_ownership_or_automatic_selection
+rule: exclude_preexisting_third_party_and_unrelated_changes_even_if_already_staged
+rule: mixed_staged_changes_require_scope_isolation_without_reverting_others
+rule: use_atomic_conventional_commits_and_configured_authorship
+rule: do_not_repeat_a_commit_for_already_committed_changes
+rule: push_merge_release_and_feature_closure_require_their_own_authority

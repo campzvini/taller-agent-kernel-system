@@ -4,7 +4,7 @@
 
 document:
   id: task.adapters@1
-  version: 2.0.0
+  version: 2.2.0
   status: active
   scope: claude_code, codex, antigravity, cline
 
@@ -75,12 +75,25 @@ no_skill_support -> append a skill index (name, description, path) to the policy
 
 capabilities:
   codex_and_claude: supplied_hook_adapters_translate_available_events
-  post_write: reconcile_when_supported_by_host_hook_surface
-  unobserved_write: explicit_reconciliation_required
+  post_write: no_automatic_reconciliation
+  unobserved_write: reconciliation_only_on_express_operator_request
   antigravity_and_cline: instruction_driven_until_adapter_available
-  independent_scan: always_available_via_structure_tracker.py
+  independent_scan: explicit_operator_request_via_structure_tracker.py
   concurrency: limited_by_host_capacity_and_project_max_active_subagents
   absent_subagent_support: report_capability_limit_do_not_claim_delegated_execution
 rule: hook_support_is_not_evidence_of_complete_write_interception
 rule: scripts_do_not_choose_architecture_or_judge_implementation
 rule: exclusive_write_ownership_includes_operational_files
+
+¶ 8 — Departmental Compatibility and Behavioral Entry
+
+contracts:
+  layout: {{KERNEL_HOME}}/integration/installation/layout.tdsl
+  loops: {{KERNEL_HOME}}/behavior/loops/catalog.tdsl
+  SessionStart: existing_session_init_entrypoint_with_compact_context_snapshot
+  SubagentStart: minimal_delegation_context_then_L04_cold_recovery_as_needed
+  PreToolUse: existing_write_gates_and_once_per_session_policy_loading
+  PostToolUse: no_automatic_reconciliation_or_commit
+rule: host_without_hooks_uses_the_same_policy_and_skill_contracts
+rule: deploy_all_departmental_dependencies_with_public_scripts
+rule: hooks_never_classify_semantic_sufficiency_or_warm_cold_state

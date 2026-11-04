@@ -1,6 +1,8 @@
 # Executor Briefing
 ¶ - Minimal unit context, exclusive write ownership and verifiable return evidence.
 
+¶ 1 — Assignment and Return
+
 unit_ref: @unit/<id>
 root: <absolute_project_root>
 task_refs: [<task_refs>]

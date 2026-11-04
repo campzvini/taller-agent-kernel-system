@@ -1,6 +1,6 @@
 ---
 name: test-protocol
-description: Define or apply the project's test method: test-triage classes, order, criteria, report format. Use when establishing a protocol, classifying validations before tests are written, or running a test session.
+description: "Define or apply the project's test method: test-triage classes, order, criteria, report format. Use when establishing a protocol, classifying validations before tests are written, or running a test session."
 ---
 
 ¶ - Define or apply project testing methodology and protocols

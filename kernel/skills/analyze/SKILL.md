@@ -1,6 +1,6 @@
 ---
 name: analyze
-description: The only tool in the lifecycle that emits a verdict — runs the deterministic coherence pass over constitution, spec, plan and tasks, then judges what a script cannot: policy alignment, duplicated propositions, intent drift. Emits an analysis@2 record with routed findings. Use before executing, or whenever the operator wants the records checked against each other for contradiction, ambiguity or gaps. Read-only and advisory: it reports, the operator decides.
+description: "The only tool in the lifecycle that emits a verdict — runs the deterministic coherence pass over constitution, spec, plan and tasks, then judges what a script cannot: policy alignment, duplicated propositions, intent drift. Emits an analysis@2 record with routed findings. Use before executing, or whenever the operator wants the records checked against each other for contradiction, ambiguity or gaps. Read-only and advisory: it reports, the operator decides."
 ---
 
 ¶ - Deterministic coherence pass over records, then judges alignment and drift.

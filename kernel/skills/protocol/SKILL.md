@@ -44,8 +44,8 @@ routing:
   plan: skill(plan)
   tasks: skill(tasks)
   analyze: skill(analyze)
-  execute_zero: skill(execute)
-  execute: skill(execute)
+  execute_zero: report_phase_without_invoking_execute_or_scaffolding
+  execute: report_phase_without_invoking_execute
   idle: report_and_stop
 rule: broken_reference -> owning_phase
 rule: available_technical_answer -> resolve_within_authority
@@ -57,8 +57,8 @@ planning:
   gradual: active_feature_cycles_before_next_feature
   integral: complete_declared_features_then_cross_feature_analysis
 execution:
-  autonomous: ready_package_proceeds_to_execute_zero_and_loop_in_same_session
-  interactive: proceed_with_existing_or_new_execution_authority
+  autonomous: authority_does_not_implicitly_invoke_execute
+  interactive: operator_scope_governs_work_without_implicit_skill_invocation
 closure:
   delegated: validated_feature_may_close_and_next_eligible_unit_routes
   undelegated: propose_for_operator_direction
@@ -75,3 +75,20 @@ report:
   checklist: derived_from_execution_journal
   detail: query_specific_refs_on_request
 ban: tracker_or_router_judging_implementation_quality
+
+¶ 6 — Operator-Controlled Entry
+
+rule: execute_skill_only_on_explicit_operator_command_$execute_or_/execute
+rule: general_execution_request_is_not_an_implicit_skill_command
+rule: reconciliation_only_on_express_operator_request
+rule: existing_structure_and_mapping_are_reused_not_reprepared
+rule: diagramming_only_when_explicitly_assigned_by_an_open_feature
+rule: routing_suggests_navigation_never_adds_tasks_or_mandatory_execution_procedure
+
+¶ 7 — Context and Delivery
+
+rule: reuse_recovered_phase_and_authority_while_they_remain_applicable
+rule: warm_resume_confirms_only_required_mutable_facts
+rule: missing_context_routes_to_L02_not_a_full_recovery_cycle
+rule: completion_consults_L08_for_owned_code_commit_before_final_delivery
+reference: {{KERNEL_HOME}}/behavior/loops/L04.tdsl

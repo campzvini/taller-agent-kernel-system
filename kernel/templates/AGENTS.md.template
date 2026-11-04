@@ -1,6 +1,8 @@
 # Project Agent Context
 ¶ - Local non-derivable boundaries; inherits installed TASK policy.
 
+¶ 1 — Local Boundaries
+
 project: <name>
 stack: <languages_and_engines>
 role: <one_line_purpose>
@@ -22,3 +24,15 @@ state:
   history: .task/journals/
 rule: query_index_before_targeted_source
 rule: authority_declared_not_inferred_from_planning_mode
+
+¶ 2 — Contextual Resume
+
+resume:
+  warm: reuse_loaded_instructions_feature_and_authority_confirm_required_mutable_facts
+  cold: resolve_applicable_AGENTS_anchor_open_features_configuration_constitution_and_relevant_feature
+  history: consult_only_relevant_journals_and_interrupted_units
+  insufficient: {{KERNEL_HOME}}/behavior/loops/L02.tdsl
+  execution: {{KERNEL_HOME}}/behavior/loops/L04.tdsl
+  delivery: {{KERNEL_HOME}}/behavior/loops/L08.tdsl
+rule: reference_resolution_is_not_automatic_structural_reconciliation
+rule: code_commit_requires_authority_validation_and_owned_scope

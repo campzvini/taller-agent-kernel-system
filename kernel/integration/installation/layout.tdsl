@@ -1,0 +1,22 @@
+¶ - Installed departmental layout preserves public entrypoints and operator data.
+
+¶ 1 — Distribution
+
+layout:
+  authoritative_kernel: all_kernel_children_including_nine_departments
+  compatibility: scripts_skills_docs_grammar_templates_and_policy_paths_remain_public
+  manifest: system/routing/departments.json
+  hooks: existing_adapters_copied_to_scripts_as_before
+  rendering: existing_placeholder_interview_and_rendering_contract
+  scope: kernel_distribution_only_never_consumer_project_records
+
+¶ 2 — Upgrade
+
+upgrade:
+  backup: every_existing_file_before_replacement
+  preserve: operator_configuration_harness_hooks_personal_content_and_project_data
+  replace: distribution_owned_paths_only
+  validate: installed_cli_imports_hooks_selftest_and_department_dependencies
+rule: no_new_installer_or_second_session_initializer
+rule: warm_cold_context_and_sufficiency_are_not_configuration_fields
+rule: loop_contracts_are_loaded_only_when_relevant_not_injected_per_tool

@@ -2,7 +2,17 @@
 
 ¶ - Release changes and migration boundaries.
 
-¶ 1 — Version 2.1.0
+¶ 1 — Version 2.2.0
+
+## 2.2.0 — 2026-11-04
+
+Fix explicit execution entry and reuse of prepared structure. Code-map and tool hooks no longer
+trigger reconciliation; stale scaffold inventory no longer blocks claims. Diagramming is limited
+to explicit feature tasks. Adds departmental ownership with compatible public entrypoints, progressive context
+sufficiency (L02), warm/cold recovery (L04), and scoped authorized commit before delivery (L08).
+Compact session and Git handoff observations remain derived context, not new operational state.
+
+¶ 2 — Version 2.1.0
 
 ## 2.1.0 — 2026-11-03
 
@@ -18,7 +28,7 @@ noncommercial use, separate paid business licensing, and explicit identification
 adaptations.
 Records the official Taller distribution and contribution terms for future commercial licensing.
 
-¶ 2 — Version 2.0.0
+¶ 3 — Version 2.0.0
 
 ## 2.0.0 — 2026-11-03
 

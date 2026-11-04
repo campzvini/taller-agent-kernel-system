@@ -1,0 +1,42 @@
+¶ - L04 distinguishes contextual warm and cold entry while preserving the existing runtime authority checks.
+
+loop:
+  id: L04
+  name: execution_and_delegation
+  owner: behavior
+  context_dependency: {{KERNEL_HOME}}/behavior/loops/L02.tdsl
+
+¶ 1 — Contextual Entry
+
+warm:
+  sufficient: applicable_instructions_project_unit_and_authority_already_loaded
+  action: confirm_only_mutable_facts_needed_for_the_next_operation
+cold:
+  condition: any_required_operational_context_is_missing
+  recovery:
+    instructions: resolve_repository_root_and_applicable_AGENTS_hierarchy
+    project: read_existing_anchor_and_identify_open_features_when_present
+    authority: consult_execution_configuration_and_constitution
+    feature: read_relevant_feature_contracts_only
+    history: consult_relevant_events_and_interrupted_claims_only_as_needed
+    destinations: resolve_references_using_available_registry_and_targeted_source
+  insufficient_after_recovery: return_to_L02_for_next_relevant_source
+rule: warm_and_cold_are_session_context_not_persisted_modes_or_task_fields
+rule: a_session_can_be_warm_for_one_project_and_cold_for_another
+rule: unresolved_authority_or_dependency_prevents_execution_even_when_context_is_sufficient
+
+¶ 2 — Existing Execution Loop
+
+continuation:
+  selection: existing_next_and_dependency_eligibility
+  reservation: existing_claim_with_exclusive_scope_and_owner
+  delegation: applicable_delegation_contract_and_host_capabilities
+  work: authorized_implementation_and_declared_validation
+  history: existing_journals_release_and_interruption_recovery
+  delivery: {{KERNEL_HOME}}/behavior/loops/L08.tdsl
+rule: warm_entry_never_skips_claim_eligibility_or_mutable_state_checks
+rule: reference_resolution_is_read_only_not_automatic_structural_reconciliation
+rule: structural_reconciliation_only_on_express_operator_request
+rule: no_automatic_scaffold_or_diagramming_preflight
+rule: execute_skill_requires_explicit_operator_command
+rule: executor_receives_minimal_owned_context_not_the_orchestrators_entire_session
