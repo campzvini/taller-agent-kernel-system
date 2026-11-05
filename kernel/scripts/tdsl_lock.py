@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — tdsl_lock.py
+# TASK 2.2.1 — tdsl_lock.py
 # § - Expose the stable tdsl_lock.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

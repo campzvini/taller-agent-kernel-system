@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — handoff_snapshot.py
+# TASK 2.2.1 — handoff_snapshot.py
 # § - Expose the stable handoff_snapshot.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

@@ -4,7 +4,7 @@
 
 document:
   id: task.install@1
-  version: 2.2.0
+  version: 2.2.1
   status: active
   audience: the AI agent the operator pointed at this folder
   scope: preflight, interview, render, place, verify, report
@@ -16,7 +16,7 @@ then follow the chapters in order. Talk to the operator in their language. Expla
 
 ```text
 package_root the folder containing this file
-detect harness you are running in: claude_code | codex | antigravity | cline | other
+detect harness you are running in: claude_code | codex | antigravity | cline | opencode | dsh | other
 detect os and home directory
 require python >= 3.10 and git on PATH -> if missing, tell the operator how to install them and stop
 python_cmd the exact command that runs Python 3 here (python | python3 | py -3)

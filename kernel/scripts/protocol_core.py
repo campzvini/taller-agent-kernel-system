@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — protocol_core.py
+# TASK 2.2.1 — protocol_core.py
 # § - Expose the stable protocol_core.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

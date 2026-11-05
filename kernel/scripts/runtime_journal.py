@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — runtime_journal.py
+# TASK 2.2.1 — runtime_journal.py
 # § - Expose the stable runtime_journal.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

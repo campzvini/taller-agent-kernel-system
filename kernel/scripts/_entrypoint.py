@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — _entrypoint.py
+# TASK 2.2.1 — _entrypoint.py
 # § - Load one departmental implementation through stable public script paths · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

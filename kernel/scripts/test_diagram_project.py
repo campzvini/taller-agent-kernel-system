@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — test_diagram_project.py
+# TASK 2.2.1 — test_diagram_project.py
 # § - Expose the stable test_diagram_project.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

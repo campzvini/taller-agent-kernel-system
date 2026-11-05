@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — post_write.py
+# TASK 2.2.1 — post_write.py
 # § - Expose the stable post_write.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

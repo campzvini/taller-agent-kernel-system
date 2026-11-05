@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — contract_check.py
+# TASK 2.2.1 — contract_check.py
 # § - Expose the stable contract_check.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — spec_lint.py
+# TASK 2.2.1 — spec_lint.py
 # § - Expose the stable spec_lint.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

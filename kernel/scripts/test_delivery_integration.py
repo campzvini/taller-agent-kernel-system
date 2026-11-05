@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — test_delivery_integration.py
+# TASK 2.2.1 — test_delivery_integration.py
 # § - Expose the stable test_delivery_integration.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

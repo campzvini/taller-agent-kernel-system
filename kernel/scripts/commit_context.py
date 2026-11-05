@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — commit_context.py
+# TASK 2.2.1 — commit_context.py
 # § - Expose the stable commit_context.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

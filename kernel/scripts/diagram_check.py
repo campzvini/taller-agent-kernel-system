@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — diagram_check.py
+# TASK 2.2.1 — diagram_check.py
 # § - Expose the stable diagram_check.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

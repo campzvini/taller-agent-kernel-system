@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — structure_scaffold.py
+# TASK 2.2.1 — structure_scaffold.py
 # § - Expose the stable structure_scaffold.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

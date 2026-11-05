@@ -2,7 +2,14 @@
 
 ¶ - Release changes and migration boundaries.
 
-¶ 1 — Version 2.2.0
+¶ 1 — Version 2.2.1
+
+## 2.2.1 — 2026-11-05
+
+Add installation support and adapter specifications for OpenCode and DeepSeek Harness (`dsh`).
+Updates adapter matrix, installer preflight detection, and integration test suite coverage for multi-harness environments.
+
+¶ 2 — Version 2.2.0
 
 ## 2.2.0 — 2026-11-04
 

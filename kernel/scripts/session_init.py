@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — session_init.py
+# TASK 2.2.1 — session_init.py
 # § - Expose the stable session_init.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

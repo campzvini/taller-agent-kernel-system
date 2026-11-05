@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — diagram_project.py
+# TASK 2.2.1 — diagram_project.py
 # § - Expose the stable diagram_project.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

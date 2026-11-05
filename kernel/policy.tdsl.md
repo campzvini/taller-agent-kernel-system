@@ -4,7 +4,7 @@
 
 document:
   id: task.global-policy@1
-  version: 2.2.0
+  version: 2.2.1
   status: active
   language: TDSL v3
   scope: operator_boundary, language, routing, orchestration, economy, anchors, response, truth, hard_bans

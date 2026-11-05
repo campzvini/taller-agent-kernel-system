@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — detect_project.py
+# TASK 2.2.1 — detect_project.py
 # § - Expose the stable detect_project.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

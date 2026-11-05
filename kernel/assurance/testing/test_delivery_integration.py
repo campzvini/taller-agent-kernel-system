@@ -129,8 +129,11 @@ class InstalledIntegrationTests(unittest.TestCase):
         backup = self.base / "upgrade-backup"
         shutil.copytree(self.install, backup)
         departments = json.loads((SOURCE / "system/routing/departments.json").read_text())["departments"]
-        for directory in ("scripts", "docs", "grammar", "templates", "skills", "adapters", *departments):
+        for directory in ("scripts", "docs", "grammar", "templates", "skills", *departments):
             shutil.copytree(SOURCE / directory, self.install / directory, dirs_exist_ok=True,
+                            ignore=shutil.ignore_patterns("__pycache__"))
+        if ADAPTERS.is_dir():
+            shutil.copytree(ADAPTERS, self.install / "adapters", dirs_exist_ok=True,
                             ignore=shutil.ignore_patterns("__pycache__"))
         for path, content in originals.items():
             self.assertEqual(path.read_bytes(), content)

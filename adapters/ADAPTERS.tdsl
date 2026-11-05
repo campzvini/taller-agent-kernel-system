@@ -4,9 +4,9 @@
 
 document:
   id: task.adapters@1
-  version: 2.2.0
+  version: 2.2.1
   status: active
-  scope: claude_code, codex, antigravity, cline
+  scope: claude_code, codex, antigravity, cline, opencode, dsh
 
 ¶ 1 — Shared Layout
 
@@ -63,7 +63,27 @@ hooks ~/Documents/Cline/Hooks or ~/.cline/hooks, one script per hook type; the k
 source docs.cline.bot/customization/skills, docs.cline.bot/getting-started/config, verified 2026-11-02
 ```
 
-¶ 6 — Other Harnesses
+¶ 6 — OpenCode
+
+```text
+policy ~/.config/opencode/AGENTS.md # merge: preserve operator content, insert policy between `<!-- task:begin -->` and `<!-- task:end -->`
+  alt ~/.claude/CLAUDE.md fallback when ~/.config/opencode/AGENTS.md is absent
+skills ~/.config/opencode/skills/<name>/SKILL.md # global; also scans ~/.claude/skills and workspace .opencode/skills/
+permissions ~/.config/opencode/opencode.json # default_agent: build, permission: allow or "*"
+hooks instruction-driven; plugins via @opencode-ai/plugin when custom lifecycle interceptor needed
+source opencode.ai/docs, verified 2026-11-05
+```
+
+¶ 7 — DeepSeek Harness (dsh)
+
+```text
+policy ~/.dsh/AGENTS.md # user-global; also scans shared ~/.agents/AGENTS.md
+skills ~/.dsh/skills/<name>/SKILL.md # rank 400; shared ~/.agents/skills/ rank 500
+hooks instruction-driven; Cordis plugins (@deepseek-ai/*) for lifecycle interception
+source deepseek-harness architecture, verified 2026-11-05
+```
+
+¶ 8 — Other Harnesses
 
 ```text
 rule any harness that reads a global instruction file and SKILL.md folders can host the kernel
@@ -71,13 +91,14 @@ install policy into its global instruction file with the merge markers, skills i
 no_skill_support -> append a skill index (name, description, path) to the policy; the agent reads SKILL.md on demand
 ```
 
-¶ 7 — Runtime Capability Boundaries
+¶ 9 — Runtime Capability Boundaries
 
 capabilities:
   codex_and_claude: supplied_hook_adapters_translate_available_events
   post_write: no_automatic_reconciliation
   unobserved_write: reconciliation_only_on_express_operator_request
   antigravity_and_cline: instruction_driven_until_adapter_available
+  opencode_and_dsh: instruction_driven_until_adapter_available
   independent_scan: explicit_operator_request_via_structure_tracker.py
   concurrency: limited_by_host_capacity_and_project_max_active_subagents
   absent_subagent_support: report_capability_limit_do_not_claim_delegated_execution
@@ -85,7 +106,7 @@ rule: hook_support_is_not_evidence_of_complete_write_interception
 rule: scripts_do_not_choose_architecture_or_judge_implementation
 rule: exclusive_write_ownership_includes_operational_files
 
-¶ 8 — Departmental Compatibility and Behavioral Entry
+¶ 10 — Departmental Compatibility and Behavioral Entry
 
 contracts:
   layout: {{KERNEL_HOME}}/integration/installation/layout.tdsl

@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — selftest.py
+# TASK 2.2.1 — selftest.py
 # § - Expose the stable selftest.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

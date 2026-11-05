@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — execution_runtime.py
+# TASK 2.2.1 — execution_runtime.py
 # § - Expose the stable execution_runtime.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

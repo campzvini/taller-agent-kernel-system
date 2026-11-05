@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — code_map.py
+# TASK 2.2.1 — code_map.py
 # § - Expose the stable code_map.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

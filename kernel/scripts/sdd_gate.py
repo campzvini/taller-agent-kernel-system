@@ -1,5 +1,5 @@
 # ────────────────────────────────────────────
-# TASK 2.2.0 — sdd_gate.py
+# TASK 2.2.1 — sdd_gate.py
 # § - Expose the stable sdd_gate.py entrypoint · Python
 # VAI CORINTHIANS!
 # ────────────────────────────────────────────

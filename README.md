@@ -4,7 +4,7 @@
 
 **A governance kernel for AI coding agents, installed before any harness and shared by all of them.**
 
-Version 2.2.0 · [Licensing and official distribution](#licensing-and-official-distribution) · created by Vinícius Campos ([Taller](https://github.com/campzvini))
+Version 2.2.1 · [Licensing and official distribution](#licensing-and-official-distribution) · created by Vinícius Campos ([Taller](https://github.com/campzvini))
 
 The Taller Agent System Kernel (TASK) is the operating layer I built to work with AI agents every day:
 a global policy, a language written for agents to read, a spec-driven workflow, a navigation index for
@@ -354,6 +354,8 @@ skipped by accident.
 | Codex | `~/.codex/AGENTS.md` | yes | yes |
 | Antigravity | `~/.gemini/GEMINI.md` | yes | no — the agent runs the scripts itself |
 | Cline | `~/Documents/Cline/Rules/` | yes | no — the agent runs the scripts itself |
+| OpenCode | `~/.config/opencode/AGENTS.md` | yes | no — the agent runs the scripts itself |
+| DeepSeek Harness (`dsh`) | `~/.dsh/AGENTS.md` | yes | no — the agent runs the scripts itself |
 
 Any harness that reads a global instruction file can host the kernel; see `adapters/ADAPTERS.tdsl`.
 
